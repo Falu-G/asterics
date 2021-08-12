@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          This the crm we have been waiting for 
+          This the crm we have been waiting for we pushed
         </p>
         <a
           className="App-link"
