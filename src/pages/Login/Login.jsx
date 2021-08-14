@@ -15,7 +15,7 @@ function Login() {
                     <p>Manage your business in one page</p>
                 </div>
             </div>
-            <div className="LoginContainersecondbox">
+            <div style = {{backgroundImage: `url(/images/graybg.png)`,backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center'}} className="LoginContainersecondbox">
                 <div className="LoginContainersecondboxform">
                     <h2>Login</h2>
                     <form className="formHouse">

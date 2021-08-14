@@ -11,11 +11,10 @@
 }
 
 .LoginContainersecondbox{
-    flex: 1;
+    flex: 1.5;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: gray;
     
 }
 
@@ -72,9 +71,9 @@ text-align: left;
 }
 
 .LoginContainersecondboxform{
-background-color: aqua;
-width: 80%;
 padding: 10px;
+display: flex;
+flex-direction: column;
 }
 
 .formHouse{
@@ -82,11 +81,23 @@ padding: 10px;
     flex-direction: column;
 }
 
+.formHouse span{
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 28px;
+letter-spacing: 0em;
+text-align: left;
+color:#18A0FB;
+
+}
+
 .forminput{
-    margin-top:20px;
-    width: 200px;
-    height: 30px;
-    border: 1px solid #000000;
+margin-top:20px;
+width: 300px;
+height: 40px;
+border: 1px solid #000000;
 box-sizing: border-box;
 padding:5px;
 outline:none;
@@ -94,5 +105,24 @@ border-radius: 8px;
 }
 
 .submitbut{
-    width:80px;
+width: 153px;
+height: 40px;
+border: none;
+color: #fff;
+font-size:20px;
+margin-top:20px;
+border-radius:10px;
+background: #18A0FB;
+}
+
+
+.LoginContainersecondboxform h2{
+font-family: Roboto;
+font-size: 50px;
+font-style: normal;
+font-weight: 700;
+line-height: 75px;
+letter-spacing: 0em;
+text-align: left;
+
 }

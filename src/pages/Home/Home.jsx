@@ -15,8 +15,8 @@ function Home() {
 
             <button className = "astericButton">Read More</button>
         </div>
-        <div className="secondbox">
-        Second box
+        <div style = {{backgroundImage: "url(/images/ellipsebg.png)",backgroundRepeat: 'no-repeat',backgroundSize: 'cover',backgroundPosition: 'center'}} className="secondbox">
+        <p>Second box</p>
         </div>
         </div>
     )
