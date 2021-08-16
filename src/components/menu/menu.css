@@ -9,10 +9,11 @@
     justify-content: space-between;
     align-items: center;
     height: 40px;
+    text-decoration: none;
 }
 
-.menuContainerDesc span{
-font-family: Roboto;
+.menuAsset{
+font-family: "Roboto";
 font-size: 30px;
 font-style: normal;
 font-weight: 900;
@@ -20,6 +21,7 @@ color: #787575;
 line-height: 28px;
 letter-spacing: 0em;
 text-align: left;
+text-decoration: none;
 
 }
 
@@ -34,6 +36,8 @@ text-align: left;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    text-decoration: none;
+    color: #787575;
 }
 
 .menuItem span{

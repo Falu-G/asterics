@@ -1,68 +1,73 @@
 import React from 'react'
 import './menu.css'
 import MenuIcon from '@material-ui/icons/Menu';
+import { Link } from 'react-router-dom';
 function Menus() {
     return (
         <div className="menuContainer">
             <div className="menuContainerDesc">
-                <span>Assetrics CRM</span>
+                <Link className="menuAsset">Assetrics CRM</Link>
                 <MenuIcon />
             </div>
 
             <div className="menuHouse">
                 <div className="firstMenu">
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to = "/maindashboard">
                         <MenuIcon />
                         <span>Main</span>
-                    </div>
+                    </Link> 
 
-                    <div className="menuItem">
+                   
+                        <Link className="menuItem" to = "/dashboard">
                         <MenuIcon />
                         <span>Dashboard</span>
-                    </div>
+                        </Link>
+                        
+                    
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to = "/customer">
                         <MenuIcon />
                         <span>Customer</span>
-                    </div>
+                    </Link>
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to ="/sendsms">
                         <MenuIcon />
                         <span>Send SMS</span>
-                    </div>
+                    </Link>
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to = "/sendemai">
                         <MenuIcon />
                         <span>Send Email</span>
-                    </div>
+                    </Link>
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to = "/schedule">
                         <MenuIcon />
                         <span>Schedules</span>
-                    </div>
+                    </Link>
 
-                    <div className="menuItem">
+                    <Link className="menuItem" to = "">
                         <MenuIcon />
                         <span>Templates</span>
-                    </div>
+                    </Link>
 
                 </div>
 
                 <div className="secondMenu">
 
+
                 </div>
 
                 <div className="thirdMenu">
-                    <div className="menuItem">
+                    <Link className="menuItem">
                         <MenuIcon />
                         <span>Settings</span>
-                    </div>
+                    </Link>
 
-                    <div className="menuItem">
+                    <Link className="menuItem">
                         <MenuIcon />
                         <span>LogOut</span>
-                    </div>
+                    </Link>
                 </div>
 
 

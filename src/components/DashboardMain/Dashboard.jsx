@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Dashnav from '../dashnav/Dashnav'
 import NavigationComponent from '../navigationComponent/NavigationComponent'
 import "./dashboard.css"
@@ -51,36 +52,39 @@ function Dashboard() {
                     <div className="box box4 card">
                         <span>Create Customer</span>
                     </div>
-                    <div className="box box5 card">
+                    <div className="box box5 ">
 
-                        <div className="boardScheduler">
+                        <div className="boardScheduler card">
                             <Dashnav title = "SMS Scheduler"/>
                             <div className="centralImg">
                             <img src ="/images/seccalendar.png" alt = "sms scheduler"/>
                             </div>
                             
                         </div>
-                        <div className="boardSmsTemplates">
-                            <Dashnav title = "SMS Template"/>
+                        <div className="boardSmsTemplates card">
+                        <Dashnav title = "SMS Template"/>
+                        <Link to="/smstemplates"></Link>
+                            
                         </div>
                     </div>
-                    <div className="box box6 card">
-                        <div className = "boxsone">
+                    <div className="box box6 ">
+                        <div className = "boxsone card">
                         <Dashnav title ="Send Email"/>
-                        <div className="centralImg"> <img src ="/images/emai.png" alt = "email"/></div>
-                       
+                        <Link to = "/sendemail"><div className="centralImg"> <img src ="/images/emai.png" alt = "email"/></div></Link>
                         </div>
 
-                        <div className = "boxtwo">
+                        <div className = "boxtwo card">
                         <Dashnav title ="Send SMS"/>
-                        <div className="centralImg"> <img src ="/images/emalen.png" alt = "email env"/></div>
+                        <Link to ="/sendsms"><div className="centralImg"> <img src ="/images/emalen.png" alt = "email env"/></div></Link>
+                        
                         </div>
                        
                     </div>
 
                     <div className="box box7 card">
                         <Dashnav title="Check balance"/>
-                        <div className="centralImg"><img src ="/images/calc.png" alt = "calculator"/> </div>
+                        <Link><div className="centralImg"><img src ="/images/calc.png" alt = "calculator"/> </div></Link>
+                        
                     </div>
 
 
