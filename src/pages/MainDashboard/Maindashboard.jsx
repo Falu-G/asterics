@@ -6,7 +6,6 @@ import { useState } from 'react'
 function Maindashboard() {
     const [sidebar, setSideBar] = useState(false);
 
-
     const showSideBar = ()=> setSideBar(!sidebar)
     return (
         <div className="maindashboardContainer">
