@@ -99,6 +99,7 @@ text-align: left;
     flex: 3;
     margin-left: 10px;
     border-radius: 8px 8px 0px 0px;
+    background-color: #fff;
 }
 
 .box6{
@@ -122,6 +123,7 @@ margin-left: 10px;
     grid-area: box7;
     height: 100%;
     border-radius: 8px 8px 0px 0px;
+    background-color: #fff;
 }
 
 .outboundemails h4, .outboundsms h4, .schedulemessages h4, .box h4{

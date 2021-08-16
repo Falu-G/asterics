@@ -2,13 +2,18 @@ import React from 'react'
 import "./Maindashboard.css"
 import Menus from "../../components/menu/Menu"
 import Dashboard from "../../components/DashboardMain/Dashboard"
+import { useState } from 'react'
 function Maindashboard() {
+    const [sidebar, setSideBar] = useState(false);
+
+
+    const showSideBar = ()=> setSideBar(!sidebar)
     return (
         <div className="maindashboardContainer">
-            <div className="maindashboardContainerMenu">
+            <div className={sidebar ? "maindashboardContainerMenu" : "maindashboardContainerMenuClosed"}>
                 <Menus />
             </div>
-            <div className="maindashboardContainerDashboard">
+            <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
                 <Dashboard />
             </div>
         </div>
