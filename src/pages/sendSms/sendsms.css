@@ -1,0 +1,80 @@
+.smsContainer{
+    position:relative;
+}
+
+.ScheduleWrapper{
+    top: 50px;
+    height:calc(100vh - 50px);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.scheduleform{
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule{
+    display: flex;
+    flex-direction: row;
+}
+
+.Schedulecontaining{
+    width: 90%;
+    background-color:#000000;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.schedule-radio{
+    display: flex;
+    flex-direction: row;
+  
+}
+
+
+
+textarea{
+width: 937px;
+height: 279px;
+background: #FFFFFF;
+margin-top: 10px;
+outline: none;
+padding: 10px;
+border: 1px solid #878686;
+box-sizing: border-box;
+border-radius: 8px;
+}
+
+.scheduleform{
+    margin-top:20px;
+}
+
+.phone{
+width: 936px;
+height: 54px;
+padding: 10px;
+background: #FFFFFF;
+outline: none;
+border: 3px solid #F8F5F5;
+box-sizing: border-box;
+border-radius: 8px;
+}
+
+.sendbtn{
+border: none;
+width: 190px;
+height: 46px;
+float: right;
+font-size: 20px;
+margin-top:20px;
+color: #FFFFFF;
+background: #18A0FB;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 4px;
+}

@@ -1,0 +1,50 @@
+.menuContainer{
+    height:100%;
+    padding: 10px;
+}
+
+.menuContainerDesc{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+}
+
+.menuContainerDesc span{
+font-family: Roboto;
+font-size: 30px;
+font-style: normal;
+font-weight: 900;
+color: #787575;
+line-height: 28px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+
+.menuHouse{
+    margin-top: 10px;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.menuItem{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.menuItem span{
+    margin-left: 10px;
+}
+
+
+.secondMenu{
+    width: 100%;
+    height: 1px;
+    background-color: gray;
+}
+
+

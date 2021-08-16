@@ -1,0 +1,16 @@
+.schedule-image{
+    display: flex;
+    align-items: center;
+}
+
+.schedule-image img{
+    object-fit: cover;
+}
+
+.schedule-image span{
+    margin-left: 10px;
+}
+
+.Mui-checked{
+    color: #18A0FB !important;
+}

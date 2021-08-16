@@ -1,0 +1,12 @@
+.maindashboardContainer{
+height:100vh;
+display: flex;
+}
+.maindashboardContainerMenu{
+    flex: 1;
+}
+
+.maindashboardContainerDashboard{
+    flex: 5;
+    background-color: #f5f5f5;
+}
