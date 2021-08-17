@@ -1,0 +1,73 @@
+.monthlyscheduleConatiner{
+    height:100vh;
+    display: flex; 
+    position: relative;
+}
+
+.reportTask{
+    display: flex;
+}
+
+.ScheduleReports{
+    flex:3;
+    display: flex;
+    justify-content: flex-start;
+}
+.generalbox{
+    display: flex; 
+    flex-direction: column;
+}
+
+.scheduleDashboard{
+    position: relative;
+    padding: 40px;
+    padding-bottom: 50px;
+    height: calc(100vh - 50px);
+    
+}
+
+.headerboxBlue{
+    margin-left: 10px;
+    height:50px;
+    background-color: #18A0FB;
+    margin-left: 10px;
+    border-radius: 10px 10px 0 0px; 
+}
+.headerboxContainer{
+ 
+    margin-top:10px;
+    display: flex;
+    border-radius: 10px 10px 0 0px; 
+}
+
+.headerbox{
+    width:200px;
+    margin-left: 10px;
+    height:50px;
+    background-color: #18A0FB;
+    margin-left: 10px;
+}
+
+.TaskSchedule{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+}
+
+.taskList{
+    background-color: grey;
+    height:200px;
+}
+
+
+
+.messagesQueueTable{
+    display: flex;
+    height:200px;
+    background-color:#fff;
+    flex-direction: column;
+}
+
+.Emailqueue{
+margin-top: 10px;
+}

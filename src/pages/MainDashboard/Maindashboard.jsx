@@ -10,7 +10,7 @@ function Maindashboard() {
     return (
         <div className="maindashboardContainer">
             <div className={sidebar ? "maindashboardContainerMenu" : "maindashboardContainerMenuClosed"}>
-                <Menus />
+                <Menus sidebar = {sidebar} controlSideBar = {showSideBar}/>
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
                 <Dashboard />
