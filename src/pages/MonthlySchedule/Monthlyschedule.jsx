@@ -5,11 +5,20 @@ import Menus from "../../components/menu/Menu"
 import NavigationComponent from '../../components/navigationComponent/NavigationComponent'
 import Dashnav from '../../components/dashnav/Dashnav'
 import { DataGrid } from '@material-ui/data-grid';
-
+import {DeleteOutline} from '@material-ui/icons';
 
 function Monthlyschedule() {
+    const dataHorizontal = [
+        {id:1,dateSchedule:"12-Aug-2021",MessageContent:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",status:"Pending"},
+        {id:2,dateSchedule:"12-Aug-2021",MessageContent:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",status:"Pending"},
+        {id:3,dateSchedule:"12-Aug-2021",MessageContent:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",status:"Pending"},
+        {id:4,dateSchedule:"12-Aug-2021",MessageContent:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",status:"Pending"},
+        {id:5,dateSchedule:"12-Aug-2021",MessageContent:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",status:"Pending"},
+    ];
     const [sidebar, setSideBar] = useState(false);
+    const [dataRow, setDataRow] = useState(dataHorizontal);
 
+    const handledelete = (id)=> setDataRow(()=> dataRow.filter((item)=> item.id !== id ));
     const showSideBar = () => setSideBar(!sidebar)
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -55,6 +64,59 @@ function Monthlyschedule() {
         { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
         { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
     ];
+
+    const dataVertical = [
+        { field: 'id', headerName: 'ID', width: 90 },
+        {
+            field: 'dateSchedule',
+            headerName: 'Date Schedule',
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 160,
+            renderCell: (prenentr)=>{
+
+                console.log(prenentr);
+                <div>hdh</div>
+
+            }
+            },
+        {
+            field:"MessageContent",
+            headerName: 'Message Content',
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 500,
+            renderCell: ()=>{
+                
+            }
+        },
+        {
+            field:"status",
+            headerName: "Status",
+            width:160,
+            renderCell: ({row})=>{
+                <div className="CentralizeCell">
+                    {row.status}
+                </div>
+                
+            }
+        },
+
+        {
+
+            field:"",
+            headerName: "",
+            width:160,
+            renderCell:({row}) => (<><div className="userdelete">
+            <DeleteOutline style ={{marginLeft:20,
+            color:"red",
+          cursor:"pointer"}} onClick = {()=>handledelete(row.id) }/></div></>)
+      
+        }
+       
+
+    ]
+  
 
 
     return (
@@ -110,8 +172,8 @@ function Monthlyschedule() {
                             <h3>Email queue</h3>
                             <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
-                                    rows={rows}
-                                    columns={columns}
+                                    rows={dataHorizontal}
+                                    columns={dataVertical}
                                     pageSize={5}
                                     checkboxSelection
                                 />

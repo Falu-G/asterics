@@ -71,3 +71,11 @@
 .Emailqueue{
 margin-top: 10px;
 }
+
+.CentralizeCell{
+    background-color:#18A0FB;
+    display: flex;
+    align-items: center;
+    width:100px;
+    height:100px;
+}
