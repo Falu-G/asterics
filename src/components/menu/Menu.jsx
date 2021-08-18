@@ -54,7 +54,7 @@ function Menus({controlSideBar,sidebar}) {
                         <span>Schedules</span>
                     </Link>
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="">
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
                         <MenuIcon />
                         <span>Templates</span>
                     </Link>
