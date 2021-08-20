@@ -13,7 +13,7 @@ function Maindashboard() {
                 <Menus sidebar = {sidebar} controlSideBar = {showSideBar}/>
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
-                <Dashboard />
+                <Dashboard/>
             </div>
         </div>
     )

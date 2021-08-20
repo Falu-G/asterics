@@ -6,6 +6,8 @@ import SendEmail from './pages/SendEmail/SendEmail';
 import Sendsms from './pages/sendSms/Sendsms';
 import Maindashboard from './pages/MainDashboard/Maindashboard';
 import MonthlySchedule from './pages/MonthlySchedule/Monthlyschedule'
+import Templates from './pages/Template/Template';
+import Customer from './pages/Customer/Customer';
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,6 +26,8 @@ function App() {
           <Route path = "/sendemail" component = {SendEmail} />
           <Route path = "/maindashboard" component = {Maindashboard} />
           <Route path = "/schedule" component = {MonthlySchedule} />
+          <Route path = "/templates" component = {Templates} />
+          <Route path = "/customer" component = {Customer} />
         </Switch>
       </Router>
     </div>

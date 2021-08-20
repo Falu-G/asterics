@@ -1,19 +1,27 @@
 import React from 'react'
 import './addCustomer.css'
-import NavigationComponent from "../../components/navigationComponent/NavigationComponent"
+import CloseIcon from '@material-ui/icons/Close';
+import Dashnav from '../../components/dashnav/Dashnav';
+function AddCustomer({openModal, setOpenModal}) {
 
-function AddCustomer() {
+    //const [openModal, setOpenModal] = useState(false);
     return (
         <div className="customersContainer">
 
-            <NavigationComponent title="Add Customer" />
+            <CloseIcon
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 10
+                }}
+                onClick={setOpenModal} />
+            <Dashnav title="Add Customer" />
 
             <div style={{
                 backgroundImage: `url(/images/addcustomerbg.png)`
                 , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
                 backgroundPosition: 'center right'
             }} className="addCustomerWrapper">
-
 
                 <div className="addCustomerWrapperCont">
                     <button className="addCustomerButton">Upload CSV</button>
@@ -35,7 +43,7 @@ function AddCustomer() {
                         </div>
 
                         <input className="addforminput" type="email" name="email" placeholder="Email" />
-                        <div className = "Anniversary">
+                        <div className="Anniversary">
                             <input className="addformLast" type="email" name="Anniversary" placeholder="Anniversary" />
                             <img src="/images/calendar.png" alt="" />
                         </div>

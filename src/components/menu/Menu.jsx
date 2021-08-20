@@ -22,12 +22,12 @@ function Menus({controlSideBar,sidebar}) {
                 <div className="firstMenu">
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/maindashboard">
-                        <MenuIcon />
+                        <img src = "images/menu.png" alt = "" />
                         <span>Main</span>
                     </Link>
 
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/dashboard">
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/schedule">
                         <MenuIcon />
                         <span>Dashboard</span>
                     </Link>
@@ -54,9 +54,21 @@ function Menus({controlSideBar,sidebar}) {
                         <span>Schedules</span>
                     </Link>
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="">
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
                         <MenuIcon />
                         <span>Templates</span>
+                    </Link>
+
+
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
+                        <MenuIcon />
+                        <span>Subscription</span>
+                    </Link>
+
+
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
+                        <MenuIcon />
+                        <span>Reports</span>
                     </Link>
 
                 </div>

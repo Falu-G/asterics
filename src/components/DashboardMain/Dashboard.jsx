@@ -10,7 +10,7 @@ function Dashboard() {
             , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
             backgroundPosition: 'center right'
         }} className="dashboardContainer">
-            <NavigationComponent title="Dashboard" />
+            <NavigationComponent title="Main Dashboard" />
             <div className="dashboardContainerWrapper">
 
                 <div className="dateAndTime">
