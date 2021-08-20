@@ -3,39 +3,38 @@ import './menu.css'
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
-function Menus({controlSideBar,sidebar}) {
+import { Subscriptions, Assessment, Message, Schedule, People, Settings, ExitToApp, MailOutline, Dashboard } from '@material-ui/icons'
+function Menus({ controlSideBar, sidebar }) {
     return (
         <div className="menuContainer">
             <div className="menuContainerDesc">
 
                 {sidebar ? <>
                     <Link className="menuAsset">Assetrics CRM</Link>
-                    <CloseIcon  onClick = {controlSideBar}/>
-                </> : <MenuIcon 
-                onClick = {controlSideBar}/>}
-
-
-
+                    <CloseIcon onClick={controlSideBar} />
+                </> : <MenuIcon
+                    onClick={controlSideBar} />
+                }
             </div>
 
             <div className="menuHouse">
                 <div className="firstMenu">
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/maindashboard">
-                        <img src = "images/menu.png" alt = "" />
+                        <img src="images/menu.png" alt="" />
                         <span>Main</span>
                     </Link>
 
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/schedule">
-                        <MenuIcon />
+                        <Dashboard />
                         <span>Dashboard</span>
                     </Link>
 
 
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/customer">
-                        <MenuIcon />
+                        <People />
                         <span>Customer</span>
                     </Link>
 
@@ -44,30 +43,30 @@ function Menus({controlSideBar,sidebar}) {
                         <span>Send SMS</span>
                     </Link>
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/sendemai">
-                        <MenuIcon />
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="">
+                        <MailOutline />
                         <span>Send Email</span>
                     </Link>
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/schedule">
-                        <MenuIcon />
+                        <Schedule />
                         <span>Schedules</span>
                     </Link>
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
-                        <MenuIcon />
+                        <Message />
                         <span>Templates</span>
                     </Link>
 
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
-                        <MenuIcon />
+                        <Subscriptions />
                         <span>Subscription</span>
                     </Link>
 
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
-                        <MenuIcon />
+                        <Assessment />
                         <span>Reports</span>
                     </Link>
 
@@ -80,12 +79,12 @@ function Menus({controlSideBar,sidebar}) {
 
                 <div className="thirdMenu">
                     <Link className={sidebar ? "menuItem" : "menuItem closed"}>
-                        <MenuIcon />
+                        <Settings />
                         <span>Settings</span>
                     </Link>
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"}>
-                        <MenuIcon />
+                        <ExitToApp />
                         <span>LogOut</span>
                     </Link>
                 </div>

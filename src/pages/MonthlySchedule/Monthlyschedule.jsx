@@ -8,10 +8,20 @@ import { DataGrid } from '@material-ui/data-grid';
 import { DeleteOutline } from '@material-ui/icons';
 import Modal from "react-modal"
 import NewSchedule from '../../components/newSchedule/NewSchedule'
+import Dropdown from '../../components/Dropdown/Dropdown'
+import {CalendarToday} from '@material-ui/icons'
+
 
 function Monthlyschedule() {
-
-
+    let today = new Date();
+    let month = today.getMonth() + 1;
+    month = month < 10 ? "0" + month : month;
+    let days = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+    
+    today = today.getFullYear() + "-" + month + "-" + days;
+    
+    console.log(today);
+    
     const [openModal, setOpenModal] = useState(false);
     const customStyles = {
         content: {
@@ -35,6 +45,8 @@ function Monthlyschedule() {
 
     const handledelete = (id) => setDataRow(() => dataRow.filter((item) => item.id !== id));
     const showSideBar = () => setSideBar(!sidebar)
+
+    const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
     // const columns = [
     //     { field: 'id', headerName: 'ID', width: 90 },
     //     {
@@ -143,9 +155,6 @@ function Monthlyschedule() {
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
 
-
-
-
                 <div style={{
                     backgroundImage: `url(/images/smsbg.png)`
                     , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
@@ -163,19 +172,37 @@ function Monthlyschedule() {
 
                             <div className="ScheduleReports">
 
-                                <h3>Icon</h3>
+                                
                                 <div className="generalbox">
-                                    <div className="headerboxBlue">blue</div>
+                                    <div className="headerboxBlue">
+                                        <div className="headerboxBlueInner">
+                                        <CalendarToday/>
+                                        <span>Monthly Schedule</span>
+                                        </div>
+                                        
+                                        <span className="headerboxBluedate">{today}</span>
+                                        </div>
                                     <div className="headerboxContainer">
-                                        <div className="headerbox">first</div>
-                                        <div className="headerbox">second</div>
-                                        <div className="headerbox">third</div>
+                                        <div className="headerboxone">
+                                            <span>Scheduled Messages</span>
+                                            <h3>400</h3>
+                                        </div>
+                                        <div className="headerboxtwo">
+                                        <span>Pending Messages</span>
+                                            <h3>350</h3>
+                                            </div>
+                                        <div className="headerboxthree">
+                                        <span>Successful Messages</span>
+                                            <h3>50</h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="TaskSchedule">
-                                <h3>View Task</h3>
+
+                                <Dropdown tasks = {listOfTasks}/>
+                                
 
                                 <h3 onClick={() => setOpenModal(() => openModal ? false : true)}>New Schedule</h3>
                             </div>

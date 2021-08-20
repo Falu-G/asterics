@@ -5,12 +5,30 @@ import ImageIcon from '@material-ui/icons/Image';
 import GifIcon from '@material-ui/icons/Gif';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import { Delete } from '@material-ui/icons';
 import Modal from "react-modal"
 import FormRadio from '../../components/formRadio/FormRadio';
 import Dashnav from '../../components/dashnav/Dashnav'
 import Menus from "../../components/menu/Menu"
 import NavigationComponent from '../../components/navigationComponent/NavigationComponent'
+import Message from '../../classes/Messages'
 function Templates() {
+
+
+
+    let message = new Message("Promo", "Come and buy what we are selling");
+
+
+    let emailList = [message];
+    let smsList = [message];
+
+    const [emailTemplates, setEmailTemplates] = useState(emailList)
+    const [smsTemplates, setSmsTemplates] = useState(smsList)
+
+
+    const [modalTemplate, setModalTemplate] = useState(false);
+
+
 
     const [sidebar, setSideBar] = useState(false);
     const showSideBar = () => setSideBar(!sidebar);
@@ -32,6 +50,16 @@ function Templates() {
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+
+
+    const valueGetter = (myInput)=>{
+        // Selecting the input element and get its value 
+        var inputVal = document.getElementById(myInput).value;
+        
+        // Displaying the value
+        console.log(inputVal)
+        return inputVal
+    }
 
     return (
         <div className="templatesContainer">
@@ -55,7 +83,8 @@ function Templates() {
 
                             <div className="modalContainer">
                                 <Dashnav title="Email Template" />
-
+                                {console.log(message.title)}
+                                {console.log(message.content)}
                                 <form className="modalInput">
                                     <div className="modalFirstInput">
 
@@ -145,14 +174,62 @@ function Templates() {
                         </Modal>
 
 
+
+                        <Modal isOpen={modalTemplate}
+                            style={customStyles}>
+                            <Dashnav title="Add to templates" />
+
+                            <div className="mf_input">
+                                <input id = "titleSchedule" type="text" name="username" placeholder="Title" />
+                            </div>
+
+                            <div>
+                                <h3>Add templates to SMS or Email templates</h3>
+                            </div>
+
+                            <textArea type="text" id = "contentSchedule" name="message" placeholder="Messages..." />
+                            <div><button
+                            onClick={()=>{
+                                //let mess = new Message("","")
+                                let val  = valueGetter("titleSchedule");
+                                let content = valueGetter("contentSchedule");
+                                let messs = new Message(val,content)
+                                
+                                emailList.push(messs);
+                                setEmailTemplates(emailList);
+
+                                console.log(emailList.length);
+                                
+                            }}>ADD</button></div>
+
+
+                        </Modal>
+
+
                         <div className="EmailTemplate">
                             <h3>Email Template</h3>
                             <div className="em_templatebox">
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
+
+
+                                {emailTemplates.map((emailTemplate, index) => <>
+                                    <div className="em_gen"
+                                        key={index}
+                                        onClick={() => setOpenModalSMS(() => openModalSMS ? false : true)}>
+                                        <h3>{emailTemplate.title}</h3>
+                                        <p>{emailTemplate.content}</p>
+                                        <Delete className="delete" />
+
+                                    </div>
+                                </>)}
+
+
+
+
+
+
+
                                 <div className="em_gen em_add">
-                                    <img src="images/add.png" alt="" onClick={() => setOpenModalEmail(() => openModalEmail ? false : true)} />
+                                    <img src="images/add.png" alt="" onClick={() => setModalTemplate(!modalTemplate)} />
                                 </div>
                             </div>
 
@@ -161,13 +238,15 @@ function Templates() {
                         <div className="SMSTemplate">
                             <h3>SMS Template</h3>
                             <div className="em_templatebox">
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
-                                <div className="em_gen">First EmailT</div>
+
+                                {smsTemplates.map((smsTemplate, index) => <>
+                                    <div className="em_gen" key={index}
+                                        onClick={() => setOpenModalSMS(() => openModalSMS ? false : true)} >
+                                        <h3>{smsTemplate.title}</h3>
+                                        <p>{smsTemplate.content}</p>
+                                    </div>
+                                </>)}
+
                                 <div className="em_gen em_add">
 
                                     <img src="images/add.png" alt=""

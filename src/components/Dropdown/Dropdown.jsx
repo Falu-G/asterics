@@ -1,23 +1,20 @@
 import React, {useState} from 'react'
 import './Dropdown.css'
-function Dropdown({setActiv}) {
+function Dropdown({tasks}) {
 
 
-    const [messageType, setMessageType] = useState("Select Message Type")
-   
-
-    const options = ["SMS", "Email"]
+    const [messageType, setMessageType] = useState("View Task")
 
     return (
         <div class="dropdown">
-            <button class="dropbtn">{messageType}</button>
+            <h3 class="dropbtnn">{messageType}</h3>
             <div class="dropdown-content">
 
-                {options.map((option, index) => (<>
-                <h3 onClick={()=>{
-                    setMessageType(option);
+                {tasks.map((task, index) => (<>
+                <span onClick={()=>{
+                    setMessageType(task);
                    
-                    }}>{option}</h3>
+                    }}>{task}</span>
                 </>))}
                 
             </div>
