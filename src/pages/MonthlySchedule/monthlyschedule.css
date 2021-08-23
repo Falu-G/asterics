@@ -1,7 +1,5 @@
 .monthlyscheduleConatiner{
-    height:100vh;
     display: flex; 
-    position: relative;
 }
 
 .reportTask{
@@ -22,8 +20,6 @@
     position: relative;
     padding: 40px;
     padding-bottom: 50px;
-    height: calc(100vh - 50px);
-    
 }
 
 .headerboxBlue{

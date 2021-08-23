@@ -155,6 +155,8 @@ function Monthlyschedule() {
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
 
+                
+
                 <div style={{
                     backgroundImage: `url(/images/smsbg.png)`
                     , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
@@ -163,11 +165,85 @@ function Monthlyschedule() {
                     <NavigationComponent title="Dashboard" />
                     <div className="scheduleDashboard">
 
-                        <Modal isOpen={openModal}
+
+                    <Modal isOpen={openModal}
                             style={customStyles}>
 
                             <NewSchedule setOpenModal = {() => setOpenModal(() => openModal ? false : true)}/>
                         </Modal>
+
+
+          
+                        <div className="reportTask">
+
+                            <div className="ScheduleReports">
+
+                                
+                                <div className="generalbox">
+                                    <div className="headerboxBlue">
+                                        <div className="headerboxBlueInner">
+                                        <CalendarToday/>
+                                        <span>Monthly Schedule</span>
+                                        </div>
+                                        
+                                        <span className="headerboxBluedate">{today}</span>
+                                        </div>
+                                    <div className="headerboxContainer">
+                                        <div className="headerboxone">
+                                            <span>Scheduled Messages</span>
+                                            <h3>400</h3>
+                                        </div>
+                                        <div className="headerboxtwo">
+                                        <span>Pending Messages</span>
+                                            <h3>350</h3>
+                                            </div>
+                                        <div className="headerboxthree">
+                                        <span>Successful Messages</span>
+                                            <h3>50</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="TaskSchedule">
+
+                                <Dropdown tasks = {listOfTasks}/>
+                                
+
+                                <h3 onClick={() => setOpenModal(() => openModal ? false : true)}>New Schedule</h3>
+                            </div>
+
+                        </div>
+                        <div style = {{marginTop: 25}}>
+                            <h3>MessagesQueue</h3>
+                            <div className="messagesQueueTable card">
+                                <Dashnav />
+                            </div>
+                        </div>
+
+                        <div className="Emailqueue">
+                            <h3>Email queue</h3>
+                            <div style={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    rows={dataHorizontal}
+                                    columns={dataVertical}
+                                    pageSize={5}
+                                    checkboxSelection
+                                />
+                            </div>
+                        </div>
+
+                        {/*<Modal isOpen={openModal}
+                            style={customStyles}>
+
+                            <NewSchedule setOpenModal = {() => setOpenModal(() => openModal ? false : true)}/>
+                        </Modal>
+
+
+
+
+
+
                         <div className="reportTask">
 
                             <div className="ScheduleReports">
@@ -225,7 +301,7 @@ function Monthlyschedule() {
                                     checkboxSelection
                                 />
                             </div>
-                        </div>
+                        </div>*/}
 
                     </div>
 

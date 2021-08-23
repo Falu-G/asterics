@@ -7,11 +7,12 @@ function Login() {
     const [password, setPassword] = useState("")
 
 
-    const login = async ()=>{
+    const login = async (e)=>{
 
+        e.preventDefault();
         console.warn(email, password)
         let item = {email:email,password:password}
-        let result = await fetch("",{
+        let result = await fetch("users/authenticate",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -21,10 +22,18 @@ function Login() {
         })
 
         result = await result.json();
-        localStorage.setItem("user-info",JSON.stringify(result))
-        history.push("/maindashboard")
+       
 
+        if(result.status === "success"){
+            localStorage.setItem("user-info",JSON.stringify(result))
+            history.push("/maindashboard")
+        } else{
+            console.warn(result.message)
+        }
 
+        
+       
+    
     }
     return (
         <div className="LoginContainer">
@@ -51,7 +60,7 @@ function Login() {
                         onChange = {(e)=> setPassword(e.target.value)}
                         name="password" placeholder="Password" />
                         <span>Forgot password</span>
-                        <button className="submitbut" onClick ={()=>login}>Login</button>
+                        <button className="submitbut" onClick ={login}>Login</button>
                     </form>
 
                 </div>

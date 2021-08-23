@@ -31,7 +31,7 @@ function Templates() {
 
 
     const [sidebar, setSideBar] = useState(false);
-    const showSideBar = () => setSideBar(!sidebar);
+    
     const [openModalEmail, setOpenModalEmail] = useState(false);
 
     const [openModalSMS, setOpenModalSMS] = useState(false);
@@ -46,7 +46,7 @@ function Templates() {
             transform: 'translate(-50%, -50%)',
         },
     };
-
+    const showSideBar = () => setSideBar(!sidebar);
     const handleChange = (event) => {
         setValue(event.target.value);
     };
