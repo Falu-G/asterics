@@ -21,7 +21,7 @@ function Templates() {
                     backgroundPosition: 'center right'
                 }} className="dashboardContainer">
                     <NavigationComponent title="Dashboard" />
-                    <div className="scheduleDashboard"></div>
+                    <div className="scheduleDashboard">hello</div>
 
                 </div>
 
