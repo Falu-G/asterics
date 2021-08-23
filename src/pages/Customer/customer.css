@@ -1,0 +1,21 @@
+.customerContainer{
+    height:100vh;
+    display: flex; 
+    position: relative;
+    
+}
+
+.customerWrapper{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.btnAddCustomer{
+    background-color: aqua;
+    padding: 10px;
+    border:none;
+    float: right;
+    margin-top: 20px;
+    cursor: pointer;
+}
