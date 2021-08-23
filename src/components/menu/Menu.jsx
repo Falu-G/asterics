@@ -54,11 +54,7 @@ function Menus({ controlSideBar, sidebar }) {
                     </Link>
 
                     <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/templates">
-<<<<<<< HEAD
-                        <MenuIcon />
-=======
                         <Message />
->>>>>>> c63535ecc1c0de4684f5a1f563e2d64d0c02cf9c
                         <span>Templates</span>
                     </Link>
 
