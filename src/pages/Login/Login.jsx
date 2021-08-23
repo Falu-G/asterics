@@ -12,7 +12,7 @@ function Login() {
         e.preventDefault();
         console.warn(email, password)
         let item = {email:email,password:password}
-        let result = await fetch("users/authenticate",{
+        let result = await fetch("https://asteric.herokuapp.com/users/authenticate",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -25,7 +25,8 @@ function Login() {
        
 
         if(result.status === "success"){
-            localStorage.setItem("user-info",JSON.stringify(result))
+            console.log(result)
+            localStorage.setItem("user-info",result)
             history.push("/maindashboard")
         } else{
             console.warn(result.message)

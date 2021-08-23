@@ -3,9 +3,25 @@ import "./Maindashboard.css"
 import Menus from "../../components/menu/Menu"
 import Dashboard from "../../components/DashboardMain/Dashboard"
 import { useState } from 'react'
+import {useHistory} from 'react-router-dom'
 function Maindashboard() {
     const [sidebar, setSideBar] = useState(false);
-    const showSideBar = ()=> setSideBar(!sidebar)
+    const showSideBar = ()=> setSideBar(!sidebar);
+    const history = useHistory();
+
+
+
+
+    useEffect(() => {
+        const token = localStorage.getItem('user-info');
+        console.log(`This is token ${JSON.parse(token)}`)
+
+        if(!token) {
+          history.push('/login');
+        }
+      })
+
+
     //var retrievedPerson = JSON.parse(localStorage.getItem('user-info')); 
     // useEffect(() => {
     //     // POST request using fetch inside useEffect React hook
@@ -35,10 +51,6 @@ function Maindashboard() {
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
                 <Dashboard/>
-                
-            {/*console.log(localStorage.getItem('user-info'))*/}
-
-            
             </div>
 
         </div>
