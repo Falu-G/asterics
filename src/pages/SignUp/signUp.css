@@ -16,6 +16,65 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 10px;
+    
+}
+
+.signUpForm h3{
+width: 299px;
+height: 42px;
+font-style: normal;
+font-weight: bold;
+font-size: 36px;
+line-height: 42px;
+color: #000000;
+}
+
+.firstSignUp span{
+    width: 251px;
+    height: 84px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 72px;
+    line-height: 84px;
+    color: #FFFFFF;
+   
+}
+
+.firstSignUp h4{
+width: 401px;
+height: 42px;
+font-family: Roboto;
+font-style: normal;
+font-weight: bold;
+font-size: 30px;
+line-height: 42px;
+margin-top: 50px;
+color: #FFFFFF;
+}
+
+.firstSignUp p{
+width: 443px;
+height: 28px;
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 21px;
+color: #FFFFFF;
+}
+
+.firstSignUpContainer,.secondSignUp{
+    flex:1;
+  
+}
+
+.firstSignUp{
+    height:450px;
+    width:700px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
 }
 
 .firstfield{
