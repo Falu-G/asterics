@@ -12,6 +12,7 @@ import Dashnav from '../../components/dashnav/Dashnav'
 import Menus from "../../components/menu/Menu"
 import NavigationComponent from '../../components/navigationComponent/NavigationComponent'
 import Message from '../../classes/Messages'
+import Close from '@material-ui/icons/Close';
 function Templates() {
 
 
@@ -25,14 +26,18 @@ function Templates() {
     const [emailTemplates, setEmailTemplates] = useState(emailList)
     const [smsTemplates, setSmsTemplates] = useState(smsList)
 
+    const [title, setTitle] = useState("");
+
 
     const [modalTemplate, setModalTemplate] = useState(false);
 
 
 
     const [sidebar, setSideBar] = useState(false);
-    
+
     const [openModalEmail, setOpenModalEmail] = useState(false);
+
+    const [mesag, setMesag] = useState("");
 
     const [openModalSMS, setOpenModalSMS] = useState(false);
     const [value, setValue] = React.useState('Yes');
@@ -52,10 +57,18 @@ function Templates() {
     };
 
 
-    const valueGetter = (myInput)=>{
+
+    const deleteFromArray = (id)=> {
+
+        setEmailTemplates(emailList.filter(function (element) {
+            return element.id !== id;
+        }));
+       
+    }
+    const valueGetter = (myInput) => {
         // Selecting the input element and get its value 
         var inputVal = document.getElementById(myInput).value;
-        
+
         // Displaying the value
         console.log(inputVal)
         return inputVal
@@ -178,29 +191,49 @@ function Templates() {
                         <Modal isOpen={modalTemplate}
                             style={customStyles}>
                             <Dashnav title="Add to templates" />
-
+                            <Close
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 10
+                                }}
+                                onClick={() => setModalTemplate(!modalTemplate)} />
                             <div className="mf_input">
-                                <input id = "titleSchedule" type="text" name="username" placeholder="Title" />
+                                <input
+                                    id="titleSchedule"
+                                    type="text"
+                                    name="title"
+                                    placeholder="Title"
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    value={title} />
                             </div>
 
                             <div>
                                 <h3>Add templates to SMS or Email templates</h3>
                             </div>
 
-                            <textArea type="text" id = "contentSchedule" name="message" placeholder="Messages..." />
+                            <textArea
+                                type="text"
+                                id="contentSchedule"
+                                name="message"
+                                placeholder="Messages..."
+                                onChange={(e) => setMesag(e.target.value)}
+                                value={mesag} />
                             <div><button
-                            onClick={()=>{
-                                //let mess = new Message("","")
-                                let val  = valueGetter("titleSchedule");
-                                let content = valueGetter("contentSchedule");
-                                let messs = new Message(val,content)
-                                
-                                emailList.push(messs);
-                                setEmailTemplates(emailList);
+                                onClick={() => {
+                                    // //let mess = new Message("","")
+                                    // let val  = valueGetter("titleSchedule");
+                                    // let content = valueGetter("contentSchedule");
+                                    // let messs = new Message(val,content)
 
-                                console.log(emailList.length);
-                                
-                            }}>ADD</button></div>
+
+
+                                    let messs = new Message(title, mesag);
+                                    setEmailTemplates([...emailTemplates, messs]);
+
+                                    console.log(emailTemplates.length);
+
+                                }}>ADD</button></div>
 
 
                         </Modal>
@@ -217,7 +250,9 @@ function Templates() {
                                         onClick={() => setOpenModalSMS(() => openModalSMS ? false : true)}>
                                         <h3>{emailTemplate.title}</h3>
                                         <p>{emailTemplate.content}</p>
-                                        <Delete className="delete" />
+                                        <Delete 
+                                        className="delete"
+                                        onClick={()=>deleteFromArray(index)} />
 
                                     </div>
                                 </>)}
