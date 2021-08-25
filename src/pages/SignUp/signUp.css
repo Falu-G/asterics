@@ -30,32 +30,26 @@ color: #000000;
 }
 
 .firstSignUp span{
-    width: 251px;
-    height: 84px;
+    margin-top: 30px;
     font-style: normal;
     font-weight: bold;
-    font-size: 72px;
+    font-size: 50px;
     line-height: 84px;
     color: #FFFFFF;
    
 }
 
 .firstSignUp h4{
-width: 401px;
-height: 42px;
 font-family: Roboto;
 font-style: normal;
 font-weight: bold;
 font-size: 30px;
 line-height: 42px;
-margin-top: 50px;
+margin-top: 20px;
 color: #FFFFFF;
 }
 
 .firstSignUp p{
-width: 443px;
-height: 28px;
-font-family: Roboto;
 font-style: normal;
 font-weight: normal;
 font-size: 18px;

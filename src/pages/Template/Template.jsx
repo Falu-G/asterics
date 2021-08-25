@@ -58,20 +58,12 @@ function Templates() {
 
 
 
-    const deleteFromArray = (id)=> {
-
-        setEmailTemplates(emailList.filter(function (element) {
-            return element.id !== id;
+    const deleteFromArray = (title) => {
+        setOpenModalEmail(false);
+        setEmailTemplates(emailTemplates.filter(function (element) {
+            return element.title !== title;
         }));
-       
-    }
-    const valueGetter = (myInput) => {
-        // Selecting the input element and get its value 
-        var inputVal = document.getElementById(myInput).value;
 
-        // Displaying the value
-        console.log(inputVal)
-        return inputVal
     }
 
     return (
@@ -198,6 +190,7 @@ function Templates() {
                                     right: 10
                                 }}
                                 onClick={() => setModalTemplate(!modalTemplate)} />
+                                
                             <div className="mf_input">
                                 <input
                                     id="titleSchedule"
@@ -221,17 +214,9 @@ function Templates() {
                                 value={mesag} />
                             <div><button
                                 onClick={() => {
-                                    // //let mess = new Message("","")
-                                    // let val  = valueGetter("titleSchedule");
-                                    // let content = valueGetter("contentSchedule");
-                                    // let messs = new Message(val,content)
-
-
-
+                                   
                                     let messs = new Message(title, mesag);
                                     setEmailTemplates([...emailTemplates, messs]);
-
-                                    console.log(emailTemplates.length);
 
                                 }}>ADD</button></div>
 
@@ -246,21 +231,21 @@ function Templates() {
 
                                 {emailTemplates.map((emailTemplate, index) => <>
                                     <div className="em_gen"
-                                        key={index}
-                                        onClick={() => setOpenModalSMS(() => openModalSMS ? false : true)}>
-                                        <h3>{emailTemplate.title}</h3>
+                                        key={index}>
+                                        
+                                        <h3
+                                        onClick={() => setOpenModalEmail(!openModalEmail)}
+                                        >{emailTemplate.title}</h3>
                                         <p>{emailTemplate.content}</p>
-                                        <Delete 
-                                        className="delete"
-                                        onClick={()=>deleteFromArray(index)} />
 
-                                    </div>
+                                        {console.log(index)}
+
+                                        <Delete
+                                            className="delete"
+                                            onClick={() => deleteFromArray(emailTemplate.title)} />
+
+                                    </  div>
                                 </>)}
-
-
-
-
-
 
 
                                 <div className="em_gen em_add">
