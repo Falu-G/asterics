@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import './login.css'
-import { Progress } from 'react-sweet-progress';
+import { BeatLoader } from 'react-spinners';
+import { css } from "@emotion/react";
 function Login() {
     let history = useHistory();
     const [email, setEmail] = useState("");
@@ -13,8 +14,13 @@ function Login() {
     const [loginError, setLoginError] = useState(false)
 
 
+    const override = css`
+  display: block;
+  margin: 0 auto;
+`;
     const login = async (e) => {
 
+        setShowIcon(true)
         e.preventDefault();
         console.warn(email, password)
         let item = { email: email, password: password }
@@ -32,11 +38,13 @@ function Login() {
 
         if (result.status === "success") {
             console.log(result)
+            setShowIcon(false)
             localStorage.setItem("user-info", result)
             history.push("/maindashboard")
         } else {
             setErrorMessage(result.message)
             setLoginError(true)
+            setShowIcon(false)
         }
 
 
@@ -59,7 +67,7 @@ function Login() {
             <div style={{ backgroundImage: `url(/images/graybg.png)`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }} className="LoginContainersecondbox">
                 <div className="LoginContainersecondboxform">
                     <h2>Login</h2>
-                   
+
                     <form className="formHouse">
 
                         <input className="forminput"
@@ -69,19 +77,19 @@ function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             name="password" placeholder="Password" />
                         <span>Forgot password</span>
-                       <div style = {{
-                           display:'flex',
-                           alignItems: 'center',
-                           marginTop:20,
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginTop: 20,
 
-                       }}>
-                       <button className="submitbut" onClick={login}>Login</button>
-                        <i class="fa fa-camera-retro fa-2x" style = {{
-                            marginLeft:10
-                        }}></i>
-                       </div>
-                        
-                        
+                        }}>
+                            <button className="submitbut" onClick={login}>Login</button>
+                            <BeatLoader loading={showIcon}
+                                color={"#18A0FB"}
+                                css={override} />
+                        </div>
+
+
                     </form>
 
 
