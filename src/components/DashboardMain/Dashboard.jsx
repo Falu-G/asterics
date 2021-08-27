@@ -10,7 +10,7 @@ function Dashboard() {
             , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
             backgroundPosition: 'center right'
         }} className="dashboardContainer">
-            <NavigationComponent title="Dashboard" />
+            <NavigationComponent title="Main Dashboard" />
             <div className="dashboardContainerWrapper">
 
                 <div className="dateAndTime">
@@ -25,20 +25,20 @@ function Dashboard() {
 
                             <h4>Total outboundemails</h4>
 
-                            <h1>210</h1>
+                            <h1>2</h1>
 
                         </div>
 
                         <div className="outboundsms">
                             <h4>Total outboundsms</h4>
 
-                            <h1>210</h1>
+                            <h1>5000000</h1>
                         </div>
 
                         <div className="schedulemessages">
                             <h4>ScheduledMesages</h4>
 
-                            <h1>210</h1>
+                            <h1>2</h1>
                         </div>
                     </div>
                     <div className="box box2 card">

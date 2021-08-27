@@ -1,0 +1,73 @@
+.templatesContainer{
+    display: flex; 
+    position: relative;
+    height: 100vh;
+    
+}
+
+.em_templatebox{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.em_gen{
+    position: relative;
+    flex:1;
+    max-width: 200px;
+    min-width: 200px;
+    flex-direction: column;
+    height: 245px;
+    display: flex;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    background: #FFFFFF;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.em_add{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    object-fit: contain;
+}
+
+.em_gen .delete{
+    position: absolute;
+    bottom:10px;
+    right: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.em_gen p{
+    margin-top:20px;
+}
+
+
+.tm-input{
+    width: 100%;
+    height: 54px;
+    padding: 10px;
+    background: #FFFFFF;
+    outline: none;
+    border: 3px solid #F8F5F5;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.tm-txtAndbt{
+    width: 937px;
+}
+
+.tm-icons{
+    margin-top:10px;
+    width:300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.SMSTemplate, .EmailTemplate{
+    margin-top:20px;
+}
