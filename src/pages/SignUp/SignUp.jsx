@@ -3,31 +3,43 @@ import { useHistory } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import { BeatLoader } from 'react-spinners';
+import { css } from "@emotion/react";
 
 import "./signUp.css"
 function SignUp() {
 
 
-    const [companyname, setCompanyName] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [value, setValue] = useState()
+    const [phone, setValue] = useState()
+    const [lastname, setLastName] = useState("");
+    const [showIcon, setShowIcon] = useState(false)
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("");
+    const [firstname, setFirstName] = useState("");
+    const [showSucces, setShowSucces] = useState(false);
+    const [showReport, setShowReport] = useState("");
+    const [companyname, setCompanyName] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+
     let history = useHistory();
-
-
     const signUp = async (e) => {
         e.preventDefault();
         let item = {
-            companyname: companyname,
-            firstName: firstName,
-            lastName: lastName,
-            email: email
+            companyname,
+            firstname,
+            username,
+            lastname,
+            email,
+            password,
+            confirmPassword,
+            phone
         }
-        console.log(companyname, firstName, lastName, email);
-        console.warn((item));
 
-        let result = await fetch("https://asteric.herokuapp.com/", {
+
+        setShowIcon(true)
+        let result = await fetch("https://asteric.herokuapp.com/users/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -36,23 +48,29 @@ function SignUp() {
             body: JSON.stringify(item)
         })
 
-        result = result.json();
-        localStorage.setItem("user-info", JSON.stringify(result))
-        history.push("/maindashboard")
-    }
+        console.log(result)
+       
 
 
+        if (result.status === 200) {
+            result = result.json();
+            console.warn(result.status);
+            setShowIcon(false)
+            localStorage.setItem("user-info", JSON.stringify(result))
 
-    const checkNumberLength = (number) => {
-
-        if (number.toString().length > 10) {
-
-            console.log("You have supplied more")
+            setShowSucces(result.status)
+            setShowReport(result.message)
+            //history.push("/maindashboard")
         } else {
-            setValue()
+            console.warn(result.statusText);
+            setShowIcon(false)
+            setShowSucces(true)
+            setShowReport(result.statusText)
         }
 
     }
+
+
 
     return (
         <div className="formContainer" style={{
@@ -92,8 +110,8 @@ function SignUp() {
                             label="First Name"
                             variant="outlined"
                             className="firstfieldin"
-                            onChange={(e) => setFirstName()}
-                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstname}
                         />
 
                         <TextField
@@ -103,28 +121,30 @@ function SignUp() {
                             variant="outlined"
                             className="firstfieldin"
                             onChange={(e) => setLastName(e.target.value)}
-                            value={lastName}
+                            value={lastname}
                         />
 
                     </div>
 
                     <TextField
-                        id="standard-error-helper-text"
+
                         label="Enter email address"
                         variant="outlined"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                     />
                     <PhoneInput
                         placeholder="Enter phone number"
-                        value={value}
-                       
+                        value={phone}
                         defaultCountry="NG"
-                        onChange={()=> checkNumberLength(setValue)} />
+                        onChange={setValue} />
 
                     <TextField
                         id="standard-error-helper-text"
                         label="Username"
-
                         variant="outlined"
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
                     />
 
 
@@ -134,8 +154,8 @@ function SignUp() {
                             label="Enter password"
                             variant="outlined"
                             className="secondfieldin"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
                         />
 
                         <TextField
@@ -144,17 +164,25 @@ function SignUp() {
                             label="Confirm password"
                             variant="outlined"
                             className="secondfieldin"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            value={confirmPassword}
                         />
 
                     </div>
+                    <div
+                        style={{
+                            display: `flex`,
+                            justifyContent: `center`,
+                            marginTop: 20,
+                            alignItems: `center`
+                        }}> <button className="Regbtn" onClick={signUp}>Register</button>
 
+                        <BeatLoader loading={showIcon} />
 
-                    {console.log(value)}
-
-
-                    <div> <button className="Regbtn" onClick={signUp}>Register</button></div>
-
-
+                    </div>
+                    {showSucces ?  <h3>{showReport}</h3>
+                        : null}
+                    
 
                 </form>
 
