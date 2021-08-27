@@ -60,7 +60,7 @@ text-decoration: none;
     background-color: gray;
 }
 
-.MuiSvgIcon-root{
+.menuItem .MuiSvgIcon-root{
     color: #fff;
 }
 
