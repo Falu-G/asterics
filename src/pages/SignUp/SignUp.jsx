@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+//import { useHistory } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import { BeatLoader } from 'react-spinners';
-import { css } from "@emotion/react";
+//import { css } from "@emotion/react";
 
 import "./signUp.css"
 function SignUp() {
@@ -23,7 +23,7 @@ function SignUp() {
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
-    let history = useHistory();
+    //let history = useHistory();
     const signUp = async (e) => {
         e.preventDefault();
         let item = {

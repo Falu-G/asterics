@@ -5,8 +5,8 @@ import Dashnav from '../../components/dashnav/Dashnav';
 function AddCustomer({ openModal, setOpenModal }) {
 
     //const [openModal, setOpenModal] = useState(false);
-    var fileName = "myDocument.pdf";
-    var fileExtension = fileName.split('.').pop(); 
+    //var fileName = "myDocument.pdf";
+    //var fileExtension = fileName.split('.').pop(); 
 
 
     

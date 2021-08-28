@@ -11,9 +11,9 @@ function NewSchedule({ setOpenModal }) {
   const [messageType, setMessageType] = useState("Select Message Type");
 
 
-  const handleSchedule = function () {
-    console.log("handleSchedule");
-  }
+  // const handleSchedule = function () {
+  //   console.log("handleSchedule");
+  // }
 
   const options = ["SMS", "Email"];
   return (

@@ -66,6 +66,8 @@ function Templates() {
 
     }
 
+    console.log(setSmsTemplates([...smsList]))
+
     return (
         <div className="templatesContainer">
             <div className={sidebar ? "maindashboardContainerMenu" : "maindashboardContainerMenuClosed"}>
