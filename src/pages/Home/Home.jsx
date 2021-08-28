@@ -10,7 +10,7 @@ function Home() {
         <div className="astericDesc">
           <span>Asterics CRM</span>
           <p>
-            Get instant access to exciting tools to supoort your business that
+            Get instant access to exciting tools to support your business that
             will bring you close to customers.
           </p>
           <button className="astericButton">Read More</button>
