@@ -10,8 +10,6 @@
     height:100vh;
 }
 .signUpForm{
-    height:550px;
-    width:700px;
     display:flex;
     flex-direction: column;
     justify-content: space-between;
@@ -87,7 +85,6 @@ color: #FFFFFF;
 
 .secondfieldin{
 flex:1;
-margin-right: 10px;
 }
 
 
@@ -98,6 +95,11 @@ margin-right: 10px;
         border: 1px solid grey;
         min-width: 0;
     }
+
+
+.layerMargin{
+    margin-top: 10px;
+}
 
 .Regbtn{
 border: none;
