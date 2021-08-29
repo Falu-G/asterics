@@ -1,16 +1,13 @@
 import React from "react";
 import "./resetPassword.css";
 import {useHistory} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 
 const useStyles = makeStyles((theme) => ({
-
-
-
-    
     root: {
         '& > *': {
           margin: theme.spacing(1),
@@ -25,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
     button: {
         background: "#18A0FB",
-        
+        color: "white",
+        fontSize: "20px"
       },
   }));
 
@@ -42,10 +40,15 @@ function ResetPassword() {
         backgroundPosition: "center right",
       }}
     >
-      <span className="resetPasswordContainer-title">Asteric</span>
+
+
+        <Link  to ="/">
+        <span className="resetPasswordContainer-title">Asteric MMS</span>
+        </Link>
+     
       <div className="resetPasswordWrapper">
         <div className="resetPasswordContainer-input">
-          <span>Forgot Password</span>
+          <span className="resetPasswordContainer-input-title">Forgot Password</span>
 
           <form noValidate className={classes.root} autoComplete="off">
             <TextField

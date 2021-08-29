@@ -40,12 +40,13 @@ text-decoration: none;
     align-items: center;
     margin-bottom: 10px;
     text-decoration: none;
-    color: #787575;
+  
    
 }
 
 .menuItem span{
     margin-left: 10px;
+    color: #fff;
 }
 
 .closed span{

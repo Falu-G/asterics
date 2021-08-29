@@ -1,138 +1,125 @@
-.LoginContainer{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-   
+.LoginContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
 }
 
-.LoginContainerfirstbox{
-   flex: 2;
-   
+.LoginContainerfirstbox {
+  flex: 2;
 }
 
-.LoginContainersecondbox{
-    flex: 1.5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
+.LoginContainersecondbox {
+  flex: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.LoginContainerfirstbox span{
-    display: inline-block;
-    font-family: Roboto;
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 42px;
-    letter-spacing: 0em;
-    text-align: left;
-    height: 42px;
-width: 222px;
-margin-left: 55px;
-margin-top: 51px;
-color: #18A0FB;
+.LoginContainerfirstbox span {
+  display: inline-block;
+  font-family: "Open Sans", sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 42px;
+  letter-spacing: 0em;
+  text-align: left;
+  height: 42px;
+  margin-left: 55px;
+  margin-top: 50px;
+  color: #18a0fb;
 }
 
-.LoginImg{
-    margin-top: 197px; 
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+.LoginImg {
+  margin-top: 197px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.LoginImg img{
-    width: 252px;
-    height: 153px;
-    object-fit: cover;
+.LoginImg img {
+  width: 252px;
+  height: 153px;
+  object-fit: cover;
 }
 
-
-.LoginImg span{
-    font-family: Roboto;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: bold;
-    line-height: 28px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #000
+.LoginImg span {
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
 }
 
-.LoginImg p{
-font-family: Roboto;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 28px;
-letter-spacing: 0em;
-text-align: left;
-
+.LoginImg p {
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
-.LoginContainersecondboxform{
-padding: 10px;
-display: flex;
-flex-direction: column;
+.LoginContainersecondboxform {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
-.formHouse{
-    display: flex;
-    flex-direction: column;
+.formHouse {
+  display: flex;
+  flex-direction: column;
 }
 
-.formHouse span{
-font-family: Roboto;
-font-size: 18px;
-font-style: normal;
-font-weight: 700;
-line-height: 28px;
-letter-spacing: 0em;
-text-align: left;
-color:#18A0FB;
-
+.formHouse span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #18a0fb;
 }
 
-.forminput{
-margin-top:20px;
-width: 300px;
-height: 40px;
-border: 1px solid #000000;
-box-sizing: border-box;
-padding:5px;
-outline:none;
-border-radius: 8px;
+.forminput {
+  margin-top: 20px;
+  width: 300px;
+  height: 40px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  padding: 5px;
+  outline: none;
+  border-radius: 8px;
 }
 
-.submitbut{
-width: 153px;
-height: 40px;
-border: none;
-color: #fff;
-font-size:20px;
-border-radius:10px;
-background: #18A0FB;
+.submitbut {
+  width: 153px;
+  height: 40px;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 10px;
+  background: #18a0fb;
 }
 
-
-.LoginContainersecondboxform h2{
-font-family: Roboto;
-font-size: 50px;
-font-style: normal;
-font-weight: 700;
-line-height: 75px;
-letter-spacing: 0em;
-text-align: left;
-
+.LoginContainersecondboxform h2 {
+  font-family: "Open Sans", sans-serif;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 75px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
-
-
-.forminput-sipa{
-    margin-top:5px;
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    
+.forminput-sipa {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
