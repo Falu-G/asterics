@@ -15,6 +15,8 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import ResetPassword from './pages/resetPassword/ResetPassword';
+import Passwordsent from './pages/passwordSent/Passwordsent';
 
 
 function App() {
@@ -33,6 +35,9 @@ function App() {
           <Route path = "/customer" component = {Customer} />
           <Route path = "/testpage" component = {Testpage} />
           <Route path = "/signup" component = {SignUp} />
+          <Route path = "/resetpassword" component = {ResetPassword} />
+          <Route path = "/passwordsent" component = {Passwordsent} />
+
         </Switch>
       </Router>
     </div>
