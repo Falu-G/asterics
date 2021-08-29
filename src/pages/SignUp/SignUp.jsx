@@ -9,6 +9,7 @@ import User from "../../classes/User"
 //import { css } from "@emotion/react";
 
 import "./signUp.css";
+import { Link } from "react-router-dom";
 function SignUp() {
   const [email, setEmail] = useState("");
   const [phone, setValue] = useState();
@@ -73,7 +74,13 @@ function SignUp() {
       }}
     >
       {console.log(state)}
+      <Link to="/">
+      <span className = "formContainer-title">Asteric</span>
+      </Link>
+      
       <div className="firstSignUpContainer">
+
+        
         <div className="firstSignUp">
           <span>SignUp</span>
           <h4>Create your new account</h4>

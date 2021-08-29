@@ -12,10 +12,20 @@
 }
 
 .btnAddCustomer{
-    background-color: aqua;
+    background-color: #18a0fb;
     padding: 10px;
     border:none;
     float: right;
+    color: white;
+    border-radius:4px;
     margin-top: 20px;
     cursor: pointer;
+}
+
+
+
+.userdelete{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

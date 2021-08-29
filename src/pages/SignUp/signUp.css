@@ -8,6 +8,23 @@
     align-items: center;
     justify-content: center;
     height:100vh;
+    position: relative;
+}
+
+
+.formContainer-title{
+    position: absolute;
+    top:40px;
+    left:50px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 42px;
+    text-align: left;
+    height: 42px;
+    color: #18a0fb;
+
 }
 .signUpForm{
     display:flex;
