@@ -36,7 +36,7 @@ function Templates() {
 
   let emailList = [message];
   let smsList = [message];
-//   const classes = useStyles();
+  //   const classes = useStyles();
   const [emailTemplates, setEmailTemplates] = useState(emailList);
   const [smsTemplates, setSmsTemplates] = useState(smsList);
 
@@ -76,11 +76,9 @@ function Templates() {
     );
   };
 
-
-
-  console.log(()=>{
-      setSmsTemplates([]);
-  })
+  console.log(() => {
+    setSmsTemplates([]);
+  });
 
   return (
     <div className="templatesContainer">
@@ -264,7 +262,6 @@ function Templates() {
                 <div
                   style={{
                     width: "90%",
-                    
                   }}
                 >
                   <div
@@ -277,12 +274,12 @@ function Templates() {
                       type="text"
                       name="title"
                       style={{
-                          width: "90%",
-                          borderRadius: "5px",
-                          outline: "none",
-                          height: "40px",
-                          border: "1px solid #DCDCDC",
-                          paddingLeft : "10px",
+                        width: "90%",
+                        borderRadius: "5px",
+                        outline: "none",
+                        height: "40px",
+                        border: "1px solid #DCDCDC",
+                        paddingLeft: "10px",
                       }}
                       placeholder="Title"
                       onChange={(e) => setTitle(e.target.value)}
@@ -303,16 +300,18 @@ function Templates() {
                     value={mesag}
                   />
                   <div>
-                    <Button variant="contained"
-                     style ={{
+                    <Button
+                      variant="contained"
+                      style={{
                         float: "right",
                         color: "#fff",
                         backgroundColor: "#18A0FB",
-                     }}
-                     onClick={() => {
+                      }}
+                      onClick={() => {
                         let messs = new Message(title, mesag);
                         setEmailTemplates([...emailTemplates, messs]);
-                      }}>
+                      }}
+                    >
                       ADD
                     </Button>
                   </div>
