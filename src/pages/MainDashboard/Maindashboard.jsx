@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import "./Maindashboard.css"
 import Menus from "../../components/menu/Menu"
 import Dashboard from "../../components/DashboardMain/Dashboard"
 import { useState } from 'react'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 function Maindashboard() {
     const [sidebar, setSideBar] = useState(false);
-    const showSideBar = ()=> setSideBar(!sidebar);
+    const showSideBar = () => setSideBar(!sidebar);
     const history = useHistory();
 
 
@@ -17,11 +17,11 @@ function Maindashboard() {
         const userObj = JSON.parse(loggedInUser)
         const token = userObj.message[0].token
         console.log(`This is token ${token}`)
-        
-        if(!token) {
-          history.push('/login');
+
+        if (!token) {
+            history.push('/login');
         }
-      })
+    })
 
 
     //var retrievedPerson = JSON.parse(localStorage.getItem('user-info')); 
@@ -41,7 +41,7 @@ function Maindashboard() {
     //     fetch('https://reqres.in/api/posts', requestOptions)
     //         .then(response => response.json())
     //         .then(data => setPostId(data.id));
-    
+
     // // empty dependency array means this effect will only run once (like componentDidMount in classes)
     // }, []);
 
@@ -49,10 +49,10 @@ function Maindashboard() {
     return (
         <div className="maindashboardContainer">
             <div className={sidebar ? "maindashboardContainerMenu" : "maindashboardContainerMenuClosed"}>
-                <Menus sidebar = {sidebar} controlSideBar = {showSideBar}/>
+                <Menus sidebar={sidebar} controlSideBar={showSideBar} />
             </div>
             <div className={sidebar ? "maindashboardContainerDashboard" : "maindashboardContainerDashboardClosed"}>
-                <Dashboard/>
+                <Dashboard />
             </div>
 
         </div>
