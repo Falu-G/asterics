@@ -13,31 +13,30 @@ import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
 import Message from "../../classes/Messages";
 import Close from "@material-ui/icons/Close";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+//import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     "& > *": {
+//       margin: theme.spacing(1),
+//     },
 
-    button: {
+//     button: {
 
-        backgroundColor: "#18a0fb",
-        float: "right",
+//         backgroundColor: "#18a0fb",
+//         float: "right",
 
-    }
-  },
-}));
+//     }
+//   },
+// }));
 
 function Templates() {
   let message = new Message("Promo", "Come and buy what we are selling");
 
   let emailList = [message];
   let smsList = [message];
-  const classes = useStyles();
+//   const classes = useStyles();
   const [emailTemplates, setEmailTemplates] = useState(emailList);
   const [smsTemplates, setSmsTemplates] = useState(smsList);
 
@@ -76,6 +75,12 @@ function Templates() {
       })
     );
   };
+
+
+
+  console.log(()=>{
+      setSmsTemplates([]);
+  })
 
   return (
     <div className="templatesContainer">
