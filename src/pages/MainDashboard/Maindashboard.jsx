@@ -13,9 +13,11 @@ function Maindashboard() {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('user-info');
-        console.log(`This is token ${JSON.parse(token)}`)
-
+        const loggedInUser = localStorage.getItem('user-info');
+        const userObj = JSON.parse(loggedInUser)
+        const token = userObj.message[0].token
+        console.log(`This is token ${token}`)
+        
         if(!token) {
           history.push('/login');
         }

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./login.css";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/react";
 function Login() {
+
   let history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +22,11 @@ function Login() {
     setShowIcon(true);
     e.preventDefault();
     console.warn(email, password);
-    let item = { email: email, password: password };
+
+
+    let item = { email, password };
+
+   
     let result = await fetch(
       "https://asteric.herokuapp.com/users/authenticate",
       {
@@ -36,17 +41,27 @@ function Login() {
 
     result = await result.json();
 
+    console.log(`This is the ${JSON.stringify(result)}`)
     if (result.status === "success") {
       console.log(result);
       setShowIcon(false);
-      localStorage.setItem("user-info", result);
+      localStorage.setItem("user-info", JSON.stringify(result));
       history.push("/maindashboard");
     } else {
       setErrorMessage(result.message);
       setLoginError(true);
       setShowIcon(false);
     }
+
+
+
+
+
   };
+
+  useEffect(() => {
+    
+  }, [])
   return (
     <div className="LoginContainer">
       <div className="LoginContainerfirstbox">
@@ -121,7 +136,7 @@ function Login() {
           {loginError ? (
             <>
               <div className="errorLogin">
-                <h3>{errorMessage} </h3>{" "}
+                <h3>{errorMessage} </h3>
               </div>
             </>
           ) : null}
