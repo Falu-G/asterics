@@ -8,10 +8,6 @@ function Maindashboard() {
     const [sidebar, setSideBar] = useState(false);
     const showSideBar = () => setSideBar(!sidebar);
     const history = useHistory();
-
-
-
-
     useEffect(() => {
         const loggedInUser = localStorage.getItem('user-info');
         const userObj = JSON.parse(loggedInUser)
