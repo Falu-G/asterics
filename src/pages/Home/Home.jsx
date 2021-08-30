@@ -11,7 +11,7 @@ function Home() {
           <span>Asterics CRM</span>
           <p>
             Get instant access to exciting tools to support your business that
-            will bring you close to customers.
+            will bring you close to customers for you.
           </p>
           <button className="astericButton">Read More</button>
         </div>
