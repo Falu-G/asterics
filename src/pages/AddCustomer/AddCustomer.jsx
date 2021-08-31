@@ -38,6 +38,7 @@ function AddCustomer({ openModal, setOpenModal }) {
     //var fileExtension = fileName.split('.').pop(); 
 
     const [value, onChange] = useState(new Date());
+    const [birthday, setbirthday] = useState(new Date())
     const [showCalendar, setShowCalendar] = useState(false)
 
     const [showBirthday, setShowBirthday] = useState(false)
@@ -74,7 +75,7 @@ function AddCustomer({ openModal, setOpenModal }) {
 
                             <input className="addforminputin" type="text" name="username" placeholder="Phone Numner" />
                             <div className="addforminputinImg spaceleft" >
-                                <input className="addforminputi" type="text" name="username" placeholder="Birthday" />
+                                <input className="addforminputi" type="text" name="username" placeholder="Birthday" value={birthday.toDateString}/>
                                 <div>
                                     {
                                         showBirthday ?
@@ -83,8 +84,8 @@ function AddCustomer({ openModal, setOpenModal }) {
                                             }}>
                                                 <Calendar
 
-                                                    onChange={onChange}
-                                                    value={value}
+                                                    onChange={setbirthday}
+                                                    value={birthday.toDateString}
                                                 />
                                                 <div className={classes.root}>
                                                     <Button
@@ -116,7 +117,7 @@ function AddCustomer({ openModal, setOpenModal }) {
 
                         <input className="addforminput" type="email" name="email" placeholder="Email" />
                         <div className="Anniversary">
-                            <input className="addformLast" type="email" name="Anniversary" placeholder="Anniversary" />
+                            <input className="addformLast" type="email" name="Anniversary" placeholder="Anniversary" value ={value.toDateString}/>
                             <div>
                                 {
                                     showCalendar ?
@@ -126,7 +127,7 @@ function AddCustomer({ openModal, setOpenModal }) {
                                             <Calendar
 
                                                 onChange={onChange}
-                                                value={value}
+                                                value={value.toDateString}
                                             />
                                             <div className={classes.root}>
                                                 <Button
