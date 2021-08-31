@@ -17,10 +17,9 @@
 
 .menuAsset{
 font-family: "Roboto";
-font-size: 30px;
 font-style: normal;
 font-weight: 900;
-color: #787575;
+color: #fff;
 line-height: 28px;
 letter-spacing: 0em;
 text-align: left;
@@ -40,7 +39,6 @@ text-decoration: none;
     align-items: center;
     margin-bottom: 10px;
     text-decoration: none;
-  
    
 }
 
@@ -63,6 +61,18 @@ text-decoration: none;
 
 .menuItem .MuiSvgIcon-root{
     color: #fff;
+}
+
+
+.whitebg{
+width: 32px;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 32px;
+background: #FCFCFD;
+border-radius: 50%;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 

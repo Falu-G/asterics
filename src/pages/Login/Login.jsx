@@ -1,18 +1,47 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./login.css";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/react";
-function Login() {
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import TextField from '@material-ui/core/TextField';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  margin: {
+    marginTop: theme.spacing(1),
+  },
+  textField: {
+    width: "40ch",
+  },
+}));
+
+function Login() {
   let history = useHistory();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  //const [password, setPassword] = useState("");
   const [showIcon, setShowIcon] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const [loginError, setLoginError] = useState(false);
+
+  const classes = useStyles();
+  const [values, setValues] = useState({
+    password: "",
+    showPassword: false,
+  });
 
   const override = css`
     display: block;
@@ -21,12 +50,13 @@ function Login() {
   const login = async (e) => {
     setShowIcon(true);
     e.preventDefault();
-    console.warn(email, password);
+    //console.warn(email, password);
+
+    let item = { email, password:values.password };
 
 
-    let item = { email, password };
+    console.log(item)
 
-   
     let result = await fetch(
       "https://asteric.herokuapp.com/users/authenticate",
       {
@@ -41,7 +71,7 @@ function Login() {
 
     result = await result.json();
 
-    console.log(`This is the ${JSON.stringify(result)}`)
+    console.log(`This is the ${JSON.stringify(result)}`);
     if (result.status === "success") {
       console.log(result);
       setShowIcon(false);
@@ -52,16 +82,24 @@ function Login() {
       setLoginError(true);
       setShowIcon(false);
     }
-
-
-
-
-
   };
 
-  useEffect(() => {
-    
-  }, [])
+ 
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  useEffect(() => {}, []);
+
   return (
     <div className="LoginContainer">
       <div className="LoginContainerfirstbox">
@@ -87,8 +125,57 @@ function Login() {
         <div className="LoginContainersecondboxform">
           <h2>Login</h2>
 
-          <form className="formHouse">
-            <input
+        <form className="formHouse">
+
+
+        <TextField
+          label="Enter your email address"
+          className={clsx(classes.margin, classes.textField)}
+          onChange={(e) => setEmail(e.target.value)}
+          variant="outlined"
+        />
+
+         <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
+
+         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={handleChange('password')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={70}
+          />
+
+
+
+          
+         </FormControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {/* <input
               className="forminput"
               onChange={(e) => setEmail(e.target.value)}
               type="text"
@@ -101,20 +188,24 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               name="password"
               placeholder="Password"
-            />
+            /> */}
 
             <div className="forminput-sipa">
-              <Link style={{
-                textDecoration: `none`
-              }} to="/resetpassword">
+              <Link
+                style={{
+                  textDecoration: `none`,
+                }}
+                to="/resetpassword"
+              >
                 <span>Forgot password</span>
               </Link>
 
               <Link
-              style={{
-                textDecoration: `none`
-              }} to="/signup"
-               >
+                style={{
+                  textDecoration: `none`,
+                }}
+                to="/signup"
+              >
                 <span>Sign Up</span>
               </Link>
             </div>

@@ -2,7 +2,6 @@ import React from 'react'
 import './menu.css'
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
-import CloseIcon from '@material-ui/icons/Close';
 import { Subscriptions, Assessment, Message, Schedule, People, Settings, ExitToApp, MailOutline, Dashboard } from '@material-ui/icons'
 function Menus({ controlSideBar, sidebar }) {
     return (
@@ -10,9 +9,18 @@ function Menus({ controlSideBar, sidebar }) {
             <div className="menuContainerDesc">
 
                 {sidebar ? <>
+
+                    <div className="whitebg">
+                    <img src= "images/ABlogo.png" alt=""/>
+                    </div>
+                   
                     <Link className="menuAsset">Assetrics CRM</Link>
-                    <CloseIcon onClick={controlSideBar} />
-                </> : <MenuIcon
+                    <MenuIcon style = {{
+                        color: `#fff`
+                    }} onClick={controlSideBar} />
+                </> : <MenuIcon style = {{
+                        color: `#fff`
+                    }}
                     onClick={controlSideBar} />
                 }
             </div>
