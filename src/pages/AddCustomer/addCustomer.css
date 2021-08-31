@@ -36,6 +36,7 @@ border-radius: 4px;
     width: 100%;
     display: flex;
     flex-direction: column;
+    position:relative;
 }
 
 .addforminput{
@@ -63,17 +64,7 @@ box-sizing: border-box;
 border-radius: 8px;
 }
 
-.submiting{
-border:none;
-padding: 20px;
-float: right;
-color: white;
-width: 153px;
-height: 50px;
-background: #18A0FB;
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border-radius: 4px;
-}
+
 
 
 .spaceleft{
@@ -90,6 +81,7 @@ border: 1px solid #CBCBCB;
 box-sizing: border-box;
 border-radius: 8px;
 outline: none;
+
 }
 
 .addCustomerInsideInput{
@@ -100,6 +92,7 @@ outline: none;
     position:relative;
     display: flex;
     width: 47.5%;
+    height: 50px;
     justify-content: center;
     align-items: center;
 }
@@ -124,25 +117,36 @@ border-radius: 8px;
 .Anniversary{
     position: relative;
     width: 60%;
+    height: 50px;
+   
 }
 
+.submiting{
+    border:none;
+    padding: 20px;
+    float: right;
+    color: white;
+    width: 153px;
+    height: 50px;
+    background: #18A0FB;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    }
+
+    .Ok{
+        border:none;
+        padding: 20px;
+        float: right;
+        color: white;
+        width: 153px;
+        height: 50px;
+        background: #18A0FB;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+    
+    }
 
 
-#file-upload-button{
-    color: #fff;
-border: none;
-background-color: #18A0FB;
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border-radius: 4px;
-}
-
-input[type="file"] {
-    color: #fff;
-border: none;
-background-color: #18A0FB;
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border-radius: 4px;
-}
 
 
 
