@@ -96,6 +96,8 @@ function AddCustomer({ openModal, setOpenModal }) {
               onChange={(e) =>
                 setCustomerInfo({ ...customerInfo, lastName: e.target.value })
               }
+
+              value = {customerInfo.lastName}
               placeholder="Lastname"
             />
 
