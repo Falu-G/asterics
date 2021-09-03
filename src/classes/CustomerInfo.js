@@ -1,6 +1,6 @@
 class CustomerInfo{
 	constructor(name,lastName,email){
-    	this.name = name;
+    	this.firstname = name;
         this.lastName = lastName;
         this.email = email;
         
@@ -8,12 +8,17 @@ class CustomerInfo{
 
 
     addDateOfBirth(dateOfBirth){
-    	this.dateOfBirth = dateOfBirth;
+    	this.birthday = dateOfBirth;
     }
 
     addAnniversary(anniversary){
-        this.addAnniversary = anniversary;
+        this.anniversary = anniversary;
 
+    }
+
+
+    addPhoneNumber(phoneNumber){
+        this.phone = phoneNumber;
     }
 
    

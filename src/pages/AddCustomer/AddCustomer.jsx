@@ -45,13 +45,63 @@ function AddCustomer({ openModal, setOpenModal }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showBirthday, setShowBirthday] = useState(false);
 
-  const register = (e) => {
+  const[phoneNumber , setPhoneNumber] = useState("");
+
+  const register = async (e) => {
     e.preventDefault();
     let customer = new CustomerInfo(
       customerInfo.name,
       customerInfo.lastName,
       customerInfo.email
     );
+
+    if (showBirthday != null) {
+      customer.addDateOfBirth( birthday.getDay() +
+      "," +
+      birthday.toLocaleString("en-us", { month: "short" }));
+    }
+
+    if (value != null) {
+      customer.addAnniversary( value.getDay() +
+      "," +
+      value.toLocaleString("en-us", { month: "short" }))
+    }
+
+
+    if(phoneNumber !== ""){
+      customer.addPhoneNumber(phoneNumber);
+    }
+
+
+
+
+    const loggedInUser = localStorage.getItem('user-info');
+    const userObj = JSON.parse(loggedInUser)
+    const token = userObj.message[0].token
+
+
+   
+      let result = await fetch("https://asteric.herokuapp.com/customer/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify(customer)
+      });
+
+
+      result = await result.json();
+
+
+      console.log(`This is the ${JSON.stringify(result)}`);
+    
+
+    
+    
+
+
     console.log(customer);
   };
 
@@ -96,8 +146,7 @@ function AddCustomer({ openModal, setOpenModal }) {
               onChange={(e) =>
                 setCustomerInfo({ ...customerInfo, lastName: e.target.value })
               }
-
-              value = {customerInfo.lastName}
+              value={customerInfo.lastName}
               placeholder="Lastname"
             />
 
@@ -106,6 +155,8 @@ function AddCustomer({ openModal, setOpenModal }) {
                 className="addforminputin"
                 type="text"
                 name="phone"
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                value = {phoneNumber}
                 placeholder="Phone Numner"
               />
               <div className="addforminputinImg spaceleft">
@@ -114,7 +165,12 @@ function AddCustomer({ openModal, setOpenModal }) {
                   type="text"
                   name="username"
                   placeholder="Birthday"
-                  value={birthday.toLocaleDateString("en-US")}
+                  onChange={()=>setbirthday()}
+                  value={
+                    birthday.getDay() +
+                    "," +
+                    birthday.toLocaleString("en-us", { month: "short" })
+                  }
                 />
                 <div>
                   {showBirthday ? (
@@ -159,7 +215,11 @@ function AddCustomer({ openModal, setOpenModal }) {
                 type="text"
                 name="Anniversary"
                 placeholder="Anniversary"
-                value={value.toLocaleDateString("en-US")}
+                value={
+                  value.getDay() +
+                  "," +
+                  value.toLocaleString("en-us", { month: "short" })
+                }
               />
               <div>
                 {showCalendar ? (
