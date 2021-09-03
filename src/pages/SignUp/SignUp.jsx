@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-//import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import TextField from "@material-ui/core/TextField";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -26,7 +26,7 @@ function SignUp() {
   const [state, setStateName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  //let history = useHistory();
+  let history = useHistory();
   const signUp = async (e) => {
     e.preventDefault();
     let user = new User(firstname,username,lastname,address,email,password,confirmPassword,phone,city,state,country);
@@ -43,24 +43,28 @@ function SignUp() {
         body: JSON.stringify(user)
       });
 
-      console.log(result);
-
+      result = await result.json();
       if (result.status === 200) {
-        result = await result.json();
+
         console.warn(result.status);
         setShowIcon(false);
+    
         localStorage.setItem("user-info", JSON.stringify(result));
-
-        setShowSucces(result.status);
+        setShowSucces(true);
         setShowReport(result.message);
-        //history.push("/maindashboard")
+        history.push("/login")
       } else {
-        result = console.warn(result.statusText);
+   
+        console.warn(result);
         setShowIcon(false);
         setShowSucces(true);
-        setShowReport(result.statusText);
+        console.log("This is outside 200")
+        setShowReport(result.message);
       }
-    } catch (err) {}
+    } catch (err) {
+      setShowIcon(false);
+      console.log("Error message "+err.message)
+    }
   };
 
   return (
@@ -73,7 +77,7 @@ function SignUp() {
         backgroundPosition: "center left",
       }}
     >
-      {console.log(state)}
+    
       <Link to="/">
       <span className = "formContainer-title">Asteric</span>
       </Link>
@@ -231,7 +235,15 @@ function SignUp() {
             </button>
             <BeatLoader loading={showIcon} />
           </div>
-          {showSucces ? <h3>{showReport}</h3> : null}
+          <div style = {{
+            textAlign: "center",
+            marginTop: '10px',
+            fontSize:'18px',
+            fontFamily: 'Open Sans',
+          }}>
+          {showSucces ? <p>{showReport}</p> : null}
+          </div>
+     
         </form>
       </div>
     </div>

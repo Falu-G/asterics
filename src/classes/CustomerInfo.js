@@ -1,7 +1,7 @@
 class CustomerInfo{
-	constructor(name,lastName,email){
+	constructor(name,lastname,email){
     	this.firstname = name;
-        this.lastName = lastName;
+        this.lastname = lastname;
         this.email = email;
         
     }
