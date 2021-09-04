@@ -51,7 +51,7 @@ function Menus({ controlSideBar, sidebar }) {
                         <span>Send SMS</span>
                     </Link>
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="">
+                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/sendemail">
                         <MailOutline />
                         <span>Send Email</span>
                     </Link>

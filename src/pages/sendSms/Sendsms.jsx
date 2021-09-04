@@ -25,13 +25,10 @@ function Sendsms() {
     },
   };
 
-
-
-
   const [sendMessage, setSendMessage] = useState({
-      phoneNumber:"",
-      message:""
-  })
+    phoneNumber: "",
+    message: "",
+  });
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -41,13 +38,36 @@ function Sendsms() {
     subtitle.style.color = "#f00";
   }
 
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
+  const token = userObj.message[0].token;
 
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    console.log(sendMessage);
+    console.log(token)
 
-  const handleSendMessage = (e)=>{
+    try {
+      let result = await fetch("https://asteric.herokuapp.com/bbnSms/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(sendMessage),
+      });
 
-    e.preventDefault()
-    console.log(sendMessage)
-  }
+      result = await result.json();
+      if (result.status === 200) {
+        console.log(result.message);
+      } else {
+        console.log(result.message);
+      }
+    } catch (err) {
+      console.log("Something terrible happened " + err.message);
+    }
+  };
 
   return (
     <>
@@ -89,7 +109,13 @@ function Sendsms() {
                     type="phonenumber"
                     name="username"
                     placeholder="Phone Number"
-                    onChange = {(e)=> setSendMessage({...sendMessage,phoneNumber:e.target.value})}
+                    value={sendMessage.phoneNumber}
+                    onChange={(e) =>
+                      setSendMessage({
+                        ...sendMessage,
+                        phoneNumber: e.target.value,
+                      })
+                    }
                   />
                   <img
                     onClick={() =>
@@ -103,18 +129,20 @@ function Sendsms() {
                 <textArea
                   type="text"
                   name="message"
+                  value={sendMessage.message}
                   placeholder="Messages..."
-                  onChange = {(e)=> setSendMessage({...sendMessage,message:e.target.value})}
+                  onChange={(e) =>
+                    setSendMessage({ ...sendMessage, message: e.target.value })
+                  }
                 />
               </form>
 
-              <button 
-              className="sendbtn"
-              onClick = {handleSendMessage}>Send</button>
+              <button className="sendbtn" onClick={handleSendMessage}>
+                Send
+              </button>
             </div>
 
             <div>
-            
               <Modal
                 isOpen={openModal}
                 style={customStyles}
