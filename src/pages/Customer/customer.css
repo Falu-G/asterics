@@ -29,3 +29,8 @@
     align-items: center;
     justify-content: center;
 }
+
+
+.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle{
+    color: white;
+}

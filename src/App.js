@@ -17,6 +17,7 @@ import {
 } from "react-router-dom";
 import ResetPassword from './pages/resetPassword/ResetPassword';
 import Passwordsent from './pages/passwordSent/Passwordsent';
+import SessionExpired from './pages/SessionExpired/SessionExpired';
 
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
           <Route path = "/signup" component = {SignUp} />
           <Route path = "/resetpassword" component = {ResetPassword} />
           <Route path = "/passwordsent" component = {Passwordsent} />
-
+          <Route path = "/sessionexpired" component = {SessionExpired} />
         </Switch>
       </Router>
     </div>

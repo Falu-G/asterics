@@ -26,7 +26,7 @@ function Sendsms() {
   };
 
   const [sendMessage, setSendMessage] = useState({
-    phoneNumber: "",
+    numbers: "",
     message: "",
   });
   const handleChange = (event) => {
@@ -113,7 +113,7 @@ function Sendsms() {
                     onChange={(e) =>
                       setSendMessage({
                         ...sendMessage,
-                        phoneNumber: e.target.value,
+                        numbers: e.target.value,
                       })
                     }
                   />

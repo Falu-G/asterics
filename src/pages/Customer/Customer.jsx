@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Menus from "../../components/menu/Menu";
 import "./customer.css";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
@@ -12,21 +12,43 @@ import Modal from "react-modal";
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
-    backgroundColor: "#18a0fb"
+    backgroundColor: "#18a0fb",
   },
 }));
 
 function Customer() {
   const classes = useStyles();
+  const [allCustomers, setAllCustomers] = useState([]);
   const [sidebar, setSideBar] = useState(false);
   const showSideBar = () => setSideBar(!sidebar);
   const [openModalEmail, setOpenModalEmail] = useState(false);
 
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
+  const token = userObj.message[0].token;
+  useEffect(() => {
+    fetch("https://asteric.herokuapp.com/customer",{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+    )
+    .then(response => response.json())
+    .then(data =>{
+      
+      setAllCustomers(data)
+      
+    } )
+  },[token])
+
   const dataVertical = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "dateSchedule",
-      headerName: "Date Schedule",
+      field: "firstname",
+      headerName: "Name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
@@ -36,24 +58,24 @@ function Customer() {
       },
     },
     {
-      field: "MessageContent",
-      headerName: "Message Content",
+      field: "email",
+      headerName: "Email",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      width: 500,
+      width: 300,
       renderCell: () => {},
     },
     {
-      field: "status",
-      headerName: "Status",
-      width: 160,
+      field: "phone",
+      headerName: "Phone Number",
+      width: 200,
       renderCell: ({ row }) => {
         <div className="CentralizeCell">{row.status}</div>;
       },
     },
 
     {
-      field: "Address",
+      field: "birthday",
       headerName: "Addreess",
       width: 160,
       renderCell: ({ row }) => {
@@ -67,8 +89,6 @@ function Customer() {
       width: 160,
       renderCell: ({ row }) => (
         <>
-         
-
           <Button
             variant="contained"
             color="primary"
@@ -91,49 +111,7 @@ function Customer() {
     },
   ];
 
-  const dataHorizontal = [
-    {
-      id: 1,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-      Address: "plt 4 , Ikeja Street",
-    },
-    {
-      id: 2,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-      Address: "plt 4 , Ikeja Street",
-    },
-    {
-      id: 3,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-      Address: "plt 4 , Ikeja Street",
-    },
-    {
-      id: 4,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-      Address: "plt 4 , Ikeja Street",
-    },
-    {
-      id: 5,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-      Address: "plt 4 , Ikeja Street",
-    },
-  ];
-  const [dataRow, setDataRow] = useState(dataHorizontal);
+  const [dataRow, setDataRow] = useState(allCustomers);
   const handledelete = (id) =>
     setDataRow(() => dataRow.filter((item) => item.id !== id));
 
@@ -192,7 +170,6 @@ function Customer() {
 
           <div className="customerWrapper">
             <div>
-             
               <button
                 className="btnAddCustomer"
                 onClick={() =>
@@ -205,7 +182,7 @@ function Customer() {
 
             <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
               <DataGrid
-                rows={dataHorizontal}
+                rows={allCustomers}
                 columns={dataVertical}
                 pageSize={5}
                 checkboxSelection
