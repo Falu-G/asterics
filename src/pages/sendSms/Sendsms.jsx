@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./sendsms.css";
 import Modal from "react-modal";
 import FormRadio from "../../components/formRadio/FormRadio";
-import Dashnav from "../../components/dashnav/Dashnav";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 
