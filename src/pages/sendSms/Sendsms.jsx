@@ -9,15 +9,12 @@ import White from "../../components/whitenav/White";
 function Sendsms() {
   const [sidebar, setSideBar] = useState(false);
   const showSideBar = () => setSideBar(!sidebar);
-  let subtitle;
   const [value, setValue] = React.useState("Yes");
 
   const [openModal, setOpenModal] = useState(false);
 
   const customStyles = {
     content: {
-      width: "80%",
-      height: "60%",
       top: "50%",
       left: "50%",
       padding: "0",
@@ -33,10 +30,7 @@ function Sendsms() {
     setValue(event.target.value);
   };
 
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#f00";
-  }
+  
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
@@ -146,27 +140,13 @@ function Sendsms() {
               <Modal
                 isOpen={openModal}
                 style={customStyles}
-                onAfterOpen={afterOpenModal}
+               
                 contentLabel="Example Modal"
               >
                 <div className="modalContainer">
-                  <Dashnav title="SMS Template" />
-
-                  <form className="modalInput">
-                    <div className="modalFirstInput">
-                      <div className="mf_input">
-                        <input
-                          type="text"
-                          name="username"
-                          placeholder="Title"
-                        />
-                      </div>
-                      <div className="ms_input">
-                        <FormRadio value={value} handleChange={handleChange} />
-                      </div>
-                    </div>
-                    <p>Second</p>
-                    <p>Modal</p>
+                 
+                    <p>Receiver</p>
+                  
                     <button
                       onClick={() =>
                         setOpenModal(() => (openModal ? false : true))
@@ -174,7 +154,7 @@ function Sendsms() {
                     >
                       Close
                     </button>
-                  </form>
+                
                 </div>
               </Modal>
             </div>
