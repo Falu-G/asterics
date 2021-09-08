@@ -4,7 +4,7 @@ import "./schedule.css"
 import NavigationComponent from '../../components/navigationComponent/NavigationComponent'
 function Schedule() {
 
-    const [sidebar, setSideBar] = useState(false);
+    const [sidebar, setSideBar] = useState(true);
     const showSideBar = () => setSideBar(!sidebar);
 
     return (

@@ -4,6 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
 import { Subscriptions, Assessment, Message, Schedule, People, Settings, ExitToApp, MailOutline, Dashboard } from '@material-ui/icons'
 function Menus({ controlSideBar, sidebar }) {
+   
     return (
         <div className="menuContainer">
             <div className="menuContainerDesc">
@@ -28,13 +29,15 @@ function Menus({ controlSideBar, sidebar }) {
             <div className="menuHouse">
                 <div className="firstMenu">
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/maindashboard">
+                    <Link 
+                    className={sidebar ? "menuItem" : "menuItem closed"} to="/maindashboard">
                         <img src="images/menu.png" alt="" />
                         <span>Main</span>
                     </Link>
 
 
-                    <Link className={sidebar ? "menuItem" : "menuItem closed"} to="/schedule">
+                    <Link 
+                    className={sidebar ? "menuItem" : "menuItem closed"} to="/schedule">
                         <Dashboard />
                         <span>Dashboard</span>
                     </Link>

@@ -44,7 +44,7 @@ function Templates() {
 
   const [modalTemplate, setModalTemplate] = useState(false);
 
-  const [sidebar, setSideBar] = useState(false);
+  const [sidebar, setSideBar] = useState(true);
 
   const [openModalEmail, setOpenModalEmail] = useState(false);
 

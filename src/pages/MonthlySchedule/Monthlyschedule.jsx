@@ -40,7 +40,7 @@ function Monthlyschedule() {
         { id: 4, dateSchedule: "12-Aug-2021", MessageContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia", status: "Pending" },
         { id: 5, dateSchedule: "12-Aug-2021", MessageContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia", status: "Pending" },
     ];
-    const [sidebar, setSideBar] = useState(false);
+    const [sidebar, setSideBar] = useState(true);
     const [dataRow, setDataRow] = useState(dataHorizontal);
 
     const handledelete = (id) => setDataRow(() => dataRow.filter((item) => item.id !== id));

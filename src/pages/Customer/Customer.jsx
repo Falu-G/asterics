@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 function Customer() {
   const classes = useStyles();
   const [allCustomers, setAllCustomers] = useState([]);
-  const [sidebar, setSideBar] = useState(false);
+  const [sidebar, setSideBar] = useState(true);
   const showSideBar = () => setSideBar(!sidebar);
   const [openModalEmail, setOpenModalEmail] = useState(false);
 

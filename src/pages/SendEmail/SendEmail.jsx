@@ -10,7 +10,7 @@ import EmailObject from "../../classes/EmailObject";
 function SendEmail() {
   const [value, setValue] = React.useState("Yes");
 
-  const [sidebar, setSideBar] = useState(false);
+  const [sidebar, setSideBar] = useState(true);
   const showSideBar = () => setSideBar(!sidebar);
   const [emailContent, setEmailContent] = useState(new EmailObject("", "", ""));
 

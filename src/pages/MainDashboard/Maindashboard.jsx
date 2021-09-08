@@ -5,8 +5,11 @@ import Dashboard from "../../components/DashboardMain/Dashboard"
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 function Maindashboard() {
-    const [sidebar, setSideBar] = useState(false);
-    const showSideBar = () => setSideBar(!sidebar);
+    const [sidebar, setSideBar] = useState(true);
+    const showSideBar = () => {
+        setSideBar(!sidebar);
+        console.log("You clicked menu is closed "+sidebar)
+    }
     const history = useHistory();
     useEffect(() => {
         const loggedInUser = localStorage.getItem('user-info');

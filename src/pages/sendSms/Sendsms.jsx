@@ -6,9 +6,12 @@ import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 
 function Sendsms() {
-  const [sidebar, setSideBar] = useState(false);
+  const [sidebar, setSideBar] = useState(true);
   const showSideBar = () => setSideBar(!sidebar);
   const [value, setValue] = React.useState("Yes");
+
+
+  const [messageReport, setMessageReport] = useState("")
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -53,9 +56,9 @@ function Sendsms() {
 
       result = await result.json();
       if (result.status === 200) {
-        console.log(result.message);
+        setMessageReport(result.message)
       } else {
-        console.log(result.message);
+       setMessageReport(result.message)
       }
     } catch (err) {
       console.log("Something terrible happened " + err.message);
@@ -92,7 +95,11 @@ function Sendsms() {
             }}
             className="ScheduleWrapper"
           >
+
+            <p>{messageReport}</p>
             <div>
+
+
               <FormRadio value={value} handleChange={handleChange} />
 
               <form className="scheduleform">
