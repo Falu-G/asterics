@@ -1,4 +1,4 @@
-import React, { useEffect, useContext,useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu";
 import "./customer.css";
@@ -9,6 +9,7 @@ import { DeleteOutline } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Modal from "react-modal";
+import SessionExpired from "../SessionExpired/SessionExpired";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -20,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
 function Customer() {
   const classes = useStyles();
   const [allCustomers, setAllCustomers] = useState([]);
-  const {sidebar,setSideBar} = useContext(MenuContext);
-  console.log("This is siderbar "+sidebar);
+  const [tokenValid, setTokenValid] = useState(false);
+  const { sidebar, setSideBar } = useContext(MenuContext);
+  console.log("This is siderbar " + sidebar);
   const showSideBar = () => {
     setSideBar(!sidebar);
-    
   };
   const [openModalEmail, setOpenModalEmail] = useState(false);
 
@@ -32,22 +33,26 @@ function Customer() {
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   useEffect(() => {
-    fetch("https://asteric.herokuapp.com/customer",{
+    fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: "Bearer " + token,
       },
-    }
-    )
-    .then(response => response.json())
-    .then(data =>{
-      
-      setAllCustomers(data)
-      
-    } )
-  },[token])
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else {
+          setAllCustomers(data);
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+      });
+  }, [token]);
 
   const dataVertical = [
     { field: "id", headerName: "ID", width: 90 },
@@ -131,72 +136,80 @@ function Customer() {
     },
   };
   return (
-    <div className="customerContainer">
-      <div
-        className={
-          sidebar
-            ? "maindashboardContainerMenu"
-            : "maindashboardContainerMenuClosed"
-        }
-      >
-        <Menus sidebar={sidebar} controlSideBar={showSideBar} />
-      </div>
-
-      <div
-        className={
-          sidebar
-            ? "maindashboardContainerDashboard"
-            : "maindashboardContainerDashboardClosed"
-        }
-      >
-        <Modal
-          isOpen={openModalEmail}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          <AddCustomer
-            openModal={openModalEmail}
-            setOpenModal={() =>
-              setOpenModalEmail(() => (openModalEmail ? false : true))
+    <>
+      {tokenValid ? (
+        <>
+          <SessionExpired />
+        </>
+      ) : (
+        <div className="customerContainer">
+          <div
+            className={
+              sidebar
+                ? "maindashboardContainerMenu"
+                : "maindashboardContainerMenuClosed"
             }
-          />
-        </Modal>
+          >
+            <Menus sidebar={sidebar} controlSideBar={showSideBar} />
+          </div>
 
-        <div
-          style={{
-            backgroundImage: `url(/images/smsbg.png)`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
-            backgroundPosition: "center right",
-          }}
-          className="dashboardContainer"
-        >
-          <NavigationComponent title="Dashboard" />
-
-          <div className="customerWrapper">
-            <div>
-              <button
-                className="btnAddCustomer"
-                onClick={() =>
+          <div
+            className={
+              sidebar
+                ? "maindashboardContainerDashboard"
+                : "maindashboardContainerDashboardClosed"
+            }
+          >
+            <Modal
+              isOpen={openModalEmail}
+              style={customStyles}
+              contentLabel="Example Modal"
+            >
+              <AddCustomer
+                openModal={openModalEmail}
+                setOpenModal={() =>
                   setOpenModalEmail(() => (openModalEmail ? false : true))
                 }
-              >
-                AddCustomer
-              </button>
-            </div>
-
-            <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
-              <DataGrid
-                rows={allCustomers}
-                columns={dataVertical}
-                pageSize={5}
-                checkboxSelection
               />
+            </Modal>
+
+            <div
+              style={{
+                backgroundImage: `url(/images/smsbg.png)`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                backgroundPosition: "center right",
+              }}
+              className="dashboardContainer"
+            >
+              <NavigationComponent title="Dashboard" />
+
+              <div className="customerWrapper">
+                <div>
+                  <button
+                    className="btnAddCustomer"
+                    onClick={() =>
+                      setOpenModalEmail(() => (openModalEmail ? false : true))
+                    }
+                  >
+                    AddCustomer
+                  </button>
+                </div>
+
+                <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
+                  <DataGrid
+                    rows={allCustomers}
+                    columns={dataVertical}
+                    pageSize={5}
+                    checkboxSelection
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

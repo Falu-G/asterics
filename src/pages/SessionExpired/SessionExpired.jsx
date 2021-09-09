@@ -28,7 +28,6 @@ function SessionExpired() {
       <div className="passwordContainerWrapper">
         <img src="images/psssent.png" alt="" />
         <span className="passwordContainerWrapper-title">
-          {" "}
           Your session expired, Kindly relogin to continue
         </span>
         <Button
