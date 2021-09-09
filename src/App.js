@@ -1,4 +1,5 @@
 import './App.css';
+import {useState} from 'react';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import AddCustomer from './pages/AddCustomer/AddCustomer';
@@ -18,9 +19,11 @@ import {
 import ResetPassword from './pages/resetPassword/ResetPassword';
 import Passwordsent from './pages/passwordSent/Passwordsent';
 import SessionExpired from './pages/SessionExpired/SessionExpired';
+import {MenuContext} from './components/MenuContext';
 
 
 function App() {
+  const [sidebar, setSideBar] = useState(true);
   return (
     <div className="App">
       <Router>
@@ -28,12 +31,16 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path = "/login" component = {Login} />
           <Route path = "/addCustomer" component = {AddCustomer} />
+
+          <MenuContext.Provider value = {{sidebar, setSideBar}}> 
           <Route path = "/sendsms" component = {Sendsms} />
           <Route path = "/sendemail" component = {SendEmail} />
           <Route path = "/maindashboard" component = {Maindashboard} />
           <Route path = "/schedule" component = {MonthlySchedule} />
           <Route path = "/templates" component = {Templates} />
           <Route path = "/customer" component = {Customer} />
+          </MenuContext.Provider>
+
           <Route path = "/testpage" component = {Testpage} />
           <Route path = "/signup" component = {SignUp} />
           <Route path = "/resetpassword" component = {ResetPassword} />

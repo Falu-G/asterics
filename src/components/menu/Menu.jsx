@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './menu.css'
 import MenuIcon from '@material-ui/icons/Menu';
+import {MenuContext} from '../MenuContext'
 import { Link } from 'react-router-dom';
 import { Subscriptions, Assessment, Message, Schedule, People, Settings, ExitToApp, MailOutline, Dashboard } from '@material-ui/icons'
+
 function Menus({ controlSideBar, sidebar }) {
-   
+    const value = useContext(MenuContext);
+    console.log(value)
     return (
         <div className="menuContainer">
             <div className="menuContainerDesc">
