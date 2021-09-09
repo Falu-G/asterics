@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./sendemail.css";
 //import Modal from "react-modal";
+import { MenuContext } from "../../components/MenuContext";
 import FormRadio from "../../components/formRadio/FormRadio";
 //import Dashnav from "../../components/dashnav/Dashnav";
 import Menus from "../../components/menu/Menu";
@@ -10,7 +11,7 @@ import EmailObject from "../../classes/EmailObject";
 function SendEmail() {
   const [value, setValue] = React.useState("Yes");
 
-  const [sidebar, setSideBar] = useState(true);
+  const {sidebar,setSideBar} = useContext(MenuContext);
   const showSideBar = () => setSideBar(!sidebar);
   const [emailContent, setEmailContent] = useState(new EmailObject("", "", ""));
 

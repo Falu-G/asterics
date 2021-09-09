@@ -11,6 +11,7 @@ import Templates from './pages/Template/Template';
 import Customer from './pages/Customer/Customer';
 import Testpage from './pages/Testpage/Testpage';
 import SignUp from './pages/SignUp/SignUp';
+import Menus from './components/menu/Menu'
 import {
   BrowserRouter as Router,
   Switch,
@@ -34,6 +35,9 @@ function App() {
 
           <MenuContext.Provider value = {{sidebar, setSideBar}}> 
           <Route path = "/sendsms" component = {Sendsms} />
+
+          <Route path = '/huhgddyuhtrthwh' component = {Menus}/>
+       
           <Route path = "/sendemail" component = {SendEmail} />
           <Route path = "/maindashboard" component = {Maindashboard} />
           <Route path = "/schedule" component = {MonthlySchedule} />

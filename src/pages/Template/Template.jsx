@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./template.css";
 import AttachmentIcon from "@material-ui/icons/Attachment";
+import { MenuContext } from "../../components/MenuContext";
 import ImageIcon from "@material-ui/icons/Image";
 import GifIcon from "@material-ui/icons/Gif";
 import FormatBoldIcon from "@material-ui/icons/FormatBold";
@@ -44,7 +45,8 @@ function Templates() {
 
   const [modalTemplate, setModalTemplate] = useState(false);
 
-  const [sidebar, setSideBar] = useState(true);
+  const {sidebar,setSideBar} = useContext(MenuContext);
+  const showSideBar = () => setSideBar(!sidebar);
 
   const [openModalEmail, setOpenModalEmail] = useState(false);
 
@@ -62,7 +64,7 @@ function Templates() {
       transform: "translate(-50%, -50%)",
     },
   };
-  const showSideBar = () => setSideBar(!sidebar);
+  
   const handleChange = (event) => {
     setValue(event.target.value);
   };

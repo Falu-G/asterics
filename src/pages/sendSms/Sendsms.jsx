@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { MenuContext } from "../../components/MenuContext";
 import "./sendsms.css";
 import Modal from "react-modal";
 import FormRadio from "../../components/formRadio/FormRadio";
@@ -6,8 +7,12 @@ import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 
 function Sendsms() {
-  const [sidebar, setSideBar] = useState(true);
-  const showSideBar = () => setSideBar(!sidebar);
+  const {sidebar,setSideBar} = useContext(MenuContext);
+  console.log("This is siderbar "+sidebar);
+  const showSideBar = () => {
+    setSideBar(!sidebar);
+    
+  };
   const [value, setValue] = React.useState("Yes");
 
 

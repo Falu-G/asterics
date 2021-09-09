@@ -1,6 +1,6 @@
-import React from 'react'
-import { useState } from 'react'
+import React, {useState, useContext } from "react";
 import './monthlyschedule.css'
+import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu"
 import NavigationComponent from '../../components/navigationComponent/NavigationComponent'
 import Dashnav from '../../components/dashnav/Dashnav'
@@ -40,58 +40,15 @@ function Monthlyschedule() {
         { id: 4, dateSchedule: "12-Aug-2021", MessageContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia", status: "Pending" },
         { id: 5, dateSchedule: "12-Aug-2021", MessageContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia", status: "Pending" },
     ];
-    const [sidebar, setSideBar] = useState(true);
+    const {sidebar,setSideBar} = useContext(MenuContext);
+    console.log("I am on monthly "+sidebar)
     const [dataRow, setDataRow] = useState(dataHorizontal);
 
     const handledelete = (id) => setDataRow(() => dataRow.filter((item) => item.id !== id));
     const showSideBar = () => setSideBar(!sidebar)
 
     const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
-    // const columns = [
-    //     { field: 'id', headerName: 'ID', width: 90 },
-    //     {
-    //         field: 'firstName',
-    //         headerName: 'First name',
-    //         width: 150,
-    //         editable: true,
-    //     },
-    //     {
-    //         field: 'lastName',
-    //         headerName: 'Last name',
-    //         width: 150,
-    //         editable: true,
-    //     },
-    //     {
-    //         field: 'age',
-    //         headerName: 'Age',
-    //         type: 'number',
-    //         width: 110,
-    //         editable: true,
-    //     },
-    //     {
-    //         field: 'fullName',
-    //         headerName: 'Full name',
-    //         description: 'This column has a value getter and is not sortable.',
-    //         sortable: false,
-    //         width: 160,
-    //         valueGetter: (params) =>
-    //             `${params.getValue(params.id, 'firstName') || ''} ${params.getValue(params.id, 'lastName') || ''
-    //             }`,
-    //     },
-    // ];
-
-    // const rows = [
-    //     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    //     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    //     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    //     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    //     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    //     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    //     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    //     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    //     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    // ];
-
+ 
     const dataVertical = [
         { field: 'id', headerName: 'ID', width: 90 },
         {

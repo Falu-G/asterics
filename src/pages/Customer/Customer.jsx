@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext,useState } from "react";
+import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu";
 import "./customer.css";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
@@ -19,8 +20,12 @@ const useStyles = makeStyles((theme) => ({
 function Customer() {
   const classes = useStyles();
   const [allCustomers, setAllCustomers] = useState([]);
-  const [sidebar, setSideBar] = useState(true);
-  const showSideBar = () => setSideBar(!sidebar);
+  const {sidebar,setSideBar} = useContext(MenuContext);
+  console.log("This is siderbar "+sidebar);
+  const showSideBar = () => {
+    setSideBar(!sidebar);
+    
+  };
   const [openModalEmail, setOpenModalEmail] = useState(false);
 
   const loggedInUser = localStorage.getItem("user-info");
