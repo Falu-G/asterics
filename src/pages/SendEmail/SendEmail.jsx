@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useToasts } from 'react-toast-notifications';
 import "./sendemail.css";
 //import Modal from "react-modal";
 import { MenuContext } from "../../components/MenuContext";
@@ -22,7 +23,7 @@ function SendEmail() {
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
-
+  const { addToast } = useToasts();
   console.log("Token is "+token)
 
   const handleSend = async (e) => {
@@ -47,9 +48,11 @@ function SendEmail() {
       result = await result.json();
       if (result.status === 200) {
         console.log(result.message)
+        addToast('Saved Successfully', { appearance: 'success' });
        
       } else {
         console.log(result.message)
+        addToast(result.message, { appearance: 'error' });
       }
     } catch (err) {
         console.log("Something terrible happened "+err.message)

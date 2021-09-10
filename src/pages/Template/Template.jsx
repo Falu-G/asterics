@@ -45,7 +45,7 @@ function Templates() {
 
   const [modalTemplate, setModalTemplate] = useState(false);
 
-  const {sidebar,setSideBar} = useContext(MenuContext);
+  const { sidebar, setSideBar } = useContext(MenuContext);
   const showSideBar = () => setSideBar(!sidebar);
 
   const [openModalEmail, setOpenModalEmail] = useState(false);
@@ -64,7 +64,7 @@ function Templates() {
       transform: "translate(-50%, -50%)",
     },
   };
-  
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -210,7 +210,6 @@ function Templates() {
                   </div>
 
                   <div className="tm-txtAndbt">
-                    {" "}
                     <textArea
                       type="text"
                       name="message"

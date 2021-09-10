@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { MenuContext } from "../../components/MenuContext";
+import { useToasts } from 'react-toast-notifications';
 import "./sendsms.css";
 import Modal from "react-modal";
 import FormRadio from "../../components/formRadio/FormRadio";
@@ -7,6 +8,7 @@ import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 
 function Sendsms() {
+  const { addToast } = useToasts();
   const {sidebar,setSideBar} = useContext(MenuContext);
   console.log("This is siderbar "+sidebar);
   const showSideBar = () => {
@@ -62,8 +64,12 @@ function Sendsms() {
       result = await result.json();
       if (result.status === 200) {
         setMessageReport(result.message)
+        addToast('Saved Successfully', { appearance: 'success' });
+       
+
       } else {
        setMessageReport(result.message)
+       addToast(result.message, { appearance: 'error' });
       }
     } catch (err) {
       console.log("Something terrible happened " + err.message);
@@ -72,6 +78,7 @@ function Sendsms() {
 
   return (
     <>
+    
       <div className="maindashboardContainer">
         <div
           className={
@@ -145,6 +152,8 @@ function Sendsms() {
               <button className="sendbtn" onClick={handleSendMessage}>
                 Send
               </button>
+
+
             </div>
 
             <div>
@@ -172,6 +181,7 @@ function Sendsms() {
           </div>
         </div>
       </div>
+     
     </>
   );
 }
