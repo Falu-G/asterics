@@ -33,7 +33,8 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path = "/login" component = {Login} />
           <Route path = "/addCustomer" component = {AddCustomer} />
-
+          <Route path = "/testpage" component = {Testpage} />
+          <Route path = "/signup" component = {()=><ToastProvider> <SignUp/> </ToastProvider>} />
           <MenuContext.Provider value = {{sidebar, setSideBar}}> 
 
 
@@ -46,8 +47,8 @@ function App() {
           <Route path = "/schedule" component = {MonthlySchedule} />
           <Route path = "/templates" component = {Templates} />
           <Route path = "/customer" component = {()=> <ToastProvider> <Customer/> </ToastProvider>} />
-          <Route path = "/testpage" component = {Testpage} />
-          <Route path = "/signup" component = {SignUp} />
+         
+          
           <Route path = "/resetpassword" component = {ResetPassword} />
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />

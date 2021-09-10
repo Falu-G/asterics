@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 import "./sendemail.css";
 //import Modal from "react-modal";
 import { MenuContext } from "../../components/MenuContext";
@@ -8,11 +8,14 @@ import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import EmailObject from "../../classes/EmailObject";
+import * as ReactBootStrap from "react-bootstrap";
+
 
 function SendEmail() {
   const [value, setValue] = React.useState("Yes");
 
-  const {sidebar,setSideBar} = useContext(MenuContext);
+  const { sidebar, setSideBar } = useContext(MenuContext);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const showSideBar = () => setSideBar(!sidebar);
   const [emailContent, setEmailContent] = useState(new EmailObject("", "", ""));
 
@@ -24,38 +27,35 @@ function SendEmail() {
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
-  console.log("Token is "+token)
+
 
   const handleSend = async (e) => {
     e.preventDefault();
-    console.log(
-      emailContent.recieverAddress,
-      emailContent.messageSubject,
-      emailContent.messageBody
-    );
-
+    setSendingMessage(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/mails/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: "Bearer "+ token
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify(emailContent),
       });
 
+      
       result = await result.json();
       if (result.status === 200) {
-        console.log(result.message)
-        addToast('Saved Successfully', { appearance: 'success' });
-       
+        console.log(result.message);
+        setSendingMessage(false);
+        addToast("Saved Successfully", { appearance: "success" });
       } else {
-        console.log(result.message)
-        addToast(result.message, { appearance: 'error' });
+        console.log(result.message);
+        setSendingMessage(false);
+        addToast(result.message, { appearance: "error" });
       }
     } catch (err) {
-        console.log("Something terrible happened "+err.message)
+      console.log("Something terrible happened " + err.message);
     }
   };
 
@@ -137,9 +137,29 @@ function SendEmail() {
                 />
               </form>
 
-              <button className="sendbtn" onClick={handleSend}>
+              {/* <button
+                className="sendbtn"
+                onClick={handleSend}
+                disabled={sendingMessage}
+              >
                 Send
-              </button>
+              </button> */}
+
+              <ReactBootStrap.Button 
+              className="sendEmailbtn"
+              variant="primary" 
+              onClick={handleSend}
+              disabled = {sendingMessage}>
+                <ReactBootStrap.Spinner
+                  as="span"
+                  className={sendingMessage ? "visible" : "visually-hidden"}
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span className="visually">{sendingMessage ? "Loading..." : "Send"}</span>
+              </ReactBootStrap.Button>
             </div>
           </div>
         </div>

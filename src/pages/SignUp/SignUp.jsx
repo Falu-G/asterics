@@ -3,9 +3,11 @@ import { useHistory } from 'react-router-dom'
 import TextField from "@material-ui/core/TextField";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { BeatLoader } from "react-spinners";
+import { useToasts } from "react-toast-notifications";
+//import { BeatLoader } from "react-spinners";
 import { states } from "../../StatesandLgas";
 import User from "../../classes/User"
+import * as ReactBootStrap from "react-bootstrap";
 //import { css } from "@emotion/react";
 
 import "./signUp.css";
@@ -14,7 +16,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [phone, setValue] = useState();
   const [lastname, setLastName] = useState("");
-  const [showIcon, setShowIcon] = useState(false);
+  //const [showIcon, setShowIcon] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState("Nigeria");
@@ -25,13 +27,13 @@ function SignUp() {
   const [address, setAddress] = useState("");
   const [state, setStateName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const { addToast } = useToasts();
   let history = useHistory();
   const signUp = async (e) => {
     e.preventDefault();
+    setSendingMessage(true);
     let user = new User(firstname,username,lastname,address,email,password,confirmPassword,phone,city,state,country);
-
-    setShowIcon(true);
 
     try {
       let result = await fetch("https://asteric.herokuapp.com/users/register", {
@@ -47,22 +49,22 @@ function SignUp() {
       if (result.status === 200) {
 
         console.warn(result.status);
-        setShowIcon(false);
-    
+
+        addToast("Saved Successfully", { appearance: "success" });
+        setSendingMessage(false);
         localStorage.setItem("user-info", JSON.stringify(result));
         setShowSucces(true);
         setShowReport(result.message);
         history.push("/login")
       } else {
-   
+        setSendingMessage(false);
         console.warn(result);
-        setShowIcon(false);
         setShowSucces(true);
-        console.log("This is outside 200")
+        addToast(result.message, { appearance: "error" });
         setShowReport(result.message);
       }
     } catch (err) {
-      setShowIcon(false);
+      setSendingMessage(false);
       console.log("Error message "+err.message)
     }
   };
@@ -183,6 +185,7 @@ function SignUp() {
           <PhoneInput
             placeholder="Enter phone number"
             value={phone}
+            maxLength = {11}
             className="layerMargin"
             defaultCountry="NG"
             onChange={setValue}
@@ -230,11 +233,33 @@ function SignUp() {
               alignItems: `center`,
             }}
           >
-            <button className="Regbtn" onClick={signUp}>
+            {/* <button className="Regbtn" onClick={signUp}>
               Register
             </button>
-            <BeatLoader loading={showIcon} />
+            <BeatLoader loading={showIcon} /> */}
+
+
+            <ReactBootStrap.Button 
+              className="Regbtn"
+              variant="primary" 
+              onClick={signUp}
+              disabled = {sendingMessage}>
+                <ReactBootStrap.Spinner
+                  as="span"
+                  className={sendingMessage ? "visible" : "visually-hidden"}
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span className="visually">{sendingMessage ? "Registering..." : "Register"}</span>
+              </ReactBootStrap.Button>
+
+
+
           </div>
+
+
           <div style = {{
             textAlign: "center",
             marginTop: '10px',

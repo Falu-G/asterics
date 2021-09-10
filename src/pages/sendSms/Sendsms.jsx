@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
+import * as ReactBootStrap from "react-bootstrap";
 
 function Sendsms() {
   const { addToast } = useToasts();
@@ -17,7 +18,7 @@ function Sendsms() {
   };
   const [value, setValue] = React.useState("Yes");
 
-
+  const [sendingMessage, setSendingMessage] = useState(false);
   const [messageReport, setMessageReport] = useState("")
 
   const [openModal, setOpenModal] = useState(false);
@@ -47,6 +48,7 @@ function Sendsms() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    setSendingMessage(true);
     console.log(sendMessage);
     console.log(token)
 
@@ -64,11 +66,13 @@ function Sendsms() {
       result = await result.json();
       if (result.status === 200) {
         setMessageReport(result.message)
+        setSendingMessage(false);
         addToast('Saved Successfully', { appearance: 'success' });
        
 
       } else {
        setMessageReport(result.message)
+       setSendingMessage(false);
        addToast(result.message, { appearance: 'error' });
       }
     } catch (err) {
@@ -149,9 +153,26 @@ function Sendsms() {
                 />
               </form>
 
-              <button className="sendbtn" onClick={handleSendMessage}>
+              {/* <button className="sendbtn" onClick={handleSendMessage}>
                 Send
-              </button>
+              </button> */}
+
+
+              <ReactBootStrap.Button 
+              className="sendbtn"
+              variant="primary" 
+              onClick={handleSendMessage}
+              disabled = {sendingMessage}>
+                <ReactBootStrap.Spinner
+                  as="span"
+                  className={sendingMessage ? "visible" : "visually-hidden"}
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span className="visually">{sendingMessage ? "Loading..." : "Send"}</span>
+              </ReactBootStrap.Button>
 
 
             </div>
