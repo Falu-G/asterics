@@ -3,7 +3,7 @@ import { useToasts } from "react-toast-notifications";
 import "./sendemail.css";
 //import Modal from "react-modal";
 import { MenuContext } from "../../components/MenuContext";
-import FormRadio from "../../components/formRadio/FormRadio";
+//import FormRadio from "../../components/formRadio/FormRadio";
 //import Dashnav from "../../components/dashnav/Dashnav";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
@@ -11,52 +11,48 @@ import EmailObject from "../../classes/EmailObject";
 import * as ReactBootStrap from "react-bootstrap";
 
 
+
 function SendEmail() {
-  const [value, setValue] = React.useState("Yes");
 
   const { sidebar, setSideBar } = useContext(MenuContext);
   const [sendingMessage, setSendingMessage] = useState(false);
-  const showSideBar = () => setSideBar(!sidebar);
   const [emailContent, setEmailContent] = useState(new EmailObject("", "", ""));
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
+  const showSideBar = () => setSideBar(!sidebar);
   const { addToast } = useToasts();
 
 
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
-    try {
-      let result = await fetch("https://asteric.herokuapp.com/mails/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(emailContent),
-      });
-
-      
-      result = await result.json();
-      if (result.status === 200) {
-        console.log(result.message);
-        setSendingMessage(false);
-        addToast("Saved Successfully", { appearance: "success" });
-      } else {
-        console.log(result.message);
-        setSendingMessage(false);
-        addToast(result.message, { appearance: "error" });
+      try {
+        let result = await fetch("https://asteric.herokuapp.com/mails/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(emailContent),
+        });
+  
+        
+        result = await result.json();
+        if (result.status === 200) {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast("Saved Successfully", { appearance: "success" });
+        } else {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast(result.message, { appearance: "success" });
+        }
+      } catch (err) {
+        console.log("Something terrible happened " + err.message);
       }
-    } catch (err) {
-      console.log("Something terrible happened " + err.message);
-    }
+   
   };
 
   return (
@@ -90,7 +86,10 @@ function SendEmail() {
             className="SendEmailWrapper"
           >
             <div>
-              <FormRadio value={value} handleChange={handleChange} />
+              {/* <FormRadio 
+              value={value} 
+              handleChange={handleChange}
+              handleScheduleTime = {handleScheduleTime} /> */}
 
               <form className="scheduleform">
                 <div className="inputIcon">

@@ -3,7 +3,7 @@ import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from 'react-toast-notifications';
 import "./sendsms.css";
 import Modal from "react-modal";
-import FormRadio from "../../components/formRadio/FormRadio";
+//import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import * as ReactBootStrap from "react-bootstrap";
@@ -16,7 +16,7 @@ function Sendsms() {
     setSideBar(!sidebar);
     
   };
-  const [value, setValue] = React.useState("Yes");
+  //const [value, setValue] = React.useState("Yes");
 
   const [sendingMessage, setSendingMessage] = useState(false);
   const [messageReport, setMessageReport] = useState("")
@@ -36,9 +36,9 @@ function Sendsms() {
     numbers: "",
     message: "",
   });
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setValue(event.target.value);
+  // };
 
   
 
@@ -116,7 +116,7 @@ function Sendsms() {
             <div>
 
 
-              <FormRadio value={value} handleChange={handleChange} />
+              {/* <FormRadio value={value} handleChange={handleChange} /> */}
 
               <form className="scheduleform">
                 <div className="inputIcon">

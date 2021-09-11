@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState } from "react";
 
-function FormRadio({ value, handleChange }) {
+function FormRadio({ value, handleChange, handleScheduleTime}) {
   
 
   var today = new Date();
@@ -17,7 +17,6 @@ var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
 today = `${yyyy}-${mm}-${dd}`;
-
   const useStyles = makeStyles((theme) => ({
     container: {
       display: "flex",
@@ -41,11 +40,13 @@ today = `${yyyy}-${mm}-${dd}`;
     <div className="schedule-image">
 
       {console.log(today)}
+     
       {scheduledTime === "Yes" ? (
         <TextField
           id="datetime-local"
           label="Schedule Time"
           type="datetime-local"
+          onChange={handleScheduleTime}
           defaultValue={`${today}T00:00`}
           className={classes.textField}
           InputLabelProps={{
@@ -66,7 +67,7 @@ today = `${yyyy}-${mm}-${dd}`;
         <span>Schedule Message</span>
         <RadioGroup
           aria-label="Schedule_Message"
-          name="gender1"
+          name="Schedule"
           value={scheduledTime}
           onChange={changeTime}
           row
