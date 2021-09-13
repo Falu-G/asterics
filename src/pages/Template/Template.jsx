@@ -30,6 +30,7 @@ function Templates() {
   const [smsTemplates, setSmsTemplates] = useState(smsList);
   const [templateObjstate, settemplateObjstate] = useState(templateObj);
   // const [messageTem, setMessageTem] = useState("");
+  //const [loading, setLoading] = useState(true)
 
   // const [messageCategory, setMessageCategory] = useState("");
 
@@ -92,10 +93,12 @@ function Templates() {
           setTokenValid(true);
         } else {
           setEmailTemplates(data);
+          //setLoading(false)
         }
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
+       // setLoading(false)
       });
   }, [token]);
 
@@ -398,9 +401,8 @@ function Templates() {
                     top:'50%',
                     left:'50%'
                   }}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </ReactBootStrap.Spinner>
+                />
+                  
                 <div className="EmailTemplate">
                   <h3>Email Template</h3>
                   <div className="em_templatebox">

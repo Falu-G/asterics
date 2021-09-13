@@ -61,7 +61,7 @@ function Dashboard() {
           </div>
           <div className="box box4 card">
             <Link
-              to="/addcustomer"
+              to="/customer"
               style={{
                 textDecoration: "none",
                 color: "#fff",
