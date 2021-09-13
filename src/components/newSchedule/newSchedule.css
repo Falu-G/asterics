@@ -1,55 +1,74 @@
-.ns-Container{
-    width: 100%;
+.ns-Container {
+  width: 100%;
 }
 
-.ns-Scheduler{
-    display: flex;
-    justify-content:space-between;
-    flex-direction:row;
-    padding: 10px 40px;
+.ns-Scheduler {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 10px 40px;
 }
 
-.ns-Scheduler-input{
-    margin-top:20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction:column;
+.ns-Scheduler-input {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.ns-Scheduler-house{
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction:column;
+.ns-Scheduler-house {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
 }
-.ns-Scheduler-house textarea{
-    width: 100%;
+.ns-Scheduler-house textarea {
+  width: 100%;
 }
 .ns-Scheduler-house input {
-width: 832px;
-height: 46px;
-padding-left:10px;
-outline: none;
-background: #F1F1F1;
-border: 1px solid #CACACA;
-box-sizing: border-box;
+  width: 832px;
+  height: 46px;
+  padding-left: 10px;
+  outline: none;
+  background: #f1f1f1;
+  border: 1px solid #cacaca;
+  box-sizing: border-box;
 }
 
+.ns-scheduler-submit {
+  border-radius: 5px;
+  margin-top: 10px;
+  float: right;
+  background: #a9aeb1;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  padding: 10px;
+}
 
-.ns-scheduler-submit{
-    border-radius: 5px ;
-    margin-top: 10px;
-    float: right;
-    background: #A9AEB1;
-    color: #fff;
+.ns-Scheduler-container{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    
+}
+
+.ns-messagetab {
+  justify-content: space-around;
+  width: 200px;
+  margin-left: 10px;
+  align-items: center;
+  display: flex;
+}
+
+.ns-messagetab button {
+    padding:0 10px;
     border: none;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 5px;
 }
 
-
-.ns-Enabled{
-    background: #18A0FB !important
- 
+.ns-active{
+    background: #18A0FB;
+    color: #fff;
 }

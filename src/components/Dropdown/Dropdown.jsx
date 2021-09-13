@@ -7,7 +7,7 @@ function Dropdown({tasks}) {
 
     return (
         <div class="dropdown">
-            <h3 class="dropbtnn">{messageType}</h3>
+            <h6 class="dropbtnn">{messageType}</h6>
             <div class="dropdown-content">
 
                 {tasks.map((task, index) => (<>

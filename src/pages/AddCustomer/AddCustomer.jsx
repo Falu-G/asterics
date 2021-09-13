@@ -2,50 +2,48 @@ import React, { useState } from "react";
 import "./addCustomer.css";
 import CloseIcon from "@material-ui/icons/Close";
 import Dashnav from "../../components/dashnav/Dashnav";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+//import { makeStyles } from "@material-ui/core/styles";
 import CustomerInfo from "../../classes/CustomerInfo";
 import SessionExpired from "../SessionExpired/SessionExpired";
+import Datepicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     "& > *": {
+//       margin: theme.spacing(1),
+//     },
+//   },
 
-  button: {
-    border: "none",
-    padding: `20px`,
-    color: "white",
-    height: "50px",
-    background: "#18A0FB",
-    boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-    borderRadius: `4px`,
-    zIndex: 4,
-  },
-}));
+//   button: {
+//     border: "none",
+//     padding: `20px`,
+//     color: "white",
+//     height: "50px",
+//     background: "#18A0FB",
+//     boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+//     borderRadius: `4px`,
+//     zIndex: 4,
+//   },
+// }));
 
 function AddCustomer({ openModal, setOpenModal }) {
-  const classes = useStyles();
-
   //const [openModal, setOpenModal] = useState(false);
   //var fileName = "myDocument.pdf";
   //var fileExtension = fileName.split('.').pop();
 
   const [sessionExpired, setSessionExpired] = useState(false);
-  const [value, onChange] = useState(new Date());
 
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     lastName: "",
     email: "",
   });
-  const [birthday, setbirthday] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [showBirthday, setShowBirthday] = useState(false);
+  const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
+  const [selectedAnniversaryDate, setselectedAnniversaryDate] = useState(null);
+ 
+
 
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -57,17 +55,17 @@ function AddCustomer({ openModal, setOpenModal }) {
       customerInfo.email
     );
 
-    if (showBirthday != null) {
+    if (selectedBirthdayDate != null) {
       customer.addDateOfBirth(
-        birthday.getDay() +
+        selectedBirthdayDate.getDay() +
           "," +
-          birthday.toLocaleString("en-us", { month: "short" })
+          selectedBirthdayDate.toLocaleString("en-us", { month: "short" })
       );
     }
 
-    if (value != null) {
+    if (selectedAnniversaryDate != null) {
       customer.addAnniversary(
-        value.getDay() + "," + value.toLocaleString("en-us", { month: "short" })
+        selectedAnniversaryDate.getDay() + "," + selectedAnniversaryDate.toLocaleString("en-us", { month: "short" })
       );
     }
 
@@ -112,22 +110,13 @@ function AddCustomer({ openModal, setOpenModal }) {
           <CloseIcon
             style={{
               position: "absolute",
-              top: 0,
+              top: "5",
               right: 10,
             }}
             onClick={setOpenModal}
           />
           <Dashnav title="Add Customer" />
-
-          <div
-            style={{
-              backgroundImage: `url(/images/addcustomerbg.png)`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
-              backgroundPosition: "center right",
-            }}
-            className="addCustomerWrapper"
-          >
+          <div className="addCustomerWrapper">
             <div className="addCustomerWrapperCont">
               <input
                 label="Upload CSV"
@@ -167,46 +156,30 @@ function AddCustomer({ openModal, setOpenModal }) {
                     name="phone"
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber}
-                    placeholder="Phone Numner"
+                    placeholder="Phone Number"
                   />
                   <div className="addforminputinImg spaceleft">
-                    <input
-                      className="addforminputi"
-                      type="text"
-                      name="username"
-                      placeholder="Birthday"
-                      onChange={() => setbirthday()}
-                      value={
-                        birthday.getDay() +
-                        "," +
-                        birthday.toLocaleString("en-us", { month: "short" })
-                      }
+                    <Datepicker
+                      selected={selectedBirthdayDate}
+                      onChange={(date) => setSelectedBirthdayDate(date)}
+                      className="Datepicker pa2 addformLast"
+                      placeholderText="Select a date"
+                      calendarClassName="rasta-stripes"
+                      maxDate={new Date()}
+                      isClearable
+                      showYearDropdown
+                      popperModifiers={{
+                        offset: {
+                          enabled: true,
+                          offset: "0px, 0px",
+                        },
+                        preventOverflow: {
+                          enabled: true,
+                          escapeWithReference: false,
+                          boundariesElement: "scrollParent",
+                        },
+                      }}
                     />
-                    <div>
-                      {showBirthday ? (
-                        <div
-                          style={{
-                            float: "right",
-                          }}
-                        >
-                          <Calendar onChange={setbirthday} value={birthday} />
-                          <div className={classes.root}>
-                            <Button
-                              className={classes.button}
-                              onClick={() => setShowBirthday(!showBirthday)}
-                            >
-                              SELECT
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <img
-                          src="/images/calendar.png"
-                          alt=""
-                          onClick={() => setShowBirthday(!showBirthday)}
-                        />
-                      )}
-                    </div>
                   </div>
                 </div>
 
@@ -220,42 +193,27 @@ function AddCustomer({ openModal, setOpenModal }) {
                   placeholder="Email"
                 />
                 <div className="Anniversary">
-                  <input
-                    className="addformLast"
-                    type="text"
-                    name="Anniversary"
-                    placeholder="Anniversary"
-                    value={
-                      value.getDay() +
-                      "," +
-                      value.toLocaleString("en-us", { month: "short" })
-                    }
+                  <Datepicker
+                    selected={selectedAnniversaryDate}
+                    onChange={(date) => setselectedAnniversaryDate(date)}
+                    className="Datepicker pa2 addformLast"
+                    placeholderText="Select anniversary date"
+                    calendarClassName="rasta-stripes"
+                    maxDate={new Date()}
+                    isClearable
+                    showYearDropdown
+                    popperModifiers={{
+                      offset: {
+                        enabled: true,
+                        offset: "0px, 0px",
+                      },
+                      preventOverflow: {
+                        enabled: true,
+                        escapeWithReference: false,
+                        boundariesElement: "scrollParent",
+                      },
+                    }}
                   />
-                  <div>
-                    {showCalendar ? (
-                      <div
-                        style={{
-                          float: "right",
-                        }}
-                      >
-                        <Calendar onChange={onChange} value={value} />
-                        <div className={classes.root}>
-                          <Button
-                            className={classes.button}
-                            onClick={() => setShowCalendar(!showCalendar)}
-                          >
-                            SELECT
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <img
-                        src="/images/calendar.png"
-                        alt=""
-                        onClick={() => setShowCalendar(!showCalendar)}
-                      />
-                    )}
-                  </div>
                 </div>
 
                 <div className="submitcont">

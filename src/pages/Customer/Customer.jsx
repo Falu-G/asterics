@@ -132,6 +132,7 @@ function Customer() {
       top: "50%",
       left: "50%",
       padding: "0",
+      overflow: "visible",
       transform: "translate(-50%, -50%)",
     },
   };

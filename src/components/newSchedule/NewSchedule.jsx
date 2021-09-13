@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Dashnav from "../dashnav/Dashnav";
 //import Dropdown from '../Dropdown/Dropdown'
 //import FormRadio from "../formRadio/FormRadio";
@@ -10,7 +10,6 @@ import * as ReactBootStrap from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
-
 function NewSchedule({ setOpenModal, hideOption }) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -18,6 +17,8 @@ function NewSchedule({ setOpenModal, hideOption }) {
   var yyyy = today.getFullYear();
 
   today = `${yyyy}-${mm}-${dd}`;
+
+  let schedule = new ScheduleEmail();
 
   const useStyles = makeStyles((theme) => ({
     container: {
@@ -31,31 +32,17 @@ function NewSchedule({ setOpenModal, hideOption }) {
     },
   }));
 
-
-  const [isActive, setIsActive] = useState(false);
-
-  const [messageType, setMessageType] = useState("Select Message Type");
-  const [scheduledTimeToSend, setscheduledTimeToSend] = useState("");
+  const [scheduleMessage, setScheduleMessage] = useState(schedule);
+  const [messageType, setMessageType] = useState("SMS");
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
-  // const handleSchedule = function () {
-  //   console.log("handleSchedule");
-  // }
-
-  // const handleSchedule = (event) => {
-  //   setscheduledTimeToSend(event.target.value);
-  // };
-
-  // const [scheduleMessage, setscheduleMesssage] = useState(
-  //   new ScheduleEmail([], "", "", "")
-  // );
   const [sendingMessage, setSendingMessage] = useState(false);
-  const options = ["SMS", "Email"];
+  //const options = ["SMS", "Email"];
 
-  const handleSend = async (e) => {
+  const handleSend = async () => {
     try {
       let result = await fetch("https://asteric.herokuapp.com/mails/schedule", {
         method: "POST",
@@ -88,41 +75,45 @@ function NewSchedule({ setOpenModal, hideOption }) {
       <CloseIcon
         style={{
           position: "absolute",
-          top: 0,
+          top: 5,
+          cursor: "pointer",
+          color: "white",
           right: 10,
         }}
         onClick={setOpenModal}
       />
       <Dashnav title="New Schedule" />
 
-
-{console.log(scheduledTimeToSend)}
+      {console.log(schedule.schedule_date)}
       <div className="ns-Scheduler">
-        <div class="dropdown">
-          <button class="dropbtn">{messageType}</button>
-          <div class="dropdown-content">
-            {options.map((option, index) => (
-              <>
-                <h3
-                  onClick={() => {
-                    setMessageType(option);
-                    setIsActive(!isActive);
-                  }}
-                >
-                  {option}
-                </h3>
-              </>
-            ))}
+        <div className="ns-Scheduler-container">
+          <span>Select Message Type</span>
+          <div className="ns-messagetab">
+            <button
+              className={messageType === "SMS" ? "ns-active" : null}
+              onClick={() => setMessageType("SMS")}
+            >
+              SMS
+            </button>
+            <button
+              className={messageType === "Email" ? "ns-active" : null}
+              onClick={() => setMessageType("Email")}
+            >
+              Email
+            </button>
           </div>
         </div>
-
-        {/*<Dropdown setIsActiv = {()=> setIsActive(!isActive)}/>*/}
         <div>
           <TextField
             id="datetime-local"
             label="Schedule Time"
             type="datetime-local"
-            onChange={(event) => setscheduledTimeToSend(event.target.value)}
+            onChange={(event) =>
+              setScheduleMessage({
+                ...scheduleMessage,
+                schedule_date: event.target.value,
+              })
+            }
             defaultValue={`${today}T00:00`}
             className={classes.textField}
             InputLabelProps={{
@@ -135,29 +126,28 @@ function NewSchedule({ setOpenModal, hideOption }) {
       <form className="ns-Scheduler-input">
         <div className="ns-Scheduler-house">
           <input
-            type="phone"
-            name="phone"
-            placeholder={
-              messageType === "SMS" || messageType === "Email"
-                ? "PhoneNumber"
-                : "Phone Number or Email"
+            type={messageType === "SMS" ? "text" : "email"}
+            name={messageType === "SMS" ? "sms" : "email"}
+            placeholder={messageType === "SMS" ? "PhoneNumber" : "Enter Email"}
+          />
+
+          <input
+            type="text"
+            name="title"
+            placeholder={"Title of the message"}
+          />
+          <textArea
+            type="messages"
+            name="name"
+            onChange={(event) =>
+              setScheduleMessage({
+                ...scheduleMessage,
+                messageBody: event.target.value,
+              })
             }
           />
-          <textArea type="messages" name="name" />
 
           <div style={{ width: "100%" }}>
-            {/* <button
-              type="submit"
-              name="Schedule"
-              className={
-                messageType === "SMS" || messageType === "Email"
-                  ? "ns-scheduler-submit ns-Enabled"
-                  : "ns-scheduler-submit"
-              }
-            >
-              Schedule
-            </button> */}
-
             <ReactBootStrap.Button
               className="sendEmailbtn"
               variant="primary"
@@ -173,7 +163,7 @@ function NewSchedule({ setOpenModal, hideOption }) {
                 aria-hidden="true"
               />
               <span className="visually">
-                {messageType ? "Schedule" : "Send"}
+                {messageType === "SMS" ? "Schedule SMS" : "Schedule Email"}
               </span>
             </ReactBootStrap.Button>
           </div>
