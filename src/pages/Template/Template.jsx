@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import "./template.css";
 import AttachmentIcon from "@material-ui/icons/Attachment";
 import { MenuContext } from "../../components/MenuContext";
+import { useToasts } from "react-toast-notifications";
 import ImageIcon from "@material-ui/icons/Image";
 import GifIcon from "@material-ui/icons/Gif";
 import FormatBoldIcon from "@material-ui/icons/FormatBold";
@@ -12,27 +13,19 @@ import FormRadio from "../../components/formRadio/FormRadio";
 import Dashnav from "../../components/dashnav/Dashnav";
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
-import Message from "../../classes/Messages";
 import Close from "@material-ui/icons/Close";
 //import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import TemplateObject from "../../classes/TemplateObject";
 import * as ReactBootStrap from "react-bootstrap";
 function Templates() {
-  let message = new Message("Promo", "Come and buy what we are selling");
-
-  let emailList = [message];
-  let smsList = [message];
-
-  let templateObj = new TemplateObject("", "");
-  const [emailTemplates, setEmailTemplates] = useState(emailList);
-  const [smsTemplates, setSmsTemplates] = useState(smsList);
+  let templateObj = new TemplateObject("", "", "");
+  const [emailTemplates, setEmailTemplates] = useState([]);
+  const [smsTemplates, setSmsTemplates] = useState([]);
   const [templateObjstate, settemplateObjstate] = useState(templateObj);
-  // const [messageTem, setMessageTem] = useState("");
-  //const [loading, setLoading] = useState(true)
-
-  // const [messageCategory, setMessageCategory] = useState("");
+  const [addEmail, setAddEmail] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [modalTemplate, setModalTemplate] = useState(false);
 
@@ -41,8 +34,8 @@ function Templates() {
 
   const [openModalEmail, setOpenModalEmail] = useState(false);
 
-  const [mesag, setMesag] = useState("");
-
+  // const [mesag, setMesag] = useState("");
+  const { addToast } = useToasts();
   const [openModalSMS, setOpenModalSMS] = useState(false);
   const [value, setValue] = React.useState("Yes");
   const customStyles = {
@@ -60,25 +53,21 @@ function Templates() {
     setValue(event.target.value);
   };
 
-  const deleteFromArray = (title) => {
+  const deleteFromArray = (id) => {
     setOpenModalEmail(false);
     setEmailTemplates(
       emailTemplates.filter(function (element) {
-        return element.title !== title;
+        return element.id !== id;
       })
     );
   };
-
-  console.log(() => {
-    setSmsTemplates([]);
-  });
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const [tokenValid, setTokenValid] = useState(false);
 
-  useEffect(() => {
+  const fetchBusinesses = useCallback(() => {
     fetch("https://asteric.herokuapp.com/messageTemplate", {
       method: "GET",
       headers: {
@@ -92,20 +81,38 @@ function Templates() {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
         } else {
-          setEmailTemplates(data);
-          //setLoading(false)
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].messageCategory === "Email") {
+              setEmailTemplates([...emailTemplates, data[i]]);
+            } else {
+              setSmsTemplates([...smsTemplates, data[i]]);
+            }
+          }
+
+          setLoading(false);
         }
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
-       // setLoading(false)
+        setLoading(false);
       });
-  }, [token]);
+    
+  }, []);
+
+  useEffect(() => {
+    fetchBusinesses()
+  },[fetchBusinesses]);
+
+  const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
+  };
 
   const handleSetTemplate = async () => {
-    if (templateObjstate.messageTem.isEmpty()) {
-      alert("Cant be empty");
+    console.log(`Message ` + templateObjstate.message);
+    if (isBlank(templateObjstate.message)) {
+      alert("Message can not be empty");
     } else {
+      setAddEmail(true);
       let result = await fetch(
         "https://asteric.herokuapp.com/messageTemplate/register",
         {
@@ -115,19 +122,30 @@ function Templates() {
             Accept: "application/json",
             Authorization: "Bearer " + token,
           },
-          body: JSON.stringify(),
+          body: JSON.stringify(templateObjstate),
         }
       );
 
+      console.log(
+        `The message body is ${templateObjstate.message} and the type of message is ${templateObjstate.messageCategory}`
+      );
       result = await result.json();
 
       if (result.message === "Invalid Token") {
         setTokenValid(true);
-        return;
+        setAddEmail(true);
       } else {
-        setEmailTemplates(result);
-        setOpenModalEmail(false);
-        setEmailTemplates([...emailTemplates, templateObjstate]);
+        if (templateObjstate.messageCategory === "Email") {
+          setEmailTemplates([...emailTemplates, templateObjstate]);
+          setModalTemplate(!modalTemplate);
+          setAddEmail(false);
+          addToast("Email added Succesfully", { appearance: "success" });
+        } else {
+          setSmsTemplates([...smsTemplates, templateObjstate]);
+          setOpenModalSMS(false);
+          setAddEmail(false);
+          addToast("SMS added Succesfully", { appearance: "success" });
+        }
       }
     }
   };
@@ -164,7 +182,106 @@ function Templates() {
               className="dashboardContainer"
             >
               <NavigationComponent title="Template" />
+
               <div className="scheduleDashboard">
+                {loading ? (
+                  <>
+                    <ReactBootStrap.Spinner
+                      animation="border"
+                      role="status"
+                      style={{
+                        position: "absolute",
+                        color: `#18A0FB`,
+                        top: "50%",
+                        left: "50%",
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="EmailTemplate">
+                      <h3>Email Template</h3>
+                      <div className="em_templatebox">
+                        {emailTemplates.map((emailTemplate, index) => (
+                          <>
+                            <div className="em_gen" key={emailTemplate.id}>
+                              <h3
+                                onClick={() =>
+                                  setOpenModalEmail(!openModalEmail)
+                                }
+                              >
+                                {emailTemplate.message}
+                              </h3>
+                              <p>{emailTemplate.message}</p>
+
+                              {console.log(index)}
+
+                              <Delete
+                                className="delete"
+                                onClick={() =>
+                                  deleteFromArray(emailTemplate.id)
+                                }
+                              />
+                            </div>
+                          </>
+                        ))}
+
+                        <div className="em_gen em_add">
+                          <img
+                            src="images/add.png"
+                            alt=""
+                            onClick={() => {
+                              setModalTemplate(!modalTemplate);
+                              settemplateObjstate({
+                                ...templateObjstate,
+                                messageCategory: "Email",
+                              });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="SMSTemplate">
+                      <h3>SMS Template</h3>
+                      <div className="em_templatebox">
+                        {smsTemplates.map((smsTemplate, index) => (
+                          <>
+                            <div
+                              className="em_gen"
+                              key={index}
+                              onClick={() =>
+                                setOpenModalSMS(() =>
+                                  openModalSMS ? false : true
+                                )
+                              }
+                            >
+                              <h3>{smsTemplate.message}</h3>
+                              <p>{smsTemplate.message}</p>
+                            </div>
+                          </>
+                        ))}
+
+                        <div className="em_gen em_add">
+                          <img
+                            src="images/add.png"
+                            alt=""
+                            onClick={() => {
+                              setOpenModalSMS(() =>
+                                openModalSMS ? false : true
+                              );
+                              settemplateObjstate({
+                                ...templateObjstate,
+                                messageCategory: "SMS",
+                              });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <Modal
                   isOpen={openModalEmail}
                   style={customStyles}
@@ -172,8 +289,6 @@ function Templates() {
                 >
                   <div className="modalContainer">
                     <Dashnav title="Email Template" />
-                    {console.log(message.title)}
-                    {console.log(message.content)}
                     <form className="modalInput">
                       <div className="modalFirstInput">
                         <div className="mf_input">
@@ -213,7 +328,7 @@ function Templates() {
                           onChange={(event) =>
                             settemplateObjstate({
                               ...templateObjstate,
-                              messageBody: event.target.value,
+                              message: event.target.value,
                             })
                           }
                         />
@@ -339,7 +454,7 @@ function Templates() {
                   >
                     <div
                       style={{
-                        width: "90%",
+                        width: "80%",
                       }}
                     >
                       <div
@@ -374,107 +489,57 @@ function Templates() {
                         id="contentSchedule"
                         name="message"
                         placeholder="Messages..."
-                        onChange={(e) => setMesag(e.target.value)}
-                        value={mesag}
+                        onChange={(e) =>
+                          settemplateObjstate({
+                            ...templateObjstate,
+                            message: e.target.value,
+                          })
+                        }
+                        value={templateObjstate.message}
                       />
                       <div>
-                        <Button
+                        {/* <Button
                           variant="contained"
                           style={{
+                            marginRight: "40px",
                             float: "right",
+                            padding: "10px 20px",
                             color: "#fff",
                             backgroundColor: "#18A0FB",
                           }}
                           onClick={handleSetTemplate}
                         >
                           ADD
-                        </Button>
+                        </Button> */}
+
+                        <ReactBootStrap.Button
+                          style={{
+                            marginRight: "40px",
+                            float: "right",
+                            padding: "10px 20px",
+                            color: "#fff",
+                            backgroundColor: "#18A0FB",
+                          }}
+                          variant="primary"
+                          onClick={handleSetTemplate}
+                          disabled={addEmail}
+                        >
+                          <ReactBootStrap.Spinner
+                            as="span"
+                            className={addEmail ? "visible" : "visually-hidden"}
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />
+                          <span className="visually">
+                            {addEmail ? "Loading..." : "Send"}
+                          </span>
+                        </ReactBootStrap.Button>
                       </div>
                     </div>
                   </div>
                 </Modal>
-                <ReactBootStrap.Spinner
-                  animation="border"
-                  role="status"
-                  style={{
-                    position: "absolute",
-                    top:'50%',
-                    left:'50%'
-                  }}
-                />
-                  
-                <div className="EmailTemplate">
-                  <h3>Email Template</h3>
-                  <div className="em_templatebox">
-                    {emailTemplates.map((emailTemplate, index) => (
-                      <>
-                        <div className="em_gen" key={index}>
-                          <h3
-                            onClick={() => setOpenModalEmail(!openModalEmail)}
-                          >
-                            {emailTemplate.title}
-                          </h3>
-                          <p>{emailTemplate.content}</p>
-
-                          {console.log(index)}
-
-                          <Delete
-                            className="delete"
-                            onClick={() => deleteFromArray(emailTemplate.title)}
-                          />
-                        </div>
-                      </>
-                    ))}
-
-                    <div className="em_gen em_add">
-                      <img
-                        src="images/add.png"
-                        alt=""
-                        onClick={() => {
-                          setModalTemplate(!modalTemplate);
-                          settemplateObjstate({
-                            ...templateObjstate,
-                            messageCategory: "Email",
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="SMSTemplate">
-                  <h3>SMS Template</h3>
-                  <div className="em_templatebox">
-                    {smsTemplates.map((smsTemplate, index) => (
-                      <>
-                        <div
-                          className="em_gen"
-                          key={index}
-                          onClick={() =>
-                            setOpenModalSMS(() => (openModalSMS ? false : true))
-                          }
-                        >
-                          <h3>{smsTemplate.title}</h3>
-                          <p>{smsTemplate.content}</p>
-                        </div>
-                      </>
-                    ))}
-
-                    <div className="em_gen em_add">
-                      <img
-                        src="images/add.png"
-                        alt=""
-                        onClick={() => {
-                          setOpenModalSMS(() => (openModalSMS ? false : true));
-                          settemplateObjstate({
-                            ...templateObjstate,
-                            messageCategory: "SMS",
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

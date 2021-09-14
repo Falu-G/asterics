@@ -36,19 +36,13 @@ function App() {
           <Route path = "/testpage" component = {Testpage} />
           <Route path = "/signup" component = {()=><ToastProvider> <SignUp/> </ToastProvider>} />
           <MenuContext.Provider value = {{sidebar, setSideBar}}> 
-
-
           <Route path = "/sendsms" component = {()=> <ToastProvider> <Sendsms/> </ToastProvider>} />
-
           <Route path = '/huhgddyuhtrthwh' component = {Menus}/>
-       
           <Route path = "/sendemail" component = {()=> <ToastProvider> <SendEmail/> </ToastProvider>} />
           <Route path = "/maindashboard" component = {Maindashboard} />
           <Route path = "/schedule" component = {MonthlySchedule} />
-          <Route path = "/templates" component = {Templates} />
+          <Route path = "/templates" component = {()=> <ToastProvider><Templates/></ToastProvider>} />
           <Route path = "/customer" component = {()=> <ToastProvider> <Customer/> </ToastProvider>} />
-         
-          
           <Route path = "/resetpassword" component = {ResetPassword} />
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />

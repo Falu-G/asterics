@@ -1,5 +1,6 @@
 class TemplateObject{
-    constructor(  message , messageCategory ){
+    constructor(  message , messageCategory, id){
+        this.id = id;
         this.message = message;
         this.messageCategory = messageCategory;
     }
