@@ -1,6 +1,7 @@
 .maindashboardContainer{
-height:100vh;
+
 display: flex;
+background-color: green;
 }
 .maindashboardContainerMenu{
     flex: 1;
