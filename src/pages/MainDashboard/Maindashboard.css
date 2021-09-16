@@ -1,7 +1,7 @@
 .maindashboardContainer{
 
 display: flex;
-background-color: green;
+
 }
 .maindashboardContainerMenu{
     flex: 1;

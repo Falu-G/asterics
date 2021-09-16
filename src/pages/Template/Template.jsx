@@ -81,14 +81,8 @@ function Templates() {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
         } else {
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].messageCategory === "Email") {
-              setEmailTemplates([...emailTemplates, data[i]]);
-            } else {
-              setSmsTemplates([...smsTemplates, data[i]]);
-            }
-          }
-
+          setEmailTemplates(data.filter((element) => element.messageCategory === "Email"));
+          setSmsTemplates(data.filter((element) => element.messageCategory === "SMS"));
           setLoading(false);
         }
       })
@@ -97,7 +91,7 @@ function Templates() {
         setLoading(false);
       });
     
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     fetchBusinesses()
