@@ -199,13 +199,16 @@ function Templates() {
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
-                              <h3
+                              <h5 style={{
+                               
+                                marginTop: '10px',
+                              }}
                                 onClick={() =>
                                   setOpenModalEmail(!openModalEmail)
                                 }
                               >
                                 {emailTemplate.message}
-                              </h3>
+                              </h5>
                               <p>{emailTemplate.message}</p>
 
                               {console.log(index)}
@@ -250,7 +253,7 @@ function Templates() {
                                 )
                               }
                             >
-                              <h3>{smsTemplate.message}</h3>
+                              <h5>{smsTemplate.message}</h5>
                               <p>{smsTemplate.message}</p>
                             </div>
                           </>

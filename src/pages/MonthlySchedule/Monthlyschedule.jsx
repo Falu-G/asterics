@@ -22,9 +22,13 @@ function Monthlyschedule() {
     root: {
       "& > *": {
         margin: theme.spacing(0),
-        backgroundColor: '#18A0FB'
+      
       
       },
+
+      button:{
+        backgroundColor: '#18A0FB'
+      }
     },
   }));
 
@@ -278,22 +282,10 @@ function Monthlyschedule() {
                       <div className="TaskSchedule">
                         <Dropdown tasks={listOfTasks} />
 
-                        {/* <h6
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() =>
-                            setOpenModal(() => (openModal ? false : true))
-                          }
-                        >
-                          New Schedule
-                        </h6> */}
 
                         <Button
                         
-                        className = {classes.root}
-                       
-                        
+                        className = {classes.button}
                           variant="contained"
                           onClick={() =>
                             setOpenModal(() => (openModal ? false : true))

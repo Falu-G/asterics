@@ -55,8 +55,8 @@
 }
 
 .ns-messagetab {
-  justify-content: space-around;
-  width: 200px;
+  justify-content: center;
+  width: 150px;
   margin-left: 10px;
   align-items: center;
   display: flex;

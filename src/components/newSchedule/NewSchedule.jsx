@@ -96,6 +96,7 @@ function NewSchedule({ setOpenModal, hideOption }) {
               SMS
             </button>
             <button
+            style={{marginLeft: "10px"}}
               className={messageType === "Email" ? "ns-active" : null}
               onClick={() => setMessageType("Email")}
             >
