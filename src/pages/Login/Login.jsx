@@ -109,8 +109,8 @@ function Login() {
 
         <div className="LoginImg">
           <img src="images/loginimg.png" alt="Login" />
-          <span>Login to your account</span>
-          <p>Manage your business in one page</p>
+          {/* <span>Login to your account</span> */}
+          <p>Manage your customer's easily with Asteric</p>
         </div>
       </div>
       <div

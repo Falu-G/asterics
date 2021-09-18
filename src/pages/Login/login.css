@@ -31,11 +31,14 @@
 }
 
 .LoginImg {
-  margin-top: 197px;
+  margin-top: 60px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 }
+
+
 
 .LoginImg img {
   width: 252px;
@@ -54,14 +57,16 @@
   color: #000;
 }
 
-.LoginImg p {
-  font-family: Roboto;
-  font-size: 24px;
+.LoginImg p  {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
   font-style: normal;
   font-weight: 400;
   line-height: 28px;
   letter-spacing: 0em;
   text-align: left;
+  margin-top: 70px;
+  color: #6f6f6f !important;
 }
 
 .LoginContainersecondboxform {
@@ -103,7 +108,7 @@
   border: none;
   color: #fff;
   font-size: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   background: #18a0fb;
 }
 

@@ -16,7 +16,7 @@
 
 .astericDesc{
     margin: 0 auto;
-    margin-top:237px;
+    margin-top:150px;
     width:80%;
     display:flex;
     flex-direction: column;
@@ -24,7 +24,7 @@
 
 .astericDesc span{
 font-family: 'Roboto', sans-serif;
-font-size: 72px;
+font-size: 50px;
 font-style: normal;
 font-weight: 700;
 line-height: 84px;
@@ -35,13 +35,13 @@ color: #046CB2;
 }
 
 .astericDesc p{
-font-size: 24px;
+font-size: 20px;
 font-style: normal;
-font-weight: 400;
+font-weight: 500;
 line-height: 27px;
 letter-spacing: 0em;
 text-align: left;
-
+color: #4d4c4c;
 }
 
 .secondbox{
@@ -52,12 +52,13 @@ text-align: left;
 
 }
 
-.astericButton{
-    width:200px;
-    height:50px;
-    margin-top:20px;
+.astericButton {
+    width: 150px;
+    height: 50px;
+    margin-top: 20px;
     border: none;
-    font-size:18px;
+    font-size: 16px;
     background: #FF9211;
-    color: #fff;
+    color: #f9faea;
+    border-radius: 5px;
 }

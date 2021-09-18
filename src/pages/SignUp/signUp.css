@@ -35,13 +35,14 @@
 }
 
 .signUpForm h3{
-width: 299px;
+/* width: 299px; */
 height: 42px;
 font-style: normal;
 font-weight: bold;
 font-size: 36px;
 line-height: 42px;
 color: #000000;
+margin-bottom:0px;
 }
 
 .firstSignUp span{

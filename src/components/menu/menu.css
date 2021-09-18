@@ -61,6 +61,7 @@ text-decoration: none;
 
 .menuItem .MuiSvgIcon-root{
     color: #fff;
+    cursor: pointer;
 }
 
 
