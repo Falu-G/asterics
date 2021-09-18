@@ -55,7 +55,7 @@ function Customer() {
   }, [token]);
 
   const dataVertical = [
-    { field: "id", headerName: "ID", width: 90 },
+  
     {
       field: "firstname",
       headerName: "Name",
