@@ -16,6 +16,7 @@ import { ToastProvider } from "react-toast-notifications";
 import dateFormat from "dateformat";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import { useToasts } from "react-toast-notifications";
 
 function Monthlyschedule() {
   const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,8 @@ function Monthlyschedule() {
 
   console.log(today);
 
+
+  const {addToast} = useToasts();
   const [emailQueue, setEmailQueue] = useState([]);
   // const [messageQueue, setMessageQueue] = useState([]);
   const loggedInUser = localStorage.getItem("user-info");
@@ -87,55 +90,45 @@ function Monthlyschedule() {
       });
   }, [token]);
 
-  const dataHorizontal = [
-    {
-      id: 1,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-    },
-    {
-      id: 4,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-    },
-    {
-      id: 5,
-      dateSchedule: "12-Aug-2021",
-      MessageContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-      status: "Pending",
-    },
-  ];
   const { sidebar, setSideBar } = useContext(MenuContext);
   console.log("I am on monthly " + sidebar);
-  const [dataRow, setDataRow] = useState(dataHorizontal);
 
-  const handledelete = (id) =>
-    setDataRow(() => dataRow.filter((item) => item.id !== id));
+  const handledelete = (id) =>{
+    (console.log("I am deleting " + id));
+
+    fetch(`https://asteric.herokuapp.com/mails${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else if (data.responsecode === "200") {
+          setEmailQueue(
+            emailQueue.filter(function (element) {
+               return element.id !== id })
+          );
+          addToast("Templates Saved Successfully", { appearance: "success" });
+        } else {
+          console.log("An error occured");
+          addToast("Error in saving templates", { appearance: 'error' });
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+        setLoading(false);
+      });
+  }
+    //setDataRow(() => dataRow.filter((item) => item.id !== id));
   const showSideBar = () => setSideBar(!sidebar);
-
   const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
 
   const dataVertical = [
-    { field: "id", headerName: "ID", width: 90 },
     {
       field: "messageDate",
       headerName: "Date Schedule",
@@ -151,7 +144,6 @@ function Monthlyschedule() {
     {
       field: "messageBody",
       headerName: "Message Content",
-      description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 500,
       renderCell: () => {},

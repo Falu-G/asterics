@@ -103,7 +103,7 @@ margin-left: 10px;
 
 
 .mf_input input{
-    width: 100%;
+width: 100%;
 height: 54px;
 padding: 10px;
 background: #FFFFFF;
@@ -112,3 +112,17 @@ border: 3px solid #F8F5F5;
 box-sizing: border-box;
 border-radius: 8px;
 }
+
+.modalContainer{
+    position: relative;
+    height: fit-content;
+}
+
+.spinning{
+    position: absolute;
+    top: 100px;
+    left: 300px;
+    transform: "translate(-50%, -50%)",
+}
+
+

@@ -28,10 +28,10 @@ function Customer() {
     setSideBar(!sidebar);
   };
   const [openModalEmail, setOpenModalEmail] = useState(false);
-
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
+  
   useEffect(() => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
@@ -62,15 +62,13 @@ function Customer() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
-      renderCell: (prenentr) => {
-        console.log(prenentr);
-        <div>hdh</div>;
+      renderCell: () => {
+       
       },
     },
     {
       field: "email",
       headerName: "Email",
-      description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 300,
       renderCell: () => {},

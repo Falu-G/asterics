@@ -1,25 +1,57 @@
 import React, { useState, useContext } from "react";
 import { MenuContext } from "../../components/MenuContext";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 import "./sendsms.css";
+import SessionExpired from '../SessionExpired/SessionExpired'
 import Modal from "react-modal";
 //import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import * as ReactBootStrap from "react-bootstrap";
+import { DataGrid } from "@material-ui/data-grid";
 
 function Sendsms() {
+  const dataVertical = [
+    {
+      field: "firstname",
+      headerName: "Full Name",
+      sortable: false,
+      width: 260,
+      renderCell: ({ row }) => {
+        return (
+          <div>
+            <p>{row.firstname + " " + row.lastname}</p>
+          </div>
+        );
+      },
+    },
+    {
+      field: "phone",
+      headerName: "Phone Number",
+      sortable: false,
+      width: 300,
+
+      renderCell: ({row})=> <>
+      <div>{`+${row.phone}`}</div>
+      </>
+
+      
+    },
+  ];
+  const customersList = [];
+  const [allCustomers, setAllCustomers] = useState(customersList);
   const { addToast } = useToasts();
-  const {sidebar,setSideBar} = useContext(MenuContext);
-  console.log("This is siderbar "+sidebar);
+  const { sidebar, setSideBar } = useContext(MenuContext);
+  const [invalidToken, setInvalidToken] = useState(false)
+  console.log("This is siderbar " + sidebar);
   const showSideBar = () => {
     setSideBar(!sidebar);
-    
   };
-  //const [value, setValue] = React.useState("Yes");
 
+  const [loading, setLoading] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
-  const [messageReport, setMessageReport] = useState("")
+  const [messageReport, setMessageReport] = useState("");
+  
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -36,21 +68,53 @@ function Sendsms() {
     numbers: "",
     message: "",
   });
-  // const handleChange = (event) => {
-  //   setValue(event.target.value);
-  // };
-
-  
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
 
+
+
+  const handleSelectCustomers = async () => {
+    setOpenModal(() => (openModal ? false : true));
+    setLoading(true);
+    try {
+      let result = await fetch(
+        "https://asteric.herokuapp.com/customer",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      result = await result.json();
+      console.log("You clicked contact");
+      console.log("This os kiknjm " + result);
+      if (result.message === "Invalid Token") {
+        setLoading(false);
+        setInvalidToken(true);
+        console.log(result.message);
+      } else {
+        setAllCustomers(result);
+        setLoading(false);
+        console.log(
+          "Numbers of customers " + allCustomers.length
+        );
+      }
+    } catch (e) {
+      setLoading(false);
+      console.log("Error In catch " + e.message);
+    }
+  }
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
     console.log(sendMessage);
-    console.log(token)
+    console.log(token);
 
     try {
       let result = await fetch("https://asteric.herokuapp.com/bbnSms/send", {
@@ -64,16 +128,18 @@ function Sendsms() {
       });
 
       result = await result.json();
-      if (result.status === 200) {
-        setMessageReport(result.message)
+      if (result.message === "Invalid Token") {
+        setLoading(false);
+        setInvalidToken(true);
+        console.log(result.message);
+      }else if (result.status === 200) {
+        setMessageReport(result.message);
         setSendingMessage(false);
-        addToast('Saved Successfully', { appearance: 'success' });
-       
-
+        addToast("Saved Successfully", { appearance: "success" });
       } else {
-       setMessageReport(result.message)
-       setSendingMessage(false);
-       addToast(result.message, { appearance: 'error' });
+        setMessageReport(result.message);
+        setSendingMessage(false);
+        addToast(result.message, { appearance: "error" });
       }
     } catch (err) {
       console.log("Something terrible happened " + err.message);
@@ -82,6 +148,11 @@ function Sendsms() {
 
   return (
     <>
+    {invalidToken ? <>
+    
+    <SessionExpired />
+    </> : <>
+    
     
       <div className="maindashboardContainer">
         <div
@@ -111,13 +182,8 @@ function Sendsms() {
             }}
             className="ScheduleWrapper"
           >
-
             <p>{messageReport}</p>
             <div>
-
-
-              {/* <FormRadio value={value} handleChange={handleChange} /> */}
-
               <form className="scheduleform">
                 <div className="inputIcon">
                   <input
@@ -134,9 +200,7 @@ function Sendsms() {
                     }
                   />
                   <img
-                    onClick={() =>
-                      setOpenModal(() => (openModal ? false : true))
-                    }
+                    onClick={handleSelectCustomers}
                     src="/images/contact.png"
                     alt="contact"
                   />
@@ -157,12 +221,12 @@ function Sendsms() {
                 Send
               </button> */}
 
-
-              <ReactBootStrap.Button 
-              className="sendbtn"
-              variant="primary" 
-              onClick={handleSendMessage}
-              disabled = {sendingMessage}>
+              <ReactBootStrap.Button
+                className="sendbtn"
+                variant="primary"
+                onClick={handleSendMessage}
+                disabled={sendingMessage}
+              >
                 <ReactBootStrap.Spinner
                   as="span"
                   className={sendingMessage ? "visible" : "visually-hidden"}
@@ -171,38 +235,66 @@ function Sendsms() {
                   role="status"
                   aria-hidden="true"
                 />
-                <span className="visually">{sendingMessage ? "Loading..." : "Send"}</span>
+                <span className="visually">
+                  {sendingMessage ? "Loading..." : "Send"}
+                </span>
               </ReactBootStrap.Button>
-
-
             </div>
 
             <div>
               <Modal
                 isOpen={openModal}
                 style={customStyles}
-               
                 contentLabel="Example Modal"
               >
                 <div className="modalContainer">
-                 
-                    <p>Receiver</p>
-                  
-                    <button
-                      onClick={() =>
-                        setOpenModal(() => (openModal ? false : true))
-                      }
-                    >
-                      Close
-                    </button>
-                
+                  {loading ? (
+                    <>
+                      <span>This is loading</span>
+
+                      <ReactBootStrap.Spinner
+                        as="span"
+                        className="spinning"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        style={{
+                          height: 400,
+                          width: "100%",
+                         
+                        }}
+                      >
+                        <DataGrid
+                          rows={allCustomers}
+                          columns={dataVertical}
+                          pageSize={5}
+                          checkboxSelection
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <button
+                    onClick={() =>
+                      setOpenModal(() => (openModal ? false : true))
+                    }
+                  >
+                    Close
+                  </button>
                 </div>
               </Modal>
             </div>
           </div>
         </div>
       </div>
-     
+    </>}
+    
     </>
   );
 }

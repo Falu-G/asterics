@@ -55,11 +55,35 @@ function Templates() {
 
   const deleteFromArray = (id) => {
     setOpenModalEmail(false);
-    setEmailTemplates(
-      emailTemplates.filter(function (element) {
-        return element.id !== id;
+    fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else if (data.responsecode === "200") {
+          setEmailTemplates(
+            emailTemplates.filter(function (element) {
+              return element.id !== id;
+            })
+          );
+
+          addToast("Templates Saved Successfully", { appearance: "success" });
+        } else {
+          console.log("An error occured");
+          addToast("Error in saving templates", { appearance: 'error' });
+        }
       })
-    );
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+        setLoading(false);
+      });
   };
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -81,8 +105,12 @@ function Templates() {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
         } else {
-          setEmailTemplates(data.filter((element) => element.messageCategory === "Email"));
-          setSmsTemplates(data.filter((element) => element.messageCategory === "SMS"));
+          setEmailTemplates(
+            data.filter((element) => element.messageCategory === "Email")
+          );
+          setSmsTemplates(
+            data.filter((element) => element.messageCategory === "SMS")
+          );
           setLoading(false);
         }
       })
@@ -90,12 +118,11 @@ function Templates() {
         console.log("This is the error that was caught" + err);
         setLoading(false);
       });
-    
   }, [token]);
 
   useEffect(() => {
-    fetchBusinesses()
-  },[fetchBusinesses]);
+    fetchBusinesses();
+  }, [fetchBusinesses]);
 
   const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
@@ -199,10 +226,10 @@ function Templates() {
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
-                              <h5 style={{
-                               
-                                marginTop: '10px',
-                              }}
+                              <h5
+                                style={{
+                                  marginTop: "10px",
+                                }}
                                 onClick={() =>
                                   setOpenModalEmail(!openModalEmail)
                                 }

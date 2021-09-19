@@ -40,7 +40,7 @@ function App() {
           <Route path = '/huhgddyuhtrthwh' component = {Menus}/>
           <Route path = "/sendemail" component = {()=> <ToastProvider> <SendEmail/> </ToastProvider>} />
           <Route path = "/maindashboard" component = {Maindashboard} />
-          <Route path = "/schedule" component = {MonthlySchedule} />
+          <Route path = "/schedule" component = {()=> <ToastProvider> <MonthlySchedule/> </ToastProvider>}  />
           <Route path = "/templates" component = {()=> <ToastProvider><Templates/></ToastProvider>} />
           <Route path = "/customer" component = {()=> <ToastProvider> <Customer/> </ToastProvider>} />
           <Route path = "/resetpassword" component = {ResetPassword} />
