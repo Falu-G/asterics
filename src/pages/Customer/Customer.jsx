@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Modal from "react-modal";
 import SessionExpired from "../SessionExpired/SessionExpired";
+import { useToasts } from "react-toast-notifications";
+import * as ReactBootStrap from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -27,11 +29,12 @@ function Customer() {
   const showSideBar = () => {
     setSideBar(!sidebar);
   };
+  const [loading, setLoading] = useState(false);
   const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
-  
+  const { addToast } = useToasts();
   useEffect(() => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
@@ -55,16 +58,13 @@ function Customer() {
   }, [token]);
 
   const dataVertical = [
-  
     {
       field: "firstname",
       headerName: "Name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
-      renderCell: () => {
-       
-      },
+      renderCell: () => {},
     },
     {
       field: "email",
@@ -119,9 +119,40 @@ function Customer() {
     },
   ];
 
-  const [dataRow, setDataRow] = useState(allCustomers);
-  const handledelete = (id) =>
-    setDataRow(() => dataRow.filter((item) => item.id !== id));
+  // const [dataRow, setDataRow] = useState(allCustomers);
+  const handledelete = (id) => {
+    setLoading(true);
+    fetch(`https://asteric.herokuapp.com/customer/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else if (data.responsecode === "200") {
+          setAllCustomers(
+            allCustomers.filter((element) => {
+              return element.id !== id;
+            })
+          );
+          setLoading(false);
+          addToast("User deleted successfully", { appearance: "success" });
+        } else {
+          console.log("An error occured");
+          setLoading(false);
+          addToast("Error in saving templates", { appearance: "error" });
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+        setLoading(false);
+      });
+  };
 
   const customStyles = {
     content: {
@@ -141,72 +172,99 @@ function Customer() {
           <SessionExpired />
         </>
       ) : (
-        <div className="customerContainer">
-          <div
-            className={
-              sidebar
-                ? "maindashboardContainerMenu"
-                : "maindashboardContainerMenuClosed"
-            }
-          >
-            <Menus sidebar={sidebar} controlSideBar={showSideBar} />
-          </div>
-
-          <div
-            className={
-              sidebar
-                ? "maindashboardContainerDashboard"
-                : "maindashboardContainerDashboardClosed"
-            }
-          >
-            <Modal
-              isOpen={openModalEmail}
-              style={customStyles}
-              contentLabel="Example Modal"
-            >
-              <AddCustomer
-                openModal={openModalEmail}
-                setOpenModal={() =>
-                  setOpenModalEmail(() => (openModalEmail ? false : true))
-                }
+        <>
+          {loading ? (
+            <>
+              <ReactBootStrap.Spinner
+                animation="border"
+                role="status"
+                style={{
+                  position: "absolute",
+                  color: `#18A0FB`,
+                  top: "50%",
+                  left: "50%",
+                }}
               />
-            </Modal>
-
-            <div
-              style={{
-                backgroundImage: `url(/images/smsbg.png)`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-                backgroundPosition: "center right",
-              }}
-              className="dashboardContainer"
-            >
-              <NavigationComponent title="Dashboard" />
-
-              <div className="customerWrapper">
-                <div>
-                  <button
-                    className="btnAddCustomer"
-                    onClick={() =>
-                      setOpenModalEmail(() => (openModalEmail ? false : true))
-                    }
-                  >
-                    AddCustomer
-                  </button>
+            </>
+          ) : (
+            <>
+              <div className="customerContainer">
+                <div
+                  className={
+                    sidebar
+                      ? "maindashboardContainerMenu"
+                      : "maindashboardContainerMenuClosed"
+                  }
+                >
+                  <Menus sidebar={sidebar} controlSideBar={showSideBar} />
                 </div>
 
-                <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
-                  <DataGrid
-                    rows={allCustomers}
-                    columns={dataVertical}
-                    pageSize={5}
-                    checkboxSelection
-                  />
+                <div
+                  className={
+                    sidebar
+                      ? "maindashboardContainerDashboard"
+                      : "maindashboardContainerDashboardClosed"
+                  }
+                >
+                  <Modal
+                    isOpen={openModalEmail}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                  >
+                    <AddCustomer
+                      openModal={openModalEmail}
+                      setOpenModal={() =>
+                        setOpenModalEmail(() => (openModalEmail ? false : true))
+                      }
+                    />
+                  </Modal>
+
+                  <div
+                    style={{
+                      backgroundImage: `url(/images/smsbg.png)`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center right",
+                    }}
+                    className="dashboardContainer"
+                  >
+                    <NavigationComponent title="Dashboard" />
+
+                    <div className="customerWrapper">
+                      <div>
+                        <button
+                          className="btnAddCustomer"
+                          onClick={() =>
+                            setOpenModalEmail(() =>
+                              openModalEmail ? false : true
+                            )
+                          }
+                        >
+                          AddCustomer
+                        </button>
+                      </div>
+
+                      <div
+                        style={{
+                          height: 400,
+                          width: "100%",
+                          marginTop: "20px",
+                        }}
+                      >
+                        <DataGrid
+                          rows={allCustomers}
+                          columns={dataVertical}
+                          pageSize={5}
+                          checkboxSelection
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </>
+          )}
+        </>
       )}
     </>
   );

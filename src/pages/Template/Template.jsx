@@ -33,7 +33,10 @@ function Templates() {
   const showSideBar = () => setSideBar(!sidebar);
 
   const [openModalEmail, setOpenModalEmail] = useState(false);
-
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
+  const token = userObj.message[0].token;
+  const [tokenValid, setTokenValid] = useState(false);
   // const [mesag, setMesag] = useState("");
   const { addToast } = useToasts();
   const [openModalSMS, setOpenModalSMS] = useState(false);
@@ -54,6 +57,8 @@ function Templates() {
   };
 
   const deleteFromArray = (id) => {
+    console.log("deleting from array "+id);
+    setLoading(true);
     setOpenModalEmail(false);
     fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
       method: "DELETE",
@@ -66,30 +71,26 @@ function Templates() {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Invalid Token") {
+          setLoading(false);
           setTokenValid(true);
         } else if (data.responsecode === "200") {
           setEmailTemplates(
-            emailTemplates.filter(function (element) {
-              return element.id !== id;
-            })
+            emailTemplates.filter((element) => element.id !== id)
           );
-
-          addToast("Templates Saved Successfully", { appearance: "success" });
+          setLoading(false);
+          addToast("Templates deleted Successfully", { appearance: "success" });
         } else {
           console.log("An error occured");
-          addToast("Error in saving templates", { appearance: 'error' });
+          setLoading(false);
+          addToast("Error in saving templates", { appearance: "error" });
         }
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
         setLoading(false);
+        setLoading(false);
       });
   };
-
-  const loggedInUser = localStorage.getItem("user-info");
-  const userObj = JSON.parse(loggedInUser);
-  const token = userObj.message[0].token;
-  const [tokenValid, setTokenValid] = useState(false);
 
   const fetchBusinesses = useCallback(() => {
     fetch("https://asteric.herokuapp.com/messageTemplate", {

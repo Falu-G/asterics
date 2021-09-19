@@ -91,12 +91,13 @@ function Monthlyschedule() {
   }, [token]);
 
   const { sidebar, setSideBar } = useContext(MenuContext);
+  
   console.log("I am on monthly " + sidebar);
 
   const handledelete = (id) =>{
-    (console.log("I am deleting " + id));
-
-    fetch(`https://asteric.herokuapp.com/mails${id}`, {
+  
+    setLoading(true);
+    fetch(`https://asteric.herokuapp.com/mails/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -113,9 +114,11 @@ function Monthlyschedule() {
             emailQueue.filter(function (element) {
                return element.id !== id })
           );
-          addToast("Templates Saved Successfully", { appearance: "success" });
+          setLoading(false)
+          addToast("Email deleted from queue", { appearance: "success" });
         } else {
           console.log("An error occured");
+          setLoading(false)
           addToast("Error in saving templates", { appearance: 'error' });
         }
       })
