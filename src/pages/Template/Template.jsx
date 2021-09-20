@@ -77,6 +77,7 @@ function Templates() {
           setEmailTemplates(
             emailTemplates.filter((element) => element.id !== id)
           );
+          console.log("This is numbers of email "+emailTemplates.length);
           setLoading(false);
           addToast("Templates deleted Successfully", { appearance: "success" });
         } else {
@@ -156,13 +157,18 @@ function Templates() {
       if (result.message === "Invalid Token") {
         setTokenValid(true);
         setAddEmail(true);
+        setLoading(false);
       } else {
         if (templateObjstate.messageCategory === "Email") {
+         setLoading(false);
           setEmailTemplates([...emailTemplates, templateObjstate]);
+          console.log("This is numbers of email ");
+          console.log("This is the numbers of email "+emailTemplates.length);
           setModalTemplate(!modalTemplate);
           setAddEmail(false);
-          addToast("Email added Succesfully", { appearance: "success" });
+          addToast("Templates added Succesfully", { appearance: "success" });
         } else {
+          setLoading(false);
           setSmsTemplates([...smsTemplates, templateObjstate]);
           setOpenModalSMS(false);
           setAddEmail(false);
@@ -243,7 +249,7 @@ function Templates() {
 
                               <Delete
                                 className="delete"
-                                onClick={() =>
+                                onClick={()=>
                                   deleteFromArray(emailTemplate.id)
                                 }
                               />
