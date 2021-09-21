@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     backgroundColor: "#18a0fb",
+
   },
 }));
 
@@ -71,7 +72,7 @@ function Customer() {
       headerName: "Email",
       sortable: false,
       width: 300,
-      renderCell: () => {},
+      
     },
     {
       field: "phone",
@@ -84,7 +85,7 @@ function Customer() {
 
     {
       field: "birthday",
-      headerName: "Addreess",
+      headerName: "Birthday",
       width: 160,
       renderCell: ({ row }) => {
         <div className="CentralizeCell">{row.status}</div>;
@@ -92,19 +93,42 @@ function Customer() {
     },
 
     {
-      field: "",
+      field: " ",
       headerName: "",
-      width: 160,
+      width: 200,
       renderCell: ({ row }) => (
         <>
-          <Button
+
+        <div style ={{
+   
+          width:`100%`,
+          display:"flex",
+          alignItems:`center`,
+          justifyContent:'center'
+        }}>
+
+        <Button
             variant="contained"
             color="primary"
             className={classes.button}
           >
             UPDATE
           </Button>
+        </div>
+          
 
+        
+        </>
+      ),
+    },
+
+
+    {
+      field: "",
+      headerName: "",
+      width: 50,
+      renderCell: ({ row }) => (
+        <>
           <div className="userdelete">
             <DeleteOutline
               style={{
@@ -115,8 +139,9 @@ function Customer() {
             />
           </div>
         </>
-      ),
-    },
+      )
+
+    }
   ];
 
   // const [dataRow, setDataRow] = useState(allCustomers);
@@ -256,6 +281,11 @@ function Customer() {
                           columns={dataVertical}
                           pageSize={5}
                           checkboxSelection
+                          onSelectionChange={(newSelection) => {
+                            console.log(newSelection.rows)
+                          
+                            console.log("Changing things")
+                        }}
                         />
                       </div>
                     </div>

@@ -11,6 +11,7 @@ import * as ReactBootStrap from "react-bootstrap";
 import { DataGrid } from "@material-ui/data-grid";
 
 function Sendsms() {
+  const [select, setSelection] = useState([]);
   const dataVertical = [
     {
       field: "firstname",
@@ -50,7 +51,7 @@ function Sendsms() {
 
   const [loading, setLoading] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
-  const [messageReport, setMessageReport] = useState("");
+  // const [messageReport, setMessageReport] = useState("");
   
 
   const [openModal, setOpenModal] = useState(false);
@@ -133,11 +134,11 @@ function Sendsms() {
         setInvalidToken(true);
         console.log(result.message);
       }else if (result.status === 200) {
-        setMessageReport(result.message);
+        // setMessageReport(result.message);
         setSendingMessage(false);
         addToast("Saved Successfully", { appearance: "success" });
       } else {
-        setMessageReport(result.message);
+        // setMessageReport(result.message);
         setSendingMessage(false);
         addToast(result.message, { appearance: "error" });
       }
@@ -182,7 +183,8 @@ function Sendsms() {
             }}
             className="ScheduleWrapper"
           >
-            <p>{messageReport}</p>
+            {console.log("The number of numbers clicked "+select.length)}
+            {/* <p>{messageReport}</p> */}
             <div>
               <form className="scheduleform">
                 <div className="inputIcon">
@@ -275,6 +277,13 @@ function Sendsms() {
                           columns={dataVertical}
                           pageSize={5}
                           checkboxSelection
+                          
+                          onSelectionChange={(newSelection) => {
+                            console.log(newSelection.rows)
+                            setSelection(newSelection.rows);
+                          
+                            console.log("Changing things")
+                        }}
                         />
                       </div>
                     </>
