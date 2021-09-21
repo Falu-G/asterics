@@ -57,7 +57,7 @@ function Templates() {
   };
 
   const deleteFromArray = (id) => {
-    console.log("deleting from array "+id);
+    console.log("deleting from array " + id);
     setLoading(true);
     setOpenModalEmail(false);
     fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
@@ -77,7 +77,7 @@ function Templates() {
           setEmailTemplates(
             emailTemplates.filter((element) => element.id !== id)
           );
-          console.log("This is numbers of email "+emailTemplates.length);
+          console.log("This is numbers of email " + emailTemplates.length);
           setLoading(false);
           addToast("Templates deleted Successfully", { appearance: "success" });
         } else {
@@ -160,10 +160,11 @@ function Templates() {
         setLoading(false);
       } else {
         if (templateObjstate.messageCategory === "Email") {
-         setLoading(false);
-          setEmailTemplates([...emailTemplates, templateObjstate]);
+         // setLoading(false);
+          fetchBusinesses();
+          //setEmailTemplates([...emailTemplates, templateObjstate]);
           console.log("This is numbers of email ");
-          console.log("This is the numbers of email "+emailTemplates.length);
+          console.log("This is the numbers of email " + emailTemplates.length);
           setModalTemplate(!modalTemplate);
           setAddEmail(false);
           addToast("Templates added Succesfully", { appearance: "success" });
@@ -249,7 +250,7 @@ function Templates() {
 
                               <Delete
                                 className="delete"
-                                onClick={()=>
+                                onClick={() =>
                                   deleteFromArray(emailTemplate.id)
                                 }
                               />
