@@ -7,7 +7,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from "@material-ui/icons/Visibility";
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
   },
   margin: {
-    marginTop: theme.spacing(1),
+    marginTop: 5
   },
   textField: {
     width: "40ch",

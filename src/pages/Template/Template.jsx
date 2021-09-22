@@ -14,11 +14,23 @@ import Dashnav from "../../components/dashnav/Dashnav";
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
 import Close from "@material-ui/icons/Close";
+import Button from "@material-ui/core/Button";
 //import { makeStyles } from "@material-ui/core/styles";
 //import Button from "@material-ui/core/Button";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import TemplateObject from "../../classes/TemplateObject";
 import * as ReactBootStrap from "react-bootstrap";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function Templates() {
   let templateObj = new TemplateObject("", "", "");
   const [emailTemplates, setEmailTemplates] = useState([]);
@@ -79,10 +91,12 @@ function Templates() {
           );
           console.log("This is numbers of email " + emailTemplates.length);
           setLoading(false);
+          setOpen(false);
           addToast("Templates deleted Successfully", { appearance: "success" });
         } else {
           console.log("An error occured");
           setLoading(false);
+          setOpen(false);
           addToast("Error in saving templates", { appearance: "error" });
         }
       })
@@ -90,6 +104,7 @@ function Templates() {
         console.log("This is the error that was caught" + err);
         setLoading(false);
         setLoading(false);
+        setOpen(false);
       });
   };
 
@@ -160,7 +175,7 @@ function Templates() {
         setLoading(false);
       } else {
         if (templateObjstate.messageCategory === "Email") {
-         // setLoading(false);
+          // setLoading(false);
           fetchBusinesses();
           //setEmailTemplates([...emailTemplates, templateObjstate]);
           console.log("This is numbers of email ");
@@ -177,6 +192,19 @@ function Templates() {
         }
       }
     }
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const [templateId, setTemplateId] = useState(null);
+
+  const handleClickOpen = (id) => {
+    setTemplateId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -251,7 +279,7 @@ function Templates() {
                               <Delete
                                 className="delete"
                                 onClick={() =>
-                                  deleteFromArray(emailTemplate.id)
+                                  handleClickOpen(emailTemplate.id) 
                                 }
                               />
                             </div>
@@ -314,6 +342,26 @@ function Templates() {
                   </>
                 )}
 
+                <Dialog
+                  open={open}
+                  TransitionComponent={Transition}
+                  keepMounted
+                  onClose={handleClose}
+                  aria-describedby="alert-dialog-slide-description"
+                >
+                  <DialogTitle>{"Delete Customer?"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                      Do you really want to delete this template? Nelson wont like it
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose}>CANCEL</Button>
+                    <Button onClick={() => deleteFromArray(templateId)}>
+                      DELETE
+                    </Button>
+                  </DialogActions>
+                </Dialog>
                 <Modal
                   isOpen={openModalEmail}
                   style={customStyles}

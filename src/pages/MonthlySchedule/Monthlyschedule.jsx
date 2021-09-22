@@ -14,7 +14,7 @@ import SessionExpired from "../SessionExpired/SessionExpired";
 import * as ReactBootStrap from "react-bootstrap";
 import { ToastProvider } from "react-toast-notifications";
 import dateFormat from "dateformat";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { useToasts } from "react-toast-notifications";
 
@@ -22,7 +22,7 @@ function Monthlyschedule() {
   const useStyles = makeStyles((theme) => ({
     root: {
       "& > *": {
-        margin: theme.spacing(0),
+        margin: 1
       
       
       },

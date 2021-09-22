@@ -8,7 +8,7 @@ import { useToasts } from "react-toast-notifications";
 import ScheduleEmail from "../../classes/ScheduleEmail";
 import * as ReactBootStrap from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 
 function NewSchedule({ setOpenModal, hideOption }) {
   var today = new Date();
@@ -20,14 +20,14 @@ function NewSchedule({ setOpenModal, hideOption }) {
 
   let schedule = new ScheduleEmail();
 
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(() => ({
     container: {
       display: "flex",
       flexWrap: "wrap",
     },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
+      marginLeft:1,
+      marginRight: 1,
       width: 200,
     },
   }));

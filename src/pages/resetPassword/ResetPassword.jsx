@@ -2,7 +2,7 @@ import React from "react";
 import "./resetPassword.css";
 import {useHistory} from 'react-router-dom'
 import {Link} from 'react-router-dom'
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 

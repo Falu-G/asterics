@@ -6,18 +6,27 @@ import NavigationComponent from "../../components/navigationComponent/Navigation
 import AddCustomer from "../AddCustomer/AddCustomer";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import Modal from "react-modal";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import { useToasts } from "react-toast-notifications";
 import * as ReactBootStrap from "react-bootstrap";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
 
-const useStyles = makeStyles((theme) => ({
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const useStyles = makeStyles(() => ({
   button: {
-    margin: theme.spacing(1),
+    margin: 1,
     backgroundColor: "#18a0fb",
-
   },
 }));
 
@@ -25,6 +34,7 @@ function Customer() {
   const classes = useStyles();
   const [allCustomers, setAllCustomers] = useState([]);
   const [tokenValid, setTokenValid] = useState(false);
+  const [customerId, setCustomerId] = useState(null)
   const { sidebar, setSideBar } = useContext(MenuContext);
   console.log("This is siderbar " + sidebar);
   const showSideBar = () => {
@@ -72,7 +82,6 @@ function Customer() {
       headerName: "Email",
       sortable: false,
       width: 300,
-      
     },
     {
       field: "phone",
@@ -98,30 +107,25 @@ function Customer() {
       width: 200,
       renderCell: ({ row }) => (
         <>
-
-        <div style ={{
-   
-          width:`100%`,
-          display:"flex",
-          alignItems:`center`,
-          justifyContent:'center'
-        }}>
-
-        <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
+          <div
+            style={{
+              width: `100%`,
+              display: "flex",
+              alignItems: `center`,
+              justifyContent: "center",
+            }}
           >
-            UPDATE
-          </Button>
-        </div>
-          
-
-        
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              UPDATE
+            </Button>
+          </div>
         </>
       ),
     },
-
 
     {
       field: "",
@@ -135,17 +139,51 @@ function Customer() {
                 color: "red",
                 cursor: "pointer",
               }}
-              onClick={() => handledelete(row.id)}
+              onClick={() => handleClickOpen(row.id)}
             />
           </div>
         </>
-      )
-
-    }
+      ),
+    },
   ];
 
   // const [dataRow, setDataRow] = useState(allCustomers);
-  const handledelete = (id) => {
+  // const handledelete = (id) => {
+  //   handleClickOpen()
+  //   //setLoading(true);
+  //   // fetch(`https://asteric.herokuapp.com/customer/${id}`, {
+  //   //   method: "DELETE",
+  //   //   headers: {
+  //   //     "Content-Type": "application/json",
+  //   //     Accept: "application/json",
+  //   //     Authorization: "Bearer " + token,
+  //   //   },
+  //   // })
+  //   //   .then((response) => response.json())
+  //   //   .then((data) => {
+  //   //     if (data.message === "Invalid Token") {
+  //   //       setTokenValid(true);
+  //   //     } else if (data.responsecode === "200") {
+  //   //       setAllCustomers(
+  //   //         allCustomers.filter((element) => {
+  //   //           return element.id !== id;
+  //   //         })
+  //   //       );
+  //   //       setLoading(false);
+  //   //       addToast("User deleted successfully", { appearance: "success" });
+  //   //     } else {
+  //   //       console.log("An error occured");
+  //   //       setLoading(false);
+  //   //       addToast("Error in saving templates", { appearance: "error" });
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     console.log("This is the error that was caught" + err);
+  //   //     setLoading(false);
+  //   //   });
+  // };
+
+  const finaldelete = (id) => {
     setLoading(true);
     fetch(`https://asteric.herokuapp.com/customer/${id}`, {
       method: "DELETE",
@@ -159,26 +197,34 @@ function Customer() {
       .then((data) => {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
+          setCustomerId(null)
         } else if (data.responsecode === "200") {
           setAllCustomers(
             allCustomers.filter((element) => {
               return element.id !== id;
             })
+           
           );
+
+          setCustomerId(null)
           setLoading(false);
+          setOpen(false);
           addToast("User deleted successfully", { appearance: "success" });
         } else {
           console.log("An error occured");
+          setCustomerId(null)
           setLoading(false);
-          addToast("Error in saving templates", { appearance: "error" });
+          setOpen(false);
+          addToast("Error in deleting users", { appearance: "error" });
         }
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
         setLoading(false);
+        setCustomerId(null)
+        setOpen(false);
       });
   };
-
   const customStyles = {
     content: {
       width: "80%",
@@ -189,6 +235,18 @@ function Customer() {
       overflow: "visible",
       transform: "translate(-50%, -50%)",
     },
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = (id) => {
+    setCustomerId(id)
+    setOpen(true);
+   
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
   return (
     <>
@@ -238,11 +296,33 @@ function Customer() {
                   >
                     <AddCustomer
                       openModal={openModalEmail}
+                      tokenValid={tokenValid}
+                      setAllCustomers={setAllCustomers}
                       setOpenModal={() =>
                         setOpenModalEmail(() => (openModalEmail ? false : true))
                       }
                     />
                   </Modal>
+
+                  <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                  >
+                    <DialogTitle>{"Delete Customer?"}</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-slide-description">
+                        This user would be deleted permanently from the database
+                        do you want to continue?
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>CANCEL</Button>
+                      <Button onClick={()=>finaldelete(customerId)}>DELETE</Button>
+                    </DialogActions>
+                  </Dialog>
 
                   <div
                     style={{
@@ -282,10 +362,10 @@ function Customer() {
                           pageSize={5}
                           checkboxSelection
                           onSelectionChange={(newSelection) => {
-                            console.log(newSelection.rows)
-                          
-                            console.log("Changing things")
-                        }}
+                            console.log(newSelection.rows);
+
+                            console.log("Changing things");
+                          }}
                         />
                       </div>
                     </div>

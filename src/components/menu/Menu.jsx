@@ -12,7 +12,7 @@ import {
   Settings,
   ExitToApp,
   MailOutline,
-  Dashboard,
+  Dashboard
 } from "@material-ui/icons";
 
 function Menus({ controlSideBar }) {
@@ -51,15 +51,6 @@ function Menus({ controlSideBar }) {
           <Link
             className={menustate ? "menuItem" : "menuItem closed"}
             to="/maindashboard"
-          >
-            <img src="images/menu.png" alt="" />
-            <span>Main</span>
-          
-          </Link>
-
-          <Link
-            className={menustate ? "menuItem" : "menuItem closed"}
-            to="/schedule"
           >
             <Dashboard />
             <span>Dashboard</span>
