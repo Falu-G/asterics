@@ -42,11 +42,18 @@ function Customer() {
     setSideBar(!sidebar);
   };
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
   const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
+
+
+
+
+
+
   useEffect(() => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
@@ -106,7 +113,7 @@ function Customer() {
       field: " ",
       headerName: "",
       width: 200,
-      renderCell: ({ row }) => (
+      renderCell: ({row}) => (
         <>
           <div
             style={{
@@ -120,7 +127,7 @@ function Customer() {
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={handleOpenUpdate}
+              onClick={()=>handleOpenUpdate(row)}
             >
               UPDATE
             </Button>
@@ -150,44 +157,38 @@ function Customer() {
   ];
 
   const [openUpdate, setOpenUpdate] = React.useState(false);
-  const handleOpenUpdate = () => setOpenUpdate(true);
-  const handleCloseUpdate = () => setOpenUpdate(false);
+  const handleOpenUpdate = row => {
+    setOpenUpdate(true);
+    setUser(row);
+    // try{
+    //   fetch(`https://asteric.herokuapp.com/customer/${userid}`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Accept: "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       if (data.message === "Invalid Token") {
+    //         setTokenValid(true);
+    //       } else {
+    //        setUser(data)
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("This is the error that was caught" + err);
+    //     });
+    // }catch(err){
+    //   console.log(err)
+    // }
+   
+    
+  }
 
-  // const [dataRow, setDataRow] = useState(allCustomers);
-  // const handledelete = (id) => {
-  //   handleClickOpen()
-  //   //setLoading(true);
-  //   // fetch(`https://asteric.herokuapp.com/customer/${id}`, {
-  //   //   method: "DELETE",
-  //   //   headers: {
-  //   //     "Content-Type": "application/json",
-  //   //     Accept: "application/json",
-  //   //     Authorization: "Bearer " + token,
-  //   //   },
-  //   // })
-  //   //   .then((response) => response.json())
-  //   //   .then((data) => {
-  //   //     if (data.message === "Invalid Token") {
-  //   //       setTokenValid(true);
-  //   //     } else if (data.responsecode === "200") {
-  //   //       setAllCustomers(
-  //   //         allCustomers.filter((element) => {
-  //   //           return element.id !== id;
-  //   //         })
-  //   //       );
-  //   //       setLoading(false);
-  //   //       addToast("User deleted successfully", { appearance: "success" });
-  //   //     } else {
-  //   //       console.log("An error occured");
-  //   //       setLoading(false);
-  //   //       addToast("Error in saving templates", { appearance: "error" });
-  //   //     }
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     console.log("This is the error that was caught" + err);
-  //   //     setLoading(false);
-  //   //   });
-  // };
+  
+  const handleCloseUpdate = () => setOpenUpdate(false);
 
   const finaldelete = (id) => {
     setLoading(true);
@@ -297,7 +298,7 @@ function Customer() {
                 >
 
 
-                  <UpdateCustomer open = {openUpdate} handleClose = {handleCloseUpdate}/>
+                  <UpdateCustomer open = {openUpdate} handleClose = {handleCloseUpdate} user = {user}/>
                   <Modal
                     isOpen={openModalEmail}
                     style={customStyles}

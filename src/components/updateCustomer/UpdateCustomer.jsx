@@ -4,13 +4,13 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
 const style = {
   position: "absolute",
   top: "50%",
-  left: "50%",
+  left: "40%",
   transform: "translate(-50%, -50%)",
   width: "700px",
   bgcolor: "background.paper",
@@ -19,7 +19,16 @@ const style = {
   p: 4,
 };
 
-function UpdateCustomer({ open, handleClose }) {
+
+
+
+function UpdateCustomer({ open, handleClose,user }) {
+
+  const updateCustomer = ()=>{
+    console.log("userObjec")
+  }
+
+
   return (
     <div>
       <Modal
@@ -38,25 +47,17 @@ function UpdateCustomer({ open, handleClose }) {
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Update Customers info
             </Typography>
-           
 
-            <div id="transition-modal-description" sx={{ mt: 2 }}>
-
-
-            </div>
+            <div id="transition-modal-description" sx={{ mt: 2 }}></div>
             <div
               component="form"
-              style = {
-                  {
-                   
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: "20px"
-                    
-                  }
-              }
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: "20px",
+              }}
               sx={{
                 width: "25ch",
               }}
@@ -64,36 +65,37 @@ function UpdateCustomer({ open, handleClose }) {
               noValidate
               autoComplete="off"
             >
-             
               <TextField
                 hiddenLabel
-                style={{ width:300}}
+                style={{ width: 300 }}
                 id="filled-hidden-label-normal"
-                defaultValue="Bamidele"
+                defaultValue={user.firstname}
+                onChange = {(e)=>{
+                  
+                }}
                 variant="filled"
               />
-               <TextField
+              <TextField
                 hiddenLabel
-                style={{ width:300}}
+                style={{ width: 300 }}
                 id="filled-hidden-label-normal"
-                defaultValue="Omonayin"
-               
+                defaultValue={user.lastname}
+                onChange = {(e)=>{
+                  
+                }}
                 variant="filled"
               />
             </div>
 
             <div
               component="form"
-              style = {
-                  {
-                    marginTop: "20px",
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    
-                  }
-              }
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
               sx={{
                 width: "25ch",
               }}
@@ -101,40 +103,50 @@ function UpdateCustomer({ open, handleClose }) {
               noValidate
               autoComplete="off"
             >
-             
               <TextField
-              style={{ width:300}}
+                style={{ width: 300 }}
                 hiddenLabel
                 id="filled-hidden-label-normal"
-                defaultValue="Phone Number"
+                defaultValue={user.phone}
+                onChange = {(e)=>{
+                  
+                }}
                 maxLength="11"
                 variant="filled"
               />
-               <TextField
-               style={{ width:300}}
+              <TextField
+                style={{ width: 300 }}
                 hiddenLabel
                 id="filled-hidden-label-normal"
-                defaultValue="Normal"
+                onChange = {(e)=>{
+
+                }}
+                defaultValue={user.birthday}
                 variant="filled"
               />
             </div>
             <TextField
-               style={{ 
-                   width:'100%',
-                   marginTop: "20px"
-                }}
-                hiddenLabel
-                disabled
-                id="filled-hidden-label-normal"
-                defaultValue="bamideleomonayin@gmail.com"
-                variant="filled"
-              />
-            
-            <Button style = {{
+              style={{
+                width: "100%",
                 marginTop: "20px",
-                float:'right'
-            }}variant="contained">UPDATE</Button>
-            
+              }}
+              hiddenLabel
+              disabled
+              id="filled-hidden-label-normal"
+              defaultValue= {user.email}
+              variant="filled"
+            />
+
+            <Button
+              style={{
+                marginTop: "20px",
+                float: "right",
+              }}
+              onClick={()=>updateCustomer()}
+              variant="contained"
+            >
+              UPDATE
+            </Button>
           </Box>
         </Fade>
       </Modal>
