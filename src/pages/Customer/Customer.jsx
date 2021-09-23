@@ -18,6 +18,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import UpdateCustomer from "../../components/updateCustomer/UpdateCustomer"
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -119,6 +120,7 @@ function Customer() {
               variant="contained"
               color="primary"
               className={classes.button}
+              onClick={handleOpenUpdate}
             >
               UPDATE
             </Button>
@@ -146,6 +148,10 @@ function Customer() {
       ),
     },
   ];
+
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleCloseUpdate = () => setOpenUpdate(false);
 
   // const [dataRow, setDataRow] = useState(allCustomers);
   // const handledelete = (id) => {
@@ -289,6 +295,9 @@ function Customer() {
                       : "maindashboardContainerDashboardClosed"
                   }
                 >
+
+
+                  <UpdateCustomer open = {openUpdate} handleClose = {handleCloseUpdate}/>
                   <Modal
                     isOpen={openModalEmail}
                     style={customStyles}
