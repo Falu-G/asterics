@@ -93,7 +93,7 @@ function Sendsms() {
       );
       result = await result.json();
       console.log("You clicked contact");
-      console.log("This os kiknjm " + result);
+
       if (result.message === "Invalid Token") {
         setLoading(false);
         setInvalidToken(true);

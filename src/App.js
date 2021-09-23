@@ -31,7 +31,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path = "/login" component = {Login} />
+          <Route path = "/login" component = {()=><ToastProvider> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
           <Route path = "/testpage" component = {Testpage} />
           <Route path = "/signup" component = {()=><ToastProvider> <SignUp/> </ToastProvider>} />

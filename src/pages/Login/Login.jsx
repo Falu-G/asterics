@@ -6,21 +6,20 @@ import { css } from "@emotion/react";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import TextField from '@material-ui/core/TextField';
-
+import TextField from "@material-ui/core/TextField";
+import { useToasts } from "react-toast-notifications";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
   },
   margin: {
-    marginTop: 5
+    marginTop: 5,
   },
   textField: {
     width: "40ch",
@@ -36,7 +35,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [loginError, setLoginError] = useState(false);
-
+  const { addToast } = useToasts();
   const classes = useStyles();
   const [values, setValues] = useState({
     password: "",
@@ -52,39 +51,41 @@ function Login() {
     e.preventDefault();
     //console.warn(email, password);
 
-    let item = { email, password:values.password };
+    let item = { email, password: values.password };
 
+    console.log(item);
+    try {
+      let result = await fetch(
+        "https://asteric.herokuapp.com/users/authenticate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(item),
+        }
+      );
 
-    console.log(item)
+      result = await result.json();
 
-    let result = await fetch(
-      "https://asteric.herokuapp.com/users/authenticate",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(item),
+      console.log(`This is the ${JSON.stringify(result)}`);
+      if (result.status === "success") {
+        console.log(result);
+        setShowIcon(false);
+        localStorage.setItem("user-info", JSON.stringify(result));
+        history.push("/maindashboard");
+      } else {
+        setErrorMessage(result.message);
+        setLoginError(true);
+        setShowIcon(false);
       }
-    );
-
-    result = await result.json();
-
-    console.log(`This is the ${JSON.stringify(result)}`);
-    if (result.status === "success") {
-      console.log(result);
-      setShowIcon(false);
-      localStorage.setItem("user-info", JSON.stringify(result));
-      history.push("/maindashboard");
-    } else {
-      setErrorMessage(result.message);
+    } catch (e) {
       setLoginError(true);
       setShowIcon(false);
+      addToast(e.message, { appearance: "error" });
     }
   };
-
- 
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -125,55 +126,41 @@ function Login() {
         <div className="LoginContainersecondboxform">
           <h2>Login</h2>
 
-        <form className="formHouse">
+          <form className="formHouse">
+            <TextField
+              label="Enter your email address"
+              className={(classes.margin)}
+              onChange={(e) => setEmail(e.target.value)}
+              variant="outlined"
+            />
 
-
-        <TextField
-          label="Enter your email address"
-          className={clsx(classes.margin, classes.textField)}
-          onChange={(e) => setEmail(e.target.value)}
-          variant="outlined"
-        />
-
-         <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
-
-         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={70}
-          />
-
-
-
-          
-         </FormControl>
-
-
-
-
-
-
-
-
-
-
-
-
+            <FormControl
+              className={(classes.margin)}
+              variant="outlined"
+            >
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
+              />
+            </FormControl>
 
             {/* <input
               className="forminput"
