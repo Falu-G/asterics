@@ -370,12 +370,6 @@ function Customer() {
                           rows={allCustomers}
                           columns={dataVertical}
                           pageSize={5}
-                          checkboxSelection
-                          onSelectionChange={(newSelection) => {
-                            console.log(newSelection.rows);
-
-                            console.log("Changing things");
-                          }}
                         />
                       </div>
                     </div>

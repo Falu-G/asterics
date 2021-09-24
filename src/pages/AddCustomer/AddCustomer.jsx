@@ -34,9 +34,6 @@ function AddCustomer({
   setTokenValid,
   setAllCustomers,
 }) {
-  //const [openModal, setOpenModal] = useState(false);
-  //var fileName = "myDocument.pdf";
-  //var fileExtension = fileName.split('.').pop();
 
   const [sessionExpired, setSessionExpired] = useState(false);
 

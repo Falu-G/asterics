@@ -21,6 +21,18 @@ class CustomerInfo{
         this.phone = phoneNumber;
     }
 
+    getBirthday(){
+        return this.birthday;
+    }
+
+    getAnniversary(){
+        return this.anniversary;
+    }
+
+    getPhoneNumber(){
+        return this.phone;
+    }
+
    
 }
 
