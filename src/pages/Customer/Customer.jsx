@@ -18,7 +18,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import UpdateCustomer from "../../components/updateCustomer/UpdateCustomer"
+import UpdateCustomer from "../../components/updateCustomer/UpdateCustomer";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,7 +35,7 @@ function Customer() {
   const classes = useStyles();
   const [allCustomers, setAllCustomers] = useState([]);
   const [tokenValid, setTokenValid] = useState(false);
-  const [customerId, setCustomerId] = useState(null)
+  const [customerId, setCustomerId] = useState(null);
   const { sidebar, setSideBar } = useContext(MenuContext);
   console.log("This is siderbar " + sidebar);
   const showSideBar = () => {
@@ -48,12 +48,6 @@ function Customer() {
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
-
-
-
-
-
-
   useEffect(() => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
@@ -113,7 +107,7 @@ function Customer() {
       field: " ",
       headerName: "",
       width: 200,
-      renderCell: ({row}) => (
+      renderCell: ({ row }) => (
         <>
           <div
             style={{
@@ -127,7 +121,7 @@ function Customer() {
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={()=>handleOpenUpdate(row)}
+              onClick={() => handleOpenUpdate(row)}
             >
               UPDATE
             </Button>
@@ -157,7 +151,7 @@ function Customer() {
   ];
 
   const [openUpdate, setOpenUpdate] = React.useState(false);
-  const handleOpenUpdate = row => {
+  const handleOpenUpdate = (row) => {
     setOpenUpdate(true);
     setUser(row);
     // try{
@@ -183,11 +177,8 @@ function Customer() {
     // }catch(err){
     //   console.log(err)
     // }
-   
-    
-  }
+  };
 
-  
   const handleCloseUpdate = () => setOpenUpdate(false);
 
   const finaldelete = (id) => {
@@ -204,22 +195,21 @@ function Customer() {
       .then((data) => {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
-          setCustomerId(null)
+          setCustomerId(null);
         } else if (data.responsecode === "200") {
           setAllCustomers(
             allCustomers.filter((element) => {
               return element.id !== id;
             })
-           
           );
 
-          setCustomerId(null)
+          setCustomerId(null);
           setLoading(false);
           setOpen(false);
           addToast("User deleted successfully", { appearance: "success" });
         } else {
           console.log("An error occured");
-          setCustomerId(null)
+          setCustomerId(null);
           setLoading(false);
           setOpen(false);
           addToast("Error in deleting users", { appearance: "error" });
@@ -228,7 +218,7 @@ function Customer() {
       .catch((err) => {
         console.log("This is the error that was caught" + err);
         setLoading(false);
-        setCustomerId(null)
+        setCustomerId(null);
         setOpen(false);
       });
   };
@@ -247,9 +237,8 @@ function Customer() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = (id) => {
-    setCustomerId(id)
+    setCustomerId(id);
     setOpen(true);
-   
   };
 
   const handleClose = () => {
@@ -296,9 +285,12 @@ function Customer() {
                       : "maindashboardContainerDashboardClosed"
                   }
                 >
-
-
-                  <UpdateCustomer open = {openUpdate} handleClose = {handleCloseUpdate} user = {user}/>
+                  <UpdateCustomer
+                    open={openUpdate}
+                    handleClose={handleCloseUpdate}
+                    user={user}
+                    setUser={setUser}
+                  />
                   <Modal
                     isOpen={openModalEmail}
                     style={customStyles}
@@ -330,7 +322,9 @@ function Customer() {
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handleClose}>CANCEL</Button>
-                      <Button onClick={()=>finaldelete(customerId)}>DELETE</Button>
+                      <Button onClick={() => finaldelete(customerId)}>
+                        DELETE
+                      </Button>
                     </DialogActions>
                   </Dialog>
 

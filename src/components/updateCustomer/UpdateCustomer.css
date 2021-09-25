@@ -1,0 +1,21 @@
+.updateanniversary {
+  width: 200px;
+  background: #ffffff;
+  padding: 10px;
+  border: 1px solid #cbcbcb;
+  box-sizing: border-box;
+  border-radius: 8px;
+  outline: none;
+}
+
+
+.updatebirthday{
+  width: 300px;
+  background: #ffffff;
+  padding: 10px;
+  float: right;
+  border: 1px solid #cbcbcb;
+  box-sizing: border-box;
+  border-radius: 8px;
+  outline: none;
+}

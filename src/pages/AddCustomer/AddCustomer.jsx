@@ -9,26 +9,8 @@ import SessionExpired from "../SessionExpired/SessionExpired";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
-import { useToasts } from "react-toast-notifications";
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     "& > *": {
-//       margin: theme.spacing(1),
-//     },
-//   },
-
-//   button: {
-//     border: "none",
-//     padding: `20px`,
-//     color: "white",
-//     height: "50px",
-//     background: "#18A0FB",
-//     boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-//     borderRadius: `4px`,
-//     zIndex: 4,
-//   },
-// }));
-
+import { useToasts } from "react-toast-notifications"
+import dateFormat from 'dateformat';
 function AddCustomer({
   setOpenModal,
   setTokenValid,
@@ -83,24 +65,20 @@ function AddCustomer({
     );
 
     if (selectedBirthdayDate != null) {
-      customer.addDateOfBirth(
-        selectedBirthdayDate.getDay() +
-          "," +
-          selectedBirthdayDate.toLocaleString("en-us", { month: "short" })
-      );
+      let date = dateFormat(selectedBirthdayDate, 'dd/mm/yyyy')
+      customer.addDateOfBirth(date);
     }
 
     if (selectedAnniversaryDate != null) {
-      customer.addAnniversary(
-        selectedAnniversaryDate.getDay() +
-          "," +
-          selectedAnniversaryDate.toLocaleString("en-us", { month: "short" })
-      );
+      let datee = dateFormat(selectedAnniversaryDate, 'dd/mm/yyyy')
+      customer.addAnniversary(datee);
+      console.log(datee);
     }
 
     if (phoneNumber !== "") {
       customer.addPhoneNumber(phoneNumber);
     }
+
 
     let result = await fetch(
       "https://asteric.herokuapp.com/customer/register",
@@ -192,6 +170,7 @@ function AddCustomer({
                       placeholderText="Select a date"
                       calendarClassName="rasta-stripes"
                       maxDate={new Date()}
+                      
                       isClearable
                       showYearDropdown
                       popperModifiers={{
@@ -243,13 +222,6 @@ function AddCustomer({
                 </div>
 
                 <div className="submitcont">
-                  {/* <input
-                    className="submiting"
-                    type="submit"
-                    name="submiting"
-                    onClick={register}
-                  /> */}
-
                   <ReactBootStrap.Button
                     className="sendbtn"
                     variant="primary"
