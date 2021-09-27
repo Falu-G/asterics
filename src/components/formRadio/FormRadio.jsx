@@ -4,7 +4,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState } from "react";
 
@@ -17,14 +17,14 @@ var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
 today = `${yyyy}-${mm}-${dd}`;
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(() => ({
     container: {
       display: "flex",
       flexWrap: "wrap",
     },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
+      marginLeft: 1,
+      marginRight: 1,
       width: 200,
     },
   }));

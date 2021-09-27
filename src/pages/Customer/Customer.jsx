@@ -19,6 +19,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import UpdateCustomer from "../../components/updateCustomer/UpdateCustomer";
+import Skeleton from "@mui/material/Skeleton";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -42,6 +43,7 @@ function Customer() {
     setSideBar(!sidebar);
   };
   const [loading, setLoading] = useState(false);
+  const [showSkeleton, setSkeleton] = useState(true);
   const [user, setUser] = useState({});
   const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
@@ -63,6 +65,7 @@ function Customer() {
           setTokenValid(true);
         } else {
           setAllCustomers(data);
+          setSkeleton(false);
         }
       })
       .catch((err) => {
@@ -225,8 +228,9 @@ function Customer() {
   const customStyles = {
     content: {
       width: "80%",
-      height: "70%",
+      height: "80%",
       top: "50%",
+      backgroundColor: "#f5f5f5",
       left: "50%",
       padding: "0",
       overflow: "visible",
@@ -360,11 +364,27 @@ function Customer() {
                           marginTop: "20px",
                         }}
                       >
-                        <DataGrid
-                          rows={allCustomers}
-                          columns={dataVertical}
-                          pageSize={5}
-                        />
+                        {showSkeleton ? (
+                          <>
+                            <Skeleton
+                              variant="rectangular"
+                              width={`100%`}
+                              height={50}
+                            />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                          </>
+                        ) : (
+                          <DataGrid
+                            rows={allCustomers}
+                            columns={dataVertical}
+                            pageSize={5}
+                            disableSelectionOnClick={true}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

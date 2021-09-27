@@ -11,9 +11,10 @@ import IconButton from "@material-ui/core/IconButton";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import TextField from "@material-ui/core/TextField";
+//import TextField from "@material-ui/core/TextField";
 import { useToasts } from "react-toast-notifications";
-const useStyles = makeStyles((theme) => ({
+import TextField from "@mui/material/TextField";
+const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -129,25 +130,28 @@ function Login() {
           <form className="formHouse">
             <TextField
               label="Enter your email address"
-              className={(classes.margin)}
+              className={classes.margin}
               onChange={(e) => setEmail(e.target.value)}
               variant="outlined"
             />
 
-            <FormControl
-              className={(classes.margin)}
-              variant="outlined"
-            >
-              <InputLabel htmlFor="outlined-adornment-password">
+            <FormControl className={classes.margin} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password"  style ={{
+                  marginTop:15
+                }}>
                 Password
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
+                style ={{
+                  marginTop:15
+                }}
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
                 onChange={handleChange("password")}
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position="end"
+                  >
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
@@ -161,7 +165,7 @@ function Login() {
                 labelWidth={70}
               />
             </FormControl>
-
+         
             {/* <input
               className="forminput"
               onChange={(e) => setEmail(e.target.value)}

@@ -9,14 +9,9 @@ import SessionExpired from "../SessionExpired/SessionExpired";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
-import { useToasts } from "react-toast-notifications"
-import dateFormat from 'dateformat';
-function AddCustomer({
-  setOpenModal,
-  setTokenValid,
-  setAllCustomers,
-}) {
-
+import { useToasts } from "react-toast-notifications";
+import dateFormat from "dateformat";
+function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
   const [sessionExpired, setSessionExpired] = useState(false);
 
   const [customerInfo, setCustomerInfo] = useState({
@@ -55,6 +50,35 @@ function AddCustomer({
       });
   };
 
+  const regFromCSV = async () => {
+    let result = await fetch(
+      "https://asteric.herokuapp.com/customer/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(),
+      }
+    );
+
+    result = await result.json();
+
+    if (result.status === 401) {
+      setSessionExpired(true);
+      setAddingUser(false);
+      return;
+    }
+
+    fetchUser();
+    setAddingUser(false);
+    setOpenModal(false);
+    addToast("User added Successfully", { appearance: "success" });
+    console.log(`This is the ${JSON.stringify(result)}`);
+    console.log();
+  };
   const register = async (e) => {
     e.preventDefault();
     setAddingUser(true);
@@ -65,12 +89,12 @@ function AddCustomer({
     );
 
     if (selectedBirthdayDate != null) {
-      let date = dateFormat(selectedBirthdayDate, 'dd/mm/yyyy')
+      let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
       customer.addDateOfBirth(date);
     }
 
     if (selectedAnniversaryDate != null) {
-      let datee = dateFormat(selectedAnniversaryDate, 'dd/mm/yyyy')
+      let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
       customer.addAnniversary(datee);
       console.log(datee);
     }
@@ -78,7 +102,6 @@ function AddCustomer({
     if (phoneNumber !== "") {
       customer.addPhoneNumber(phoneNumber);
     }
-
 
     let result = await fetch(
       "https://asteric.herokuapp.com/customer/register",
@@ -170,7 +193,6 @@ function AddCustomer({
                       placeholderText="Select a date"
                       calendarClassName="rasta-stripes"
                       maxDate={new Date()}
-                      
                       isClearable
                       showYearDropdown
                       popperModifiers={{
@@ -223,7 +245,9 @@ function AddCustomer({
 
                 <div className="submitcont">
                   <ReactBootStrap.Button
-                    className="sendbtn"
+                    style={{
+                      float: "right",
+                    }}
                     variant="primary"
                     onClick={register}
                     disabled={addingUser}
@@ -245,17 +269,45 @@ function AddCustomer({
 
               <div className="horline"></div>
 
-              <div className = "uploadcent">
-                <h3 style = {{
-                  fontStyle:`italic`
-                }}>OR</h3>
-                <h5>Upload a CSV file</h5>
-                <input
-                  label="Upload CSV"
-                  type="file"
-                  name="upload"
-                  accept=".csv"
-                />
+              <div className="uploadcent">
+                <h3 style={{ fontStyle: `italic` }}>OR</h3>
+
+                <div
+                  style={{
+                    display: `flex`,
+                    alignItems: `center`,
+                    textAlign: `center`,
+                    justifyContent: `space-between`,
+                  }}
+                >
+                  <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5>
+                  <input
+                    label="Upload CSV"
+                    type="file"
+                    name="upload"
+                    accept=".csv"
+                  />
+                </div>
+                <ReactBootStrap.Button
+                  style={{
+                    marginTop: 20,
+                  }}
+                  variant="primary"
+                  onClick={regFromCSV}
+                  disabled={addingUser}
+                >
+                  <ReactBootStrap.Spinner
+                    as="span"
+                    className={addingUser ? "visible" : "visually-hidden"}
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually">
+                    {addingUser ? "Loading..." : "Register"}
+                  </span>
+                </ReactBootStrap.Button>
               </div>
             </div>
           </div>

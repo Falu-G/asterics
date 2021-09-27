@@ -1,20 +1,15 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import "./template.css";
-import AttachmentIcon from "@material-ui/icons/Attachment";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+
 import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
-import ImageIcon from "@material-ui/icons/Image";
-import GifIcon from "@material-ui/icons/Gif";
-import FormatBoldIcon from "@material-ui/icons/FormatBold";
-import FormatItalicIcon from "@material-ui/icons/FormatItalic";
+
 import { Delete } from "@material-ui/icons";
-import Modal from "react-modal";
-import FormRadio from "../../components/formRadio/FormRadio";
-import Dashnav from "../../components/dashnav/Dashnav";
+
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
-import Close from "@material-ui/icons/Close";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 //import { makeStyles } from "@material-ui/core/styles";
 //import Button from "@material-ui/core/Button";
 import SessionExpired from "../SessionExpired/SessionExpired";
@@ -27,47 +22,54 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 function Templates() {
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+
   let templateObj = new TemplateObject("", "", "");
   const [emailTemplates, setEmailTemplates] = useState([]);
   const [smsTemplates, setSmsTemplates] = useState([]);
   const [templateObjstate, settemplateObjstate] = useState(templateObj);
   const [addEmail, setAddEmail] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const [modalTemplate, setModalTemplate] = useState(false);
-
   const { sidebar, setSideBar } = useContext(MenuContext);
-  const showSideBar = () => setSideBar(!sidebar);
-
   const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const [tokenValid, setTokenValid] = useState(false);
-  // const [mesag, setMesag] = useState("");
   const { addToast } = useToasts();
   const [openModalSMS, setOpenModalSMS] = useState(false);
-  const [value, setValue] = React.useState("Yes");
-  const customStyles = {
-    content: {
-      width: "80%",
-      height: "70%",
-      top: "50%",
-      left: "50%",
-      padding: "0",
-      transform: "translate(-50%, -50%)",
-    },
-  };
+  const [open, setOpen] = React.useState(false);
+  const [templateId, setTemplateId] = useState(null);
+  const [openAddEmail, setOpenAddEmail] = useState(false);
+  const [openSMS, setOpenSMS] = useState(false);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+  const showSideBar = () => setSideBar(!sidebar);
   const deleteFromArray = (id) => {
     console.log("deleting from array " + id);
     setLoading(true);
@@ -89,7 +91,9 @@ function Templates() {
           setEmailTemplates(
             emailTemplates.filter((element) => element.id !== id)
           );
-          console.log("This is numbers of email " + emailTemplates.length);
+
+          setSmsTemplates(smsTemplates.filter((element) => element.id !== id));
+          
           setLoading(false);
           setOpen(false);
           addToast("Templates deleted Successfully", { appearance: "success" });
@@ -178,12 +182,15 @@ function Templates() {
           // setLoading(false);
           fetchBusinesses();
           //setEmailTemplates([...emailTemplates, templateObjstate]);
+          setOpenAddEmail(false);
           console.log("This is numbers of email ");
           console.log("This is the numbers of email " + emailTemplates.length);
           setModalTemplate(!modalTemplate);
           setAddEmail(false);
           addToast("Templates added Succesfully", { appearance: "success" });
         } else {
+          setOpenAddEmail(false);
+          setOpenSMS(false);
           setLoading(false);
           setSmsTemplates([...smsTemplates, templateObjstate]);
           setOpenModalSMS(false);
@@ -194,10 +201,6 @@ function Templates() {
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const [templateId, setTemplateId] = useState(null);
-
   const handleClickOpen = (id) => {
     setTemplateId(id);
     setOpen(true);
@@ -206,6 +209,18 @@ function Templates() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleOpenEmail = () => {
+    setOpenAddEmail(true);
+  };
+
+  const handleCloseEmail = () => {
+    setOpenAddEmail(false);
+  };
+
+  const handleOpenSMS = () => setOpenSMS(true);
+
+  const handleCloseSMS = () => setOpenSMS(false);
 
   return (
     <>
@@ -279,7 +294,7 @@ function Templates() {
                               <Delete
                                 className="delete"
                                 onClick={() =>
-                                  handleClickOpen(emailTemplate.id) 
+                                  handleClickOpen(emailTemplate.id)
                                 }
                               />
                             </div>
@@ -291,7 +306,7 @@ function Templates() {
                             src="images/add.png"
                             alt=""
                             onClick={() => {
-                              setModalTemplate(!modalTemplate);
+                              handleOpenEmail();
                               settemplateObjstate({
                                 ...templateObjstate,
                                 messageCategory: "Email",
@@ -318,6 +333,11 @@ function Templates() {
                             >
                               <h5>{smsTemplate.message}</h5>
                               <p>{smsTemplate.message}</p>
+
+                              <Delete
+                                className="delete"
+                                onClick={() => handleClickOpen(smsTemplate.id)}
+                              />
                             </div>
                           </>
                         ))}
@@ -327,9 +347,7 @@ function Templates() {
                             src="images/add.png"
                             alt=""
                             onClick={() => {
-                              setOpenModalSMS(() =>
-                                openModalSMS ? false : true
-                              );
+                              handleOpenSMS();
                               settemplateObjstate({
                                 ...templateObjstate,
                                 messageCategory: "SMS",
@@ -352,7 +370,8 @@ function Templates() {
                   <DialogTitle>{"Delete Customer?"}</DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                      Do you really want to delete this template? Nelson wont like it
+                      Do you really want to delete this template? Nelson wont
+                      like it
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -362,263 +381,171 @@ function Templates() {
                     </Button>
                   </DialogActions>
                 </Dialog>
-                <Modal
-                  isOpen={openModalEmail}
-                  style={customStyles}
-                  contentLabel="Example Modal"
-                >
-                  <div className="modalContainer">
-                    <Dashnav title="Email Template" />
-                    <form className="modalInput">
-                      <div className="modalFirstInput">
-                        <div className="mf_input">
-                          <input
-                            type="text"
-                            name="username"
-                            placeholder="Title"
-                          />
-                        </div>
-                        <div className="ms_input">
-                          <FormRadio
-                            value={value}
-                            handleChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Email address"
-                        className="tm-input"
-                      />
-                      <div className="tm-icons">
-                        <AttachmentIcon />
-                        <ImageIcon />
-                        <GifIcon />
-                        <FormatBoldIcon />
-                        <FormatItalicIcon />
-                      </div>
-
-                      <div className="tm-txtAndbt">
-                        {" "}
-                        <textArea
-                          type="text"
-                          name="message"
-                          placeholder="Messages..."
-                          onChange={(event) =>
-                            settemplateObjstate({
-                              ...templateObjstate,
-                              message: event.target.value,
-                            })
-                          }
-                        />
-                        <div>
-                          <button
-                            style={{
-                              float: "right",
-                              width: "89px",
-                              height: "34px",
-                              marginTop: "10px",
-                              backgroundColor: "#18A0FB",
-                              borderRadius: "5px",
-                              color: "#fff",
-                              padding: "5px",
-                              border: "none",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              setOpenModalEmail(() =>
-                                openModalEmail ? false : true
-                              )
-                            }
-                          >
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </Modal>
 
                 <Modal
-                  isOpen={openModalSMS}
-                  style={customStyles}
-                  contentLabel="Example Modal"
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={openAddEmail}
+                  onClose={handleCloseEmail}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
                 >
-                  <div className="modalContainer">
-                    <Dashnav title="SMS Template" />
+                  <Fade in={openAddEmail}>
+                    <Box sx={style}>
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Add Email templates
+                      </Typography>
 
-                    <form className="modalInput">
-                      <div className="modalFirstInput">
-                        <div className="mf_input">
-                          <input
-                            type="text"
-                            name="username"
-                            placeholder="Title"
-                          />
-                        </div>
-                        <div className="ms_input">
-                          <FormRadio
-                            value={value}
-                            handleChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Phone number"
-                        className="tm-input"
-                      />
-                      <div className="tm-icons">
-                        <AttachmentIcon />
-                        <ImageIcon />
-                        <GifIcon />
-                        <FormatBoldIcon />
-                        <FormatItalicIcon />
-                      </div>
-
-                      <div className="tm-txtAndbt">
-                        <textArea
-                          type="text"
-                          name="message"
-                          placeholder="Messages..."
-                        />
-                        <div>
-                          <button
-                            style={{
-                              float: "right",
-                              width: "89px",
-                              height: "34px",
-                              marginTop: "10px",
-                              backgroundColor: "#18A0FB",
-                              borderRadius: "5px",
-                              color: "#fff",
-                              padding: "5px",
-                              border: "none",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              setOpenModalSMS(() =>
-                                openModalSMS ? false : true
-                              )
-                            }
-                          >
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </Modal>
-
-                <Modal isOpen={modalTemplate} style={customStyles}>
-                  <Dashnav title="Add to templates" />
-                  <Close
-                    style={{
-                      position: "absolute",
-                      top: 5,
-                      color: "white",
-                      right: 10,
-                    }}
-                    onClick={() => setModalTemplate(!modalTemplate)}
-                  />
-
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "80%",
-                      }}
-                    >
                       <div
                         style={{
-                          marginTop: "10px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        <input
-                          id="titleSchedule"
-                          type="text"
-                          name="title"
+                        <div
                           style={{
-                            width: "50%",
-                            borderRadius: "5px",
-                            outline: "none",
-                            height: "40px",
-                            border: "1px solid #DCDCDC",
-                            paddingLeft: "10px",
+                            width: "100%",
                           }}
-                          placeholder="Title"
-                          // onChange={(e) => setTitle(e.target.value)}
-                          // value={title}
-                        />
-                      </div>
-
-                      <div>
-                        <h5>Add templates to SMS or Email templates</h5>
-                      </div>
-
-                      <textArea
-                        type="text"
-                        id="contentSchedule"
-                        name="message"
-                        placeholder="Messages..."
-                        onChange={(e) =>
-                          settemplateObjstate({
-                            ...templateObjstate,
-                            message: e.target.value,
-                          })
-                        }
-                        value={templateObjstate.message}
-                      />
-                      <div>
-                        {/* <Button
-                          variant="contained"
-                          style={{
-                            marginRight: "40px",
-                            float: "right",
-                            padding: "10px 20px",
-                            color: "#fff",
-                            backgroundColor: "#18A0FB",
-                          }}
-                          onClick={handleSetTemplate}
                         >
-                          ADD
-                        </Button> */}
-
-                        <ReactBootStrap.Button
-                          style={{
-                            marginRight: "40px",
-                            float: "right",
-                            padding: "10px 20px",
-                            color: "#fff",
-                            backgroundColor: "#18A0FB",
-                          }}
-                          variant="primary"
-                          onClick={handleSetTemplate}
-                          disabled={addEmail}
-                        >
-                          <ReactBootStrap.Spinner
-                            as="span"
-                            className={addEmail ? "visible" : "visually-hidden"}
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
+                          <TextareaAutosize
+                            aria-label="minimum height"
+                            minRows={3}
+                            style={{ width: 400 }}
+                            type="text"
+                            id="contentSchedule"
+                            name="message"
+                            placeholder="Messages..."
+                            onChange={(e) =>
+                              settemplateObjstate({
+                                ...templateObjstate,
+                                message: e.target.value,
+                              })
+                            }
+                            value={templateObjstate.message}
                           />
-                          <span className="visually">
-                            {addEmail ? "Loading..." : "Send"}
-                          </span>
-                        </ReactBootStrap.Button>
+                          <div>
+                            <ReactBootStrap.Button
+                              style={{
+                                float: "right",
+                                padding: "10px 20px",
+                                color: "#fff",
+                                backgroundColor: "#18A0FB",
+                              }}
+                              variant="primary"
+                              onClick={handleSetTemplate}
+                              disabled={addEmail}
+                            >
+                              <ReactBootStrap.Spinner
+                                as="span"
+                                className={
+                                  addEmail ? "visible" : "visually-hidden"
+                                }
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                              <span className="visually">
+                                {addEmail ? "Loading..." : "Send"}
+                              </span>
+                            </ReactBootStrap.Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </Box>
+                  </Fade>
+                </Modal>
+
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={openSMS}
+                  onClose={handleCloseSMS}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
+                >
+                  <Fade in={openSMS}>
+                    <Box sx={style}>
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Add SMS templates
+                      </Typography>
+
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <TextareaAutosize
+                            aria-label="minimum height"
+                            minRows={3}
+                            style={{ width: 400 }}
+                            type="text"
+                            id="contentSchedule"
+                            name="message"
+                            placeholder="Messages..."
+                            onChange={(e) =>
+                              settemplateObjstate({
+                                ...templateObjstate,
+                                message: e.target.value,
+                              })
+                            }
+                            value={templateObjstate.message}
+                          />
+                          <div>
+                            <ReactBootStrap.Button
+                              style={{
+                                float: "right",
+                                padding: "10px 20px",
+                                color: "#fff",
+                                backgroundColor: "#18A0FB",
+                              }}
+                              variant="primary"
+                              onClick={handleSetTemplate}
+                              disabled={addEmail}
+                            >
+                              <ReactBootStrap.Spinner
+                                as="span"
+                                className={
+                                  addEmail ? "visible" : "visually-hidden"
+                                }
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                              <span className="visually">
+                                {addEmail ? "Loading..." : "Send"}
+                              </span>
+                            </ReactBootStrap.Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Box>
+                  </Fade>
                 </Modal>
               </div>
             </div>

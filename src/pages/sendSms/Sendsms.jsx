@@ -3,15 +3,37 @@ import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
 import "./sendsms.css";
 import SessionExpired from "../SessionExpired/SessionExpired";
-import Modal from "react-modal";
+//import Modal from "react-modal";
 //import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import * as ReactBootStrap from "react-bootstrap";
 import { DataGrid } from "@material-ui/data-grid";
+import Skeleton from "@mui/material/Skeleton";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+
+const style = {
+  position: "absolute",
+  width: 700,
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function Sendsms() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [select, setSelection] = useState([]);
+
   const dataVertical = [
     {
       field: "firstname",
@@ -53,16 +75,7 @@ function Sendsms() {
   const [sendingMessage, setSendingMessage] = useState(false);
   // const [messageReport, setMessageReport] = useState("");
 
-  const [openModal, setOpenModal] = useState(false);
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      padding: "0",
-      transform: "translate(-50%, -50%)",
-    },
-  };
 
   const [sendMessage, setSendMessage] = useState({
     numbers: "",
@@ -74,7 +87,7 @@ function Sendsms() {
   const token = userObj.message[0].token;
 
   const handleSelectCustomers = async () => {
-    setOpenModal(() => (openModal ? false : true));
+    handleOpen()
     setLoading(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/customer", {
@@ -240,6 +253,67 @@ function Sendsms() {
 
                 <div>
                   <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                      timeout: 500,
+                    }}
+                  >
+                    <Fade in={open}>
+                      <Box sx={style}>
+                        <Typography
+                          id="transition-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Contact List
+                        </Typography>
+                        {loading ? (
+                        <>
+                          <Skeleton
+                            variant="rectangular"
+                            width={`100%`}
+                            height={50}
+                          />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                         
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            style={{
+                              height: 400,
+                              width: "100%",
+                            }}
+                          >
+                            <DataGrid
+                              rows={allCustomers}
+                              columns={dataVertical}
+                              pageSize={5}
+                              checkboxSelection
+                              onSelectionChange={(newSelection) => {
+                                console.log(newSelection.rows);
+                                setSelection(newSelection.rows);
+
+                                console.log("Changing things");
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
+                      </Box>
+                    </Fade>
+                  </Modal>
+
+                  {/* <Modal
                     isOpen={openModal}
                     style={customStyles}
                     contentLabel="Example Modal"
@@ -247,16 +321,17 @@ function Sendsms() {
                     <div className="modalContainer">
                       {loading ? (
                         <>
-                          <span>This is loading</span>
-
-                          <ReactBootStrap.Spinner
-                            as="span"
-                            className="spinning"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
+                          <Skeleton
+                            variant="rectangular"
+                            width={`100%`}
+                            height={50}
                           />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                          <Skeleton variant="text" height={50} />
+                         
                         </>
                       ) : (
                         <>
@@ -290,7 +365,7 @@ function Sendsms() {
                         Close
                       </button>
                     </div>
-                  </Modal>
+                  </Modal> */}
                 </div>
               </div>
             </div>

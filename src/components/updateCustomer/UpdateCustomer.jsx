@@ -1,15 +1,16 @@
-//import React, { useState } from "react";
+import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-//import { useToasts } from "react-toast-notifications";
+import { useToasts } from "react-toast-notifications";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+//import dateFormat from "dateformat";
 import "./UpdateCustomer.css";
+import * as ReactBootStrap from "react-bootstrap";
 const style = {
   position: "absolute",
   top: "50%",
@@ -31,71 +32,87 @@ function UpdateCustomer({
   setAllCustomers,
   setSessionExpired,
 }) {
-  // const fetchUser = (id) => {
-  //   fetch(`https://asteric.herokuapp.com/customer${id}`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data.message === "Invalid Token") {
-  //         setTokenValid(true);
-  //       } else {
-  //         setAllCustomers(data);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("This is the error that was caught" + err);
-  //     });
+  const fetchUser = (id) => {
+    fetch(`https://asteric.herokuapp.com/customer${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else {
+          setAllCustomers(data);
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+      });
+  };
+
+  const { addToast } = useToasts();
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
+  const token = userObj.message[0].token;
+
+  // const convertStringToDate = (dateStr) => {
+  //   var parts = dateStr.split("/");
+  //   // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
+  //   // January - 0, February - 1, etc.
+  //   var mydate = new Date(parts[0], parts[1] - 1, parts[2]);
+  //   console.log(mydate.toDateString());
+  //   return mydate;
   // };
 
-  //const { addToast } = useToasts();
-  //const [addUser, setAddUser] = useState(false);
-  // const loggedInUser = localStorage.getItem("user-info");
-  // const userObj = JSON.parse(loggedInUser);
-  //const token = userObj.message[0].token;
+  const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
+  const [selectedAnniversaryDate, setselectedAnniversaryDate] = useState(null);
+  const [Updatinguser, setUpdatingUser] = useState(false);
 
-  const convertStringToDate = (dateStr) => {
-    var parts = dateStr.split("-");
-    // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-    // January - 0, February - 1, etc.
-    var mydate = new Date(parts[0], parts[1] - 1, parts[2]);
-    console.log(mydate.toDateString());
-    return mydate;
-  };
   const updateCustomer = async (id) => {
-    //setAddUser(true);
+    setUpdatingUser(true);
 
-    // let result = await fetch(`https://asteric.herokuapp.com/customer/${id}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     Authorization: "Bearer " + token,
-    //   },
-    //   body: JSON.stringify(user),
-    // });
+    let result = await fetch(`https://asteric.herokuapp.com/customer/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(user),
+    });
 
-    // result = await result.json();
+    result = await result.json();
 
-    // if (result.status === 401) {
-    //   setSessionExpired(true);
-    //   setAddingUser(false);
-    // } else if (result.status === 200) {
-    //   fetchUser();
-    //   setAddingUser(false);
-    //   addToast("User added Successfully", { appearance: "success" });
+    if (result.status === 401) {
+      setSessionExpired(true);
+    } else if (result.status === 200) {
+      fetchUser();
+      addToast("User updated Successfully", { appearance: "success" });
+    }
+    // if (selectedBirthdayDate !== null) {
+    //   let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
+    //   // console.log("This is hapening in if and date is "+date)
+    //   setUser({ ...user, birthday: date });
+    //   console.log("This is hapening in if and user is " + user.birthday);
     // }
-    console.log("Customer info " + user.firstname);
-    console.log("Customer info " + user.email);
-    console.log("Customer info " + user.lastname);
-    console.log("Customer info " + user.birthday);
-    console.log("Customer info " + user.anniversary);
-    console.log("Customer info " + user.phone);
+
+    // if (selectedAnniversaryDate !== null) {
+    //   let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
+    //   setUser({ ...user, anniversary: datee });
+    //   console.log(
+    //     "This is hapening in if of user anniversary " + user.anniversary
+    //   );
+    // }
+    // console.log("Customer info " + user.firstname);
+    // console.log("Customer info " + user.email);
+    // console.log("Customer info " + user.lastname);
+    // console.log("Customer info " + user.birthday);
+    // console.log("Customer info " + user.anniversary);
+    // console.log("Customer info " + user.phone);
   };
 
   return (
@@ -169,7 +186,6 @@ function UpdateCustomer({
                 marginTop: "20px",
                 display: "flex",
                 alignItems: "center",
-
                 justifyContent: "space-between",
               }}
               sx={{
@@ -197,10 +213,14 @@ function UpdateCustomer({
 
               <Datepicker
                 label="Basic example"
-                defaultValue={user.anniversaryDate}
+                selected={selectedBirthdayDate}
+                onSelect={setSelectedBirthdayDate} //when day is clicked
+                onChange={(date) => setSelectedBirthdayDate(date)} //only when value has changed
+                defaultValue={user.birthday}
+                value = {`Date of birth: ${user.birthday}`}
                 className="updatebirthday"
                 placeholderText="Select anniversary date"
-                value={user.birthday}
+                disabled
                 showYearDropdown
                 popperModifiers={{
                   offset: {
@@ -248,17 +268,19 @@ function UpdateCustomer({
                 display: `flex`,
                 alignItems: "center",
                 width: `100%`,
+               
               }}
             >
               <Datepicker
                 label="Basic example"
                 defaultValue={user.anniversaryDate}
-                selected={convertStringToDate("2014-04-03")}
-                //onSelect={handleDateSelect} //when day is clicked
-                //onChange={handleDateChange}
+                selected={selectedAnniversaryDate}
+                value = {`Date of Anniversary: ${user.anniversary}`}
+                onSelect={(date) => setselectedAnniversaryDate(date)}
+                onChange={(date) => setselectedAnniversaryDate(date)} //only when value has changed
                 className="updateanniversary"
                 placeholderText="Select anniversary date"
-                value={user.anniversary}
+                disabled
                 showYearDropdown
                 popperModifiers={{
                   offset: {
@@ -273,9 +295,27 @@ function UpdateCustomer({
                 }}
               />
 
-              <Button onClick={() => updateCustomer()} variant="contained">
-                UPDATE
-              </Button>
+
+
+              <ReactBootStrap.Button
+                    style={{  width: "200px" }}
+                    variant="primary"
+                    
+                    onClick={() => updateCustomer()}
+                    disabled={Updatinguser}
+                  >
+                    <ReactBootStrap.Spinner
+                      as="span"
+                      className={Updatinguser ? "visible" : "visually-hidden"}
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually">
+                      {Updatinguser ? "UPDATING..." : "UPDATE"}
+                    </span>
+                  </ReactBootStrap.Button>
             </div>
           </Box>
         </Fade>

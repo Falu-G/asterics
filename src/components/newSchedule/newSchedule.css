@@ -3,10 +3,13 @@
 }
 
 .ns-Scheduler {
+  width: 832px;
+  margin: 0 auto;
   display: flex;
+  margin-top:10px;
   justify-content: space-between;
   flex-direction: row;
-  padding: 10px 40px;
+  
 }
 
 .ns-Scheduler-input {

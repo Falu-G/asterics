@@ -17,19 +17,26 @@ import dateFormat from "dateformat";
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { useToasts } from "react-toast-notifications";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 function Monthlyschedule() {
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(() => ({
     root: {
       "& > *": {
-        margin: 1
-      
-      
+        margin: 1,
       },
 
-      button:{
-        backgroundColor: '#18A0FB'
-      }
+      button: {
+        backgroundColor: "#18A0FB",
+      },
     },
   }));
 
@@ -43,8 +50,7 @@ function Monthlyschedule() {
 
   console.log(today);
 
-
-  const {addToast} = useToasts();
+  const { addToast } = useToasts();
   const [emailQueue, setEmailQueue] = useState([]);
   // const [messageQueue, setMessageQueue] = useState([]);
   const loggedInUser = localStorage.getItem("user-info");
@@ -52,6 +58,8 @@ function Monthlyschedule() {
   const token = userObj.message[0].token;
   const [tokenValid, setTokenValid] = useState(false);
 
+  const [emailId, setEmailId] = useState("");
+  const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const customStyles = {
@@ -91,11 +99,10 @@ function Monthlyschedule() {
   }, [token]);
 
   const { sidebar, setSideBar } = useContext(MenuContext);
-  
+
   console.log("I am on monthly " + sidebar);
 
-  const handledelete = (id) =>{
-  
+  const handledelete = (id) => {
     setLoading(true);
     fetch(`https://asteric.herokuapp.com/mails/${id}`, {
       method: "DELETE",
@@ -109,25 +116,28 @@ function Monthlyschedule() {
       .then((data) => {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
+          setOpen(false);
         } else if (data.responsecode === "200") {
           setEmailQueue(
             emailQueue.filter(function (element) {
-               return element.id !== id })
+              return element.id !== id;
+            })
           );
-          setLoading(false)
+          setOpen(false);
+          setLoading(false);
           addToast("Email deleted from queue", { appearance: "success" });
         } else {
-          console.log("An error occured");
-          setLoading(false)
-          addToast("Error in saving templates", { appearance: 'error' });
+          setOpen(false);
+          setLoading(false);
+          addToast("Error in saving templates", { appearance: "error" });
         }
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
         setLoading(false);
       });
-  }
-    //setDataRow(() => dataRow.filter((item) => item.id !== id));
+  };
+  //setDataRow(() => dataRow.filter((item) => item.id !== id));
   const showSideBar = () => setSideBar(!sidebar);
   const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
 
@@ -155,9 +165,18 @@ function Monthlyschedule() {
       field: "status",
       headerName: "Status",
       width: 160,
-      renderCell: ({ row }) => {
-        <div className="CentralizeCell">{row.status}</div>;
-      },
+      renderCell: ({ row }) => (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+          }}
+        >
+          {row.status}
+        </div>
+      ),
     },
 
     {
@@ -173,7 +192,7 @@ function Monthlyschedule() {
                 color: "red",
                 cursor: "pointer",
               }}
-              onClick={() => handledelete(row.id)}
+              onClick={() => handleClickOpen(row.id)}
             />
           </div>
         </>
@@ -184,6 +203,15 @@ function Monthlyschedule() {
   useEffect(() => {
     fetchBusiness();
   }, [fetchBusiness]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = (id) => {
+    setEmailId(id);
+    setOpen(true);
+  };
 
   return (
     <div className="monthlyscheduleConatiner">
@@ -246,6 +274,27 @@ function Monthlyschedule() {
                       </ToastProvider>
                     </Modal>
 
+                    <Dialog
+                      open={open}
+                      TransitionComponent={Transition}
+                      keepMounted
+                      onClose={handleClose}
+                      aria-describedby="alert-dialog-slide-description"
+                    >
+                      <DialogTitle>{"Delete Customer?"}</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                          Are you sure you want to delete this email from queue?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose}>CANCEL</Button>
+                        <Button onClick={() => handledelete(emailId)}>
+                          DELETE
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+
                     <div className="reportTask">
                       <div className="ScheduleReports">
                         <div className="generalbox">
@@ -277,15 +326,14 @@ function Monthlyschedule() {
                       <div className="TaskSchedule">
                         <Dropdown tasks={listOfTasks} />
 
-
                         <Button
-                        
-                        className = {classes.button}
+                          className={classes.button}
                           variant="contained"
                           onClick={() =>
                             setOpenModal(() => (openModal ? false : true))
                           }
-                        >New Schedule
+                        >
+                          New Schedule
                         </Button>
                       </div>
                     </div>
@@ -293,6 +341,18 @@ function Monthlyschedule() {
                       <h3>MessagesQueue</h3>
                       <div className="messagesQueueTable card">
                         <Dashnav />
+
+                        <div
+                          style={{
+                            width: `100%`,
+                            height: `100%`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <h3>No messages to display</h3>
+                        </div>
                       </div>
                     </div>
 
@@ -304,6 +364,7 @@ function Monthlyschedule() {
                           columns={dataVertical}
                           pageSize={5}
                           checkboxSelection
+                          disableSelectionOnClick={true}
                         />
                       </div>
                     </div>
