@@ -5,6 +5,7 @@ import SessionExpired from "../../pages/SessionExpired/SessionExpired";
 import NavigationComponent from "../navigationComponent/NavigationComponent";
 import * as ReactBootStrap from "react-bootstrap";
 import "./dashboard.css";
+import CountUp from "react-countup";
 
 function Dashboard() {
   let today = new Date();
@@ -92,8 +93,13 @@ function Dashboard() {
                   <div className="box box1 card">
                     <div className="outboundemails">
                       <h4>Total outboundemails</h4>
-
-                      <h1>2</h1>
+                      <CountUp start={0} end={100} delay={0} duration={2.75}>
+                        {({ countUpRef }) => (
+                          <div>
+                            <span ref={countUpRef} />
+                          </div>
+                        )}
+                      </CountUp>
                     </div>
 
                     <div className="outboundsms">
@@ -104,7 +110,6 @@ function Dashboard() {
 
                     <div className="schedulemessages">
                       <h4>ScheduledMesages</h4>
-
                       <h1>2</h1>
                     </div>
                   </div>
@@ -140,7 +145,7 @@ function Dashboard() {
                     <div className="boardSmsTemplates card">
                       <Dashnav title="SMS Template" />
                       <Link to="/templates" className="centralImg">
-                      <img src="/images/emai.png" alt="email" />
+                        <img src="/images/emai.png" alt="email" />
                       </Link>
                     </div>
                   </div>
