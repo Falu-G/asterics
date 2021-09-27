@@ -207,6 +207,9 @@ function Sendsms() {
                         }
                       />
                       <img
+                       style = {{
+                        cursor:`pointer`
+                      }}
                         onClick={handleSelectCustomers}
                         src="/images/contact.png"
                         alt="contact"

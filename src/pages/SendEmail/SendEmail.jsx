@@ -248,6 +248,9 @@ function SendEmail() {
                         placeholder="Add Email"
                       />
                       <img
+                      style = {{
+                        cursor:`pointer`
+                      }}
                         src="/images/contact.png"
                         alt="contact"
                         onClick={handleSelectCustomers}
