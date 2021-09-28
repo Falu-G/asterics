@@ -32,8 +32,7 @@ function Sendsms() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [select, setSelection] = useState([]);
-
+  const [selectionModel, setSelectionModel] = React.useState([]);
   const dataVertical = [
     {
       field: "firstname",
@@ -42,8 +41,15 @@ function Sendsms() {
       width: 260,
       renderCell: ({ row }) => {
         return (
-          <div>
-            <p>{row.firstname + " " + row.lastname}</p>
+          <div style = {{
+           
+            display: 'flex',
+            alignItems: 'center',
+         
+            width: '100%',
+          
+          }}>
+            {row.firstname + " " + row.lastname}
           </div>
         );
       },
@@ -56,7 +62,7 @@ function Sendsms() {
 
       renderCell: ({ row }) => (
         <>
-          <div>{`+${row.phone}`}</div>
+          <div>{`${row.phone}`}</div>
         </>
       ),
     },
@@ -188,7 +194,7 @@ function Sendsms() {
                 }}
                 className="ScheduleWrapper"
               >
-                {console.log("The number of numbers clicked " + select.length)}
+                {console.log("The number of numbers clicked " + selectionModel)}
                 {/* <p>{messageReport}</p> */}
                 <div>
                   <form className="scheduleform">
@@ -302,12 +308,12 @@ function Sendsms() {
                               columns={dataVertical}
                               pageSize={5}
                               checkboxSelection
-                              onSelectionChange={(newSelection) => {
-                                console.log(newSelection.rows);
-                                setSelection(newSelection.rows);
-
-                                console.log("Changing things");
-                              }}
+                              disableSelectionOnClick
+                              onSelectionModelChange={(newSelection) => {
+                                setSelectionModel(newSelection.selectionModel);
+                                console.log("I feel again")
+                            }}
+                            
                             />
                           </div>
                         </>

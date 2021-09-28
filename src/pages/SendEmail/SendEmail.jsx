@@ -13,7 +13,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
-import { DataGrid } from "@material-ui/data-grid";
+// import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid} from '@mui/x-data-grid';
+
 const style = {
   position: "absolute",
   width: 700,
@@ -43,7 +45,7 @@ function SendEmail() {
   const [invalidToken, setInvalidToken] = useState(false);
   const [allCustomers, setAllCustomers] = useState([]);
   const [select, setSelection] = useState([]);
-
+  //const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([]);
   const handleSelectCustomers = async () => {
     handleOpen();
     setLoading(true);
@@ -110,8 +112,15 @@ function SendEmail() {
       width: 260,
       renderCell: ({ row }) => {
         return (
-          <div>
-            <p>{row.firstname + " " + row.lastname}</p>
+          <div style = {{
+           
+            display: 'flex',
+            alignItems: 'center',
+         
+            width: '100%',
+          
+          }}>
+            {row.firstname + " " + row.lastname}
           </div>
         );
       },
