@@ -8,13 +8,15 @@ import SessionExpired from "../SessionExpired/SessionExpired";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import * as ReactBootStrap from "react-bootstrap";
-import { DataGrid } from "@material-ui/data-grid";
 import Skeleton from "@mui/material/Skeleton";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
+import { useTable, usePagination, useRowSelect } from "react-table";
+import Button from "@mui/material/Button";
+import { Checkbox } from "../../components/Checkbox";
 
 const style = {
   position: "absolute",
@@ -29,46 +31,96 @@ const style = {
 };
 
 function Sendsms() {
+  const data = React.useMemo(
+    () => [
+      {
+        col1: "Hello",
+        col2: "World",
+      },
+      {
+        col1: "react-table",
+        col2: "rocks",
+      },
+      {
+        col1: "whatever",
+        col2: "you want",
+      },
+    ],
+    []
+  );
+
+  // const columns = React.useMemo(
+  //   () => [
+  //     {
+  //       Header: "Name",
+  //       accessor: "col1", // accessor is the "key" in the data
+  //     },
+  //     {
+  //       Header: "Phone Number",
+  //       accessor: "col2",
+  //     },
+  //   ],
+  //   []
+  // );
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Full Name",
+        accessor: "firstname",
+      },
+      {
+        Header: "Phone Number",
+        accessor: "phone",
+      },
+    ],
+    []
+  );
+
+  const [allCustomers, setAllCustomers] = useState(data);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [selectionModel, setSelectionModel] = React.useState([]);
-  const dataVertical = [
-    {
-      field: "firstname",
-      headerName: "Full Name",
-      sortable: false,
-      width: 260,
-      renderCell: ({ row }) => {
-        return (
-          <div style = {{
-           
-            display: 'flex',
-            alignItems: 'center',
-         
-            width: '100%',
-          
-          }}>
-            {row.firstname + " " + row.lastname}
-          </div>
-        );
-      },
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      sortable: false,
-      width: 300,
+  let [arrayOfNumbers, setArrayOfNumber] = React.useState([]);
+  const tableInstance = useTable(
+    { columns, data: allCustomers },
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => {
+        return [
+          {
+            id: "name",
+            Header: ({ getToggleAllRowsSelectedProps }) => (
+              <Checkbox {...getToggleAllRowsSelectedProps()} />
+            ),
 
-      renderCell: ({ row }) => (
-        <>
-          <div>{`${row.phone}`}</div>
-        </>
-      ),
-    },
-  ];
-  const customersList = [];
-  const [allCustomers, setAllCustomers] = useState(customersList);
+            Cell: ({ row }) => {
+              return <Checkbox {...row.getToggleRowSelectedProps()} />;
+            },
+          },
+          ...columns,
+        ];
+      });
+    }
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    state,
+    pageOptions,
+    selectedFlatRows,
+  } = tableInstance;
+
+  const page = rows.slice(0, 10);
+
   const { addToast } = useToasts();
   const { sidebar, setSideBar } = useContext(MenuContext);
   const [invalidToken, setInvalidToken] = useState(false);
@@ -79,9 +131,8 @@ function Sendsms() {
 
   const [loading, setLoading] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const { pageIndex } = state;
   // const [messageReport, setMessageReport] = useState("");
-
-
 
   const [sendMessage, setSendMessage] = useState({
     numbers: "",
@@ -93,7 +144,7 @@ function Sendsms() {
   const token = userObj.message[0].token;
 
   const handleSelectCustomers = async () => {
-    handleOpen()
+    handleOpen();
     setLoading(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/customer", {
@@ -158,6 +209,20 @@ function Sendsms() {
     }
   };
 
+  const phoneNumberHandler = () => selectedFlatRows.map(row => {
+    
+    setArrayOfNumber([...arrayOfNumbers,row.original.phone])
+    let uniquenumber  = new Set(arrayOfNumbers)
+    let array = Array.from(uniquenumber);
+    setSendMessage({...sendMessage,numbers:array.join(",")})
+    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
+    console.log(array.join(","))
+    
+    return null
+  })
+
+  
+  
   return (
     <>
       {invalidToken ? (
@@ -194,7 +259,7 @@ function Sendsms() {
                 }}
                 className="ScheduleWrapper"
               >
-                {console.log("The number of numbers clicked " + selectionModel)}
+                {console.log("The number of numbers clicked " + arrayOfNumbers.length)}
                 {/* <p>{messageReport}</p> */}
                 <div>
                   <form className="scheduleform">
@@ -202,9 +267,9 @@ function Sendsms() {
                       <input
                         className="phone"
                         type="phonenumber"
-                        name="username"
+                        name="phone"
                         placeholder="Phone Number"
-                        value={sendMessage.phoneNumber}
+                        value={sendMessage.numbers}
                         onChange={(e) =>
                           setSendMessage({
                             ...sendMessage,
@@ -213,9 +278,9 @@ function Sendsms() {
                         }
                       />
                       <img
-                       style = {{
-                        cursor:`pointer`
-                      }}
+                        style={{
+                          cursor: `pointer`,
+                        }}
                         onClick={handleSelectCustomers}
                         src="/images/contact.png"
                         alt="contact"
@@ -282,99 +347,120 @@ function Sendsms() {
                           Contact List
                         </Typography>
                         {loading ? (
-                        <>
-                          <Skeleton
-                            variant="rectangular"
-                            width={`100%`}
-                            height={50}
-                          />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                         
-                        </>
-                      ) : (
-                        <>
-                          <div
-                            style={{
-                              height: 400,
-                              width: "100%",
-                            }}
-                          >
-                            <DataGrid
-                              rows={allCustomers}
-                              columns={dataVertical}
-                              pageSize={5}
-                              checkboxSelection
-                              disableSelectionOnClick
-                              onSelectionModelChange={(newSelection) => {
-                                setSelectionModel(newSelection.selectionModel);
-                                console.log("I feel again")
-                            }}
-                            
+                          <>
+                            <Skeleton
+                              variant="rectangular"
+                              width={`100%`}
+                              height={50}
                             />
-                          </div>
-                        </>
-                      )}
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <table {...getTableProps()}>
+                                <thead>
+                                  {headerGroups.map((headerGroup) => (
+                                    <tr {...headerGroup.getHeaderGroupProps()}>
+                                      {headerGroup.headers.map((column) => (
+                                        <th {...column.getHeaderProps()}>
+                                          {column.render("Header")}
+                                        </th>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </thead>
+                                {/* Apply the table body props */}
+                                <tbody {...getTableBodyProps()}>
+                                  {page.map((row) => {
+                                    prepareRow(row);
+                                    return (
+                                      <tr {...row.getRowProps()}>
+                                        {row.cells.map((cell) => {
+                                          return (
+                                            <td {...cell.getCellProps()}>
+                                              {cell.render("Cell")}
+                                            </td>
+                                          );
+                                        })}
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+
+                              <div
+                                style={{
+                                  marginTop: "10px",
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <Button
+                                  disabled={!canNextPage}
+                                  onClick={() => previousPage()}
+                                  variant="contained"
+                                >
+                                  Previous page
+                                </Button>
+
+                                <span>
+                                  Page{" "}
+                                  <strong>
+                                    {pageIndex + 1} of {pageOptions.length}
+                                  </strong>
+                                </span>
+                                <Button
+                                  disabled={!canPreviousPage}
+                                  onClick={() => nextPage()}
+                                  variant="contained"
+                                >
+                                  Next Page
+                                </Button>
+                              </div>
+
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  marginTop: "10px",
+                                  alignItems: "center",
+                                  justifyContent: "center"
+                                }}
+                              >
+                                <Button
+                                  variant="contained"
+                                  onClick = {phoneNumberHandler}
+                                >
+                                  CONFIRM SELECTION
+                                </Button>
+                              </div>
+{/* 
+                              <pre>
+                                <code>
+                                  {JSON.stringify(
+                                    {
+                                      selectedFlatRows: selectedFlatRows.map(
+                                        (row) => row.original.firstname
+                                      ),
+                                    },
+                                    null,
+                                    2
+                                  )}
+                                </code>
+                              </pre> */}
+                            </div>
+                          </>
+                        )}
                       </Box>
                     </Fade>
                   </Modal>
-
-                  {/* <Modal
-                    isOpen={openModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                  >
-                    <div className="modalContainer">
-                      {loading ? (
-                        <>
-                          <Skeleton
-                            variant="rectangular"
-                            width={`100%`}
-                            height={50}
-                          />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                          <Skeleton variant="text" height={50} />
-                         
-                        </>
-                      ) : (
-                        <>
-                          <div
-                            style={{
-                              height: 400,
-                              width: "100%",
-                            }}
-                          >
-                            <DataGrid
-                              rows={allCustomers}
-                              columns={dataVertical}
-                              pageSize={5}
-                              checkboxSelection
-                              onSelectionChange={(newSelection) => {
-                                console.log(newSelection.rows);
-                                setSelection(newSelection.rows);
-
-                                console.log("Changing things");
-                              }}
-                            />
-                          </div>
-                        </>
-                      )}
-
-                      <button
-                        onClick={() =>
-                          setOpenModal(() => (openModal ? false : true))
-                        }
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </Modal> */}
                 </div>
               </div>
             </div>
