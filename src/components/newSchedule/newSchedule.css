@@ -25,6 +25,13 @@
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+}
+
+.ns-Scheduler-house img{
+position: absolute;
+top: 20px;
+right: 5px;
 }
 .ns-Scheduler-house textarea {
   width: 100%;
@@ -32,6 +39,7 @@
 .ns-Scheduler-house input {
   width: 832px;
   height: 46px;
+  margin-top: 10px;
   padding-left: 10px;
   outline: none;
   background: #f1f1f1;
@@ -75,3 +83,5 @@
     background: #18A0FB;
     color: #fff;
 }
+
+

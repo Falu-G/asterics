@@ -216,7 +216,7 @@ function Sendsms() {
       console.log(sendMessage.recieverAddress);
     });
 
-    
+    handleClose()
     return null
   })
 
@@ -268,6 +268,7 @@ function Sendsms() {
                         type="phonenumber"
                         name="phone"
                         placeholder="Phone Number"
+                        disabled
                         value={sendMessage.numbers}
                         onChange={(e) =>
                           setSendMessage({

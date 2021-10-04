@@ -171,6 +171,9 @@ function SendEmail() {
       console.log(emailContent.recieverAddress);
     });
 
+    handleClose()
+
+
     return null;
   };
 
@@ -339,6 +342,7 @@ function SendEmail() {
                         className="phone"
                         type="email"
                         name="email"
+                        disabled
                         value={emailContent.recieverAddress}
                         placeholder="Add Email"
                       />
