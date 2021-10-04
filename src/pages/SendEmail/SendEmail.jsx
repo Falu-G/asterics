@@ -14,7 +14,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 // import { DataGrid } from "@material-ui/data-grid";
-import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
+import { DataGrid,  } from '@mui/x-data-grid';
 
 const style = {
   position: "absolute",
@@ -45,7 +45,7 @@ function SendEmail() {
   const [invalidToken, setInvalidToken] = useState(false);
   const [allCustomers, setAllCustomers] = useState([]);
   const [select, setSelection] = useState([]);
-  const [selectionModel, setSelectionModel] = React.useState([]);
+  
   const handleSelectCustomers = async () => {
     handleOpen();
     setLoading(true);
