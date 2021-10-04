@@ -80,7 +80,6 @@ function Sendsms() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  let [arrayOfNumbers, setArrayOfNumber] = React.useState([]);
   const tableInstance = useTable(
     { columns, data: allCustomers },
     usePagination,
@@ -211,12 +210,12 @@ function Sendsms() {
 
   const phoneNumberHandler = () => selectedFlatRows.map(row => {
     
-    setArrayOfNumber([...arrayOfNumbers,row.original.phone])
-    let uniquenumber  = new Set(arrayOfNumbers)
-    let array = Array.from(uniquenumber);
-    setSendMessage({...sendMessage,numbers:array.join(",")})
-    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
-    console.log(array.join(","))
+    let promises = selectedFlatRows.map((row) => row.original.phone);
+    Promise.all(promises).then(function (results) {
+      setSendMessage({...sendMessage,numbers:results})
+      console.log(sendMessage.recieverAddress);
+    });
+
     
     return null
   })
@@ -259,7 +258,7 @@ function Sendsms() {
                 }}
                 className="ScheduleWrapper"
               >
-                {console.log("The number of numbers clicked " + arrayOfNumbers.length)}
+               
                 {/* <p>{messageReport}</p> */}
                 <div>
                   <form className="scheduleform">
@@ -301,9 +300,7 @@ function Sendsms() {
                     />
                   </form>
 
-                  {/* <button className="sendbtn" onClick={handleSendMessage}>
-                Send
-              </button> */}
+            
 
                   <ReactBootStrap.Button
                     className="sendbtn"

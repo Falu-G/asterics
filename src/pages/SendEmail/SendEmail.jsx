@@ -4,7 +4,6 @@ import "./sendemail.css";
 import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
-import EmailObject from "../../classes/EmailObject";
 import * as ReactBootStrap from "react-bootstrap";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import Backdrop from "@mui/material/Backdrop";
@@ -13,8 +12,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
-// import { DataGrid } from "@material-ui/data-grid";
-import { DataGrid,  } from '@mui/x-data-grid';
+import { useTable, usePagination, useRowSelect } from "react-table";
+import Button from "@mui/material/Button";
+import { Checkbox } from "../../components/Checkbox";
 
 const style = {
   position: "absolute",
@@ -31,7 +31,11 @@ const style = {
 function SendEmail() {
   const { sidebar, setSideBar } = useContext(MenuContext);
   const [sendingMessage, setSendingMessage] = useState(false);
-  const [emailContent, setEmailContent] = useState(new EmailObject("", "", ""));
+  const [emailContent, setEmailContent] = useState({
+    recieverAddress: "",
+    messageBody: "",
+    messageSubject: "",
+  });
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -44,8 +48,63 @@ function SendEmail() {
   const [loading, setLoading] = useState(false);
   const [invalidToken, setInvalidToken] = useState(false);
   const [allCustomers, setAllCustomers] = useState([]);
-  const [select, setSelection] = useState([]);
-  
+
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Full Name",
+        accessor: "firstname",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useTable(
+    { columns, data: allCustomers },
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => {
+        return [
+          {
+            id: "name",
+            Header: ({ getToggleAllRowsSelectedProps }) => (
+              <Checkbox {...getToggleAllRowsSelectedProps()} />
+            ),
+
+            Cell: ({ row }) => {
+              return <Checkbox {...row.getToggleRowSelectedProps()} />;
+            },
+          },
+          ...columns,
+        ];
+      });
+    }
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    state,
+    pageOptions,
+    selectedFlatRows,
+  } = tableInstance;
+
+  const page = rows.slice(0, 10);
+  const { pageIndex } = state;
+
   const handleSelectCustomers = async () => {
     handleOpen();
     setLoading(true);
@@ -104,40 +163,16 @@ function SendEmail() {
     }
   };
 
-  const dataVertical = [
-    {
-      field: "firstname",
-      headerName: "Full Name",
-      sortable: false,
-      width: 260,
-      renderCell: ({ row }) => {
-        return (
-          <div style = {{
-           
-            display: 'flex',
-            alignItems: 'center',
-         
-            width: '100%',
-          
-          }}>
-            {row.firstname + " " + row.lastname}
-          </div>
-        );
-      },
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      sortable: false,
-      width: 300,
+  const confirmSelection = () => {
+    let promises = selectedFlatRows.map((row) => row.original.email);
+    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
+    Promise.all(promises).then(function (results) {
+      setEmailContent({ ...emailContent, recieverAddress: results });
+      console.log(emailContent.recieverAddress);
+    });
 
-      renderCell: ({ row }) => (
-        <>
-          <div>{row.email}</div>
-        </>
-      ),
-    },
-  ];
+    return null;
+  };
 
   return (
     <>
@@ -163,7 +198,7 @@ function SendEmail() {
               }
             >
               <White title="Send Email" />
-              {console.log(select.length)}
+              {/*console.log(select.length)*/}
               <div
                 style={{
                   backgroundImage: `url(/images/smsbg.png)`,
@@ -209,24 +244,86 @@ function SendEmail() {
                           </>
                         ) : (
                           <>
-                            <div
-                              style={{
-                                height: 400,
-                                width: "100%",
-                              }}
-                            >
-                              <DataGrid
-                                rows={allCustomers}
-                                columns={dataVertical}
-                                pageSize={5}
-                                checkboxSelection
-                                onSelectionChange={(newSelection) => {
-                                  console.log("This the message clicked "+newSelection.rows.phone);
-                                  setSelection(newSelection.rows);
+                            <div>
+                              <table {...getTableProps()}>
+                                <thead>
+                                  {headerGroups.map((headerGroup) => (
+                                    <tr {...headerGroup.getHeaderGroupProps()}>
+                                      {headerGroup.headers.map((column) => (
+                                        <th {...column.getHeaderProps()}>
+                                          {column.render("Header")}
+                                        </th>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </thead>
+                                {/* Apply the table body props */}
+                                <tbody {...getTableBodyProps()}>
+                                  {page.map((row) => {
+                                    prepareRow(row);
+                                    return (
+                                      <tr {...row.getRowProps()}>
+                                        {row.cells.map((cell) => {
+                                          return (
+                                            <td {...cell.getCellProps()}>
+                                              {cell.render("Cell")}
+                                            </td>
+                                          );
+                                        })}
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
 
-                                  console.log("Changing things");
+                              <div
+                                style={{
+                                  marginTop: "10px",
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
                                 }}
-                              />
+                              >
+                                <Button
+                                  disabled={!canNextPage}
+                                  onClick={() => previousPage()}
+                                  variant="contained"
+                                >
+                                  Previous page
+                                </Button>
+
+                                <span>
+                                  Page{" "}
+                                  <strong>
+                                    {pageIndex + 1} of {pageOptions.length}
+                                  </strong>
+                                </span>
+                                <Button
+                                  disabled={!canPreviousPage}
+                                  onClick={() => nextPage()}
+                                  variant="contained"
+                                >
+                                  Next Page
+                                </Button>
+                              </div>
+
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  marginTop: "10px",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Button
+                                  variant="contained"
+                                  onClick={confirmSelection}
+                                >
+                                  CONFIRM SELECTION
+                                </Button>
+                              </div>
                             </div>
                           </>
                         )}
@@ -236,11 +333,6 @@ function SendEmail() {
                 </div>
 
                 <div>
-                  {/* <FormRadio 
-              value={value} 
-              handleChange={handleChange}
-              handleScheduleTime = {handleScheduleTime} /> */}
-
                   <form className="scheduleform">
                     <div className="inputIcon">
                       <input
@@ -248,18 +340,12 @@ function SendEmail() {
                         type="email"
                         name="email"
                         value={emailContent.recieverAddress}
-                        onChange={(e) =>
-                          setEmailContent({
-                            ...emailContent,
-                            recieverAddress: e.target.value,
-                          })
-                        }
                         placeholder="Add Email"
                       />
                       <img
-                      style = {{
-                        cursor:`pointer`
-                      }}
+                        style={{
+                          cursor: `pointer`,
+                        }}
                         src="/images/contact.png"
                         alt="contact"
                         onClick={handleSelectCustomers}
@@ -293,14 +379,6 @@ function SendEmail() {
                     />
                   </form>
 
-                  {/* <button
-                className="sendbtn"
-                onClick={handleSend}
-                disabled={sendingMessage}
-              >
-                Send
-              </button> */}
-
                   <ReactBootStrap.Button
                     className="sendEmailbtn"
                     variant="primary"
@@ -326,34 +404,6 @@ function SendEmail() {
         </>
       )}
     </>
-    // <div className="sendEmailContainer">
-
-    //     {/* <NavigationComponent title="Send Email" />
-
-    //     <div style={{
-    //         backgroundImage: `url(/images/smsbg.png)`
-    //         , backgroundRepeat: 'no-repeat', backgroundSize: 'contain',
-    //         backgroundPosition: 'center right'
-    //     }} className="SendEmailWrapper">
-
-    //         <div>
-    //             <FormRadio value={value} handleChange={handleChange} />
-
-    //             <form className="scheduleform">
-    //                 <div className="inputIcon">
-    //                 <input className="phone" type="email" name="username" placeholder="Add Email" />
-    //                 <img src = "/images/contact.png" alt="contact" />
-    //                 </div>
-
-    //                 <textArea type="text" name="message" placeholder="Messages..." />
-    //             </form>
-
-    //             <button className="sendbtn">Send</button>
-
-    //         </div>
-
-    //     </div> */}
-    // </div>
   );
 }
 
