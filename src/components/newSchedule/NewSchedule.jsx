@@ -241,7 +241,7 @@ function NewSchedule({ setOpenModal }) {
       />
       <Dashnav title="New Schedule" />
 
-      {console.log("Na date be dis "+schedule.schedule_date)}
+      {console.log("Na date be dis "+scheduleMessage.schedule_date)}
       <div className="ns-Scheduler">
         <div className="ns-Scheduler-container">
           <span>Select Message Type</span>
@@ -282,12 +282,21 @@ function NewSchedule({ setOpenModal }) {
             id="datetime-local"
             label="Schedule Time"
             type="datetime-local"
-            onChange={(event) =>
+            onChange={async (event) =>{
+
               setScheduleMessage({
                 ...scheduleMessage,
                 schedule_date: event.target.value,
               })
+
+              console.log(event.target.value)
+              console.log("Schedule shit "+scheduleMessage.schedule_date)
             }
+             
+            }
+
+
+        
             defaultValue={`${today}T00:00`}
             className={classes.textField}
             InputLabelProps={{
