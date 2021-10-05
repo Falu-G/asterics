@@ -80,9 +80,7 @@ color: #FFFFFF;
 
 .headerboxone span, .headerboxtwo span, .headerboxthree span{
 height: 11px;
-font-family: "Roboto";
 font-style: normal;
-font-weight: bold;
 font-size: 15px;
 line-height: 12px;
 color: #FFFFFF;
@@ -91,7 +89,6 @@ color: #FFFFFF;
 
 .headerboxone h3, .headerboxtwo h3, .headerboxthree h3{
 height: 39px;
-font-family: Roboto;
 font-style: normal;
 font-weight: bold;
 font-size: 24px;

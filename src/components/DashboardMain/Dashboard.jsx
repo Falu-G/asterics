@@ -92,7 +92,7 @@ function Dashboard() {
                 <div className="dashboardViewReport">
                   <div className="box box1 card">
                     <div className="outboundemails">
-                      <h4>Total outboundemails</h4>
+                      <h4>Total Outbound emails</h4>
                       <CountUp start={0} end={100} delay={0} duration={2.75}>
                         {({ countUpRef }) => (
                           <div>
@@ -103,13 +103,13 @@ function Dashboard() {
                     </div>
 
                     <div className="outboundsms">
-                      <h4>Total outboundsms</h4>
+                      <h4>Total Outbound sms</h4>
 
                       <h1>5</h1>
                     </div>
 
                     <div className="schedulemessages">
-                      <h4>ScheduledMesages</h4>
+                      <h4>Scheduled Messages</h4>
                       <h1>2</h1>
                     </div>
                   </div>

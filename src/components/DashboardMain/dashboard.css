@@ -66,10 +66,8 @@
 }
 
 .box4 span {
-  font-family: "Roboto";
   font-size: 14px;
   font-style: normal;
-  font-weight: 700;
   line-height: 16px;
   letter-spacing: 0em;
   text-align: left;
@@ -121,9 +119,7 @@
 .schedulemessages h4,
 .box h4 {
   margin-top: 20px;
-  font-family: Roboto;
   font-style: normal;
-  font-weight: normal;
   font-size: 20px;
   color: #fbfbfb;
 }
@@ -168,9 +164,7 @@
 
 .box2 h4,
 .box3 h4 {
-  font-family: Roboto;
   font-style: normal;
-  font-weight: normal;
   font-size: 24px;
   line-height: 16px;
   color: #ffffff;

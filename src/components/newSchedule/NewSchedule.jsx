@@ -36,6 +36,7 @@ function NewSchedule({ setOpenModal }) {
   var yyyy = today.getFullYear();
 
   today = `${yyyy}-${mm}-${dd}`;
+  console.log("This is todays date "+today)
 
   const data = React.useMemo(
     () => [
