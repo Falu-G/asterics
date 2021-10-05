@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Dashnav from "../dashnav/Dashnav";
-//import Dropdown from '../Dropdown/Dropdown'
-//import FormRadio from "../formRadio/FormRadio";
 import "./newSchedule.css";
 import CloseIcon from "@material-ui/icons/Close";
 import { useToasts } from "react-toast-notifications";
@@ -31,7 +29,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function NewSchedule({ setOpenModal, hideOption }) {
+function NewSchedule({ setOpenModal }) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -108,15 +106,6 @@ function NewSchedule({ setOpenModal, hideOption }) {
     }
   );
 
-
-
-
-
-
-
-
-
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -134,9 +123,14 @@ function NewSchedule({ setOpenModal, hideOption }) {
 
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
-  const [scheduleMessage, setScheduleMessage] = useState(schedule);
-  const [messageType, setMessageType] = useState("SMS");
-
+  const [scheduleMessage, setScheduleMessage] = useState({
+    recieverAddress: "",
+    messageBody: "",
+    messageSubject: "",
+    schedule_date: today,
+    scheduleType: "SMS",
+  });
+  
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -147,7 +141,6 @@ function NewSchedule({ setOpenModal, hideOption }) {
   const handleClose = () => setOpen(false);
   const [invalidToken, setInvalidToken] = useState(false);
   const [loading, setLoading] = useState(false);
-  //const options = ["SMS", "Email"];
 
   const handleSend = async () => {
     try {
@@ -208,6 +201,31 @@ function NewSchedule({ setOpenModal, hideOption }) {
     }
   };
 
+  const phoneNumberHandler = () => {
+    let promises = selectedFlatRows.map((row) => row.original.phone);
+    Promise.all(promises).then(function (results) {
+      setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+    });
+
+    handleClose();
+    return null;
+  };
+
+  const confirmSelection = () => {
+    let promises = selectedFlatRows.map((row) => row.original.email);
+    console.log("Clicking confirmation");
+    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
+    Promise.all(promises).then(function (results) {
+      setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+
+      console.log("tis is receivers" + scheduleMessage.recieverAddress);
+    });
+
+    handleClose();
+
+    return null;
+  };
+
   return (
     <div className="ns-Container">
       <CloseIcon
@@ -222,21 +240,37 @@ function NewSchedule({ setOpenModal, hideOption }) {
       />
       <Dashnav title="New Schedule" />
 
-      {console.log(schedule.schedule_date)}
+      {console.log("Na date be dis "+schedule.schedule_date)}
       <div className="ns-Scheduler">
         <div className="ns-Scheduler-container">
           <span>Select Message Type</span>
           <div className="ns-messagetab">
             <button
-              className={messageType === "SMS" ? "ns-active" : null}
-              onClick={() => setMessageType("SMS")}
+              className={
+                scheduleMessage.scheduleType === "SMS" ? "ns-active" : null
+              }
+              onClick={() => {
+                setScheduleMessage({
+                  ...scheduleMessage,
+                  scheduleType: "SMS",
+                  recieverAddress: "",
+                });
+              }}
             >
               SMS
             </button>
             <button
               style={{ marginLeft: "10px" }}
-              className={messageType === "Email" ? "ns-active" : null}
-              onClick={() => setMessageType("Email")}
+              className={
+                scheduleMessage.scheduleType === "Email" ? "ns-active" : null
+              }
+              onClick={() => {
+                setScheduleMessage({
+                  ...scheduleMessage,
+                  scheduleType: "Email",
+                  recieverAddress: "",
+                });
+              }}
             >
               Email
             </button>
@@ -266,11 +300,14 @@ function NewSchedule({ setOpenModal, hideOption }) {
         <div className="ns-Scheduler-house">
           <div>
             <input
-              type={messageType === "SMS" ? "text" : "email"}
-              name={messageType === "SMS" ? "sms" : "email"}
+              type={scheduleMessage.scheduleType === "SMS" ? "text" : "email"}
+              name={scheduleMessage.scheduleType === "SMS" ? "sms" : "email"}
               placeholder={
-                messageType === "SMS" ? "PhoneNumber" : "Enter Email"
+                scheduleMessage.scheduleType === "SMS"
+                  ? "PhoneNumber"
+                  : "Enter Email"
               }
+              value={scheduleMessage.recieverAddress}
             />
 
             <img
@@ -315,19 +352,17 @@ function NewSchedule({ setOpenModal, hideOption }) {
                 aria-hidden="true"
               />
               <span className="visually">
-                {messageType === "SMS" ? "Schedule SMS" : "Schedule Email"}
+                {scheduleMessage.scheduleType === "SMS"
+                  ? "Schedule SMS"
+                  : "Schedule Email"}
               </span>
             </ReactBootStrap.Button>
           </div>
         </div>
       </form>
 
-      {messageType === "SMS" ?
-      
-
-
-
-      <Modal
+      {scheduleMessage.scheduleType === "SMS" ? (
+        <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={open}
@@ -431,7 +466,7 @@ function NewSchedule({ setOpenModal, hideOption }) {
                         justifyContent: "center",
                       }}
                     >
-                      <Button variant="contained" onClick={""}>
+                      <Button variant="contained" onClick={phoneNumberHandler}>
                         CONFIRM SELECTION
                       </Button>
                     </div>
@@ -441,28 +476,20 @@ function NewSchedule({ setOpenModal, hideOption }) {
             </Box>
           </Fade>
         </Modal>
-      
-      
-      
-      :
-      
-     <>
-     
-     <ShowUpEmail handleSelectCustomers = {handleSelectCustomers} allCustomers = {allCustomers} handleClose = {handleClose} loading = {loading} open = {open} />
-     
-     {handleSelectCustomers,allCustomers, handleClose, loading}
-     
-     
-     </>
-      
-      
-      }
-        
-
-
-
-        
-      
+      ) : (
+        <>
+          <ShowUpEmail
+            allCustomers={allCustomers}
+            handleClose={handleClose}
+            loading={loading}
+            open={open}
+            scheduleMessage={scheduleMessage}
+            setScheduleMessage={setScheduleMessage}
+            confirmSelection={confirmSelection}
+            invalidToken={invalidToken}
+          />
+        </>
+      )}
     </div>
   );
 }
