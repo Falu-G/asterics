@@ -134,7 +134,8 @@ function Sendsms() {
   // const [messageReport, setMessageReport] = useState("");
 
   const [sendMessage, setSendMessage] = useState({
-    numbers: "",
+    sender:"Asterics",
+    receiver: "",
     message: "",
   });
 
@@ -164,7 +165,7 @@ function Sendsms() {
       } else {
         setAllCustomers(result);
         setLoading(false);
-        console.log("Numbers of customers " + allCustomers.length);
+        console.log("receiver of customers " + allCustomers.length);
       }
     } catch (e) {
       setLoading(false);
@@ -179,7 +180,7 @@ function Sendsms() {
     console.log(token);
 
     try {
-      let result = await fetch("https://asteric.herokuapp.com/bbnSms/send", {
+      let result = await fetch("https://asteric.herokuapp.com/vonageSms/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -212,7 +213,7 @@ function Sendsms() {
     
     let promises = selectedFlatRows.map((row) => row.original.phone);
     Promise.all(promises).then(function (results) {
-      setSendMessage({...sendMessage,numbers:results})
+      setSendMessage({...sendMessage,receiver:results})
       console.log(sendMessage.recieverAddress);
     });
 
@@ -269,11 +270,11 @@ function Sendsms() {
                         name="phone"
                         placeholder="Phone Number"
                         disabled
-                        value={sendMessage.numbers}
+                        value={sendMessage.receiver}
                         onChange={(e) =>
                           setSendMessage({
                             ...sendMessage,
-                            numbers: e.target.value,
+                            receiver: e.target.value,
                           })
                         }
                       />
