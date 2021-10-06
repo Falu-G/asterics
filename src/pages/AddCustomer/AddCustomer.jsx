@@ -291,6 +291,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                 <ReactBootStrap.Button
                   style={{
                     marginTop: 20,
+                    
                   }}
                   variant="primary"
                   onClick={regFromCSV}

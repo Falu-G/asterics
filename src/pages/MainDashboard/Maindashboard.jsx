@@ -5,7 +5,7 @@ import Menus from "../../components/menu/Menu";
 import Dashboard from "../../components/DashboardMain/Dashboard";
 import { useHistory } from "react-router-dom";
 function Maindashboard() {
- 
+
   const {sidebar,setSideBar} = useContext(MenuContext);
   console.log("This is siderbar "+sidebar);
   const showSideBar = () => {
@@ -13,10 +13,11 @@ function Maindashboard() {
     
   };
   const history = useHistory();
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user-info");
+  const loggedInUser = localStorage.getItem("user-info");
     const userObj = JSON.parse(loggedInUser);
     const token = userObj.message[0].token;
+  useEffect(() => {
+    
     console.log(`This is token ${token}`);
 
     if (!token) {

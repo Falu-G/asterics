@@ -3,7 +3,6 @@ import "./monthlyschedule.css";
 import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
-import Dashnav from "../../components/dashnav/Dashnav";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import Modal from "react-modal";
@@ -57,11 +56,13 @@ function Monthlyschedule() {
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const [tokenValid, setTokenValid] = useState(false);
-
+  const [sentEmailValue, setSentEmailValue] = useState(0);
   const [emailId, setEmailId] = useState("");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+
+  const [smsQueue, setSmsQueue] = useState([]);
   const customStyles = {
     content: {
       width: "80%",
@@ -88,7 +89,8 @@ function Monthlyschedule() {
         if (data.message === "Invalid Token") {
           setTokenValid(true);
         } else {
-          setEmailQueue(data);
+          setEmailQueue(data.filter((item) => item.status === "scheduled"));
+          setSentEmailValue(data.filter((item) => item.status === "sent"));
           setLoading(false);
         }
       })
@@ -99,9 +101,6 @@ function Monthlyschedule() {
   }, [token]);
 
   const { sidebar, setSideBar } = useContext(MenuContext);
-
-  console.log("I am on monthly " + sidebar);
-
   const handledelete = (id) => {
     setLoading(true);
     fetch(`https://asteric.herokuapp.com/mails/${id}`, {
@@ -140,6 +139,82 @@ function Monthlyschedule() {
   //setDataRow(() => dataRow.filter((item) => item.id !== id));
   const showSideBar = () => setSideBar(!sidebar);
   const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
+
+  const dataVerticalSMS = [
+    {
+      field: "messageDate",
+      headerName: "Date Schedule",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: ({ row }) => {
+        let date = dateFormat(row.messageDate, "mmmm dS, yyyy");
+        console.log(row.messageDate);
+        return <div>{date}</div>;
+      },
+    },
+    {
+      field: "message",
+      headerName: "Message Content",
+      sortable: false,
+      width: 500,
+      renderCell: () => {},
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 160,
+      renderCell: ({ row }) => (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+          }}
+        >
+          {row.status}
+        </div>
+      ),
+    },
+
+    {
+      field: "receiver",
+      headerName: "Receiver",
+      width: 160,
+      renderCell: ({ row }) => (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+          }}
+        >
+          {row.receiver}
+        </div>
+      ),
+    },
+    {
+      field: "",
+      headerName: "",
+      width: 160,
+      renderCell: ({ row }) => (
+        <>
+          <div className="userdelete">
+            <DeleteOutline
+              style={{
+                marginLeft: 20,
+                color: "red",
+                cursor: "pointer",
+              }}
+              onClick={() => handleClickOpen(row.id)}
+            />
+          </div>
+        </>
+      ),
+    },
+  ];
 
   const dataVertical = [
     {
@@ -201,8 +276,39 @@ function Monthlyschedule() {
   ];
 
   useEffect(() => {
+    console.log("I am here");
+    Promise.all([
+      fetch("https://asteric.herokuapp.com/mails", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }),
+      fetch("https://asteric.herokuapp.com/vonageSms/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }),
+    ])
+      .then(([items, contactlist]) => {
+        console.log("I made it here");
+        return Promise.all([items.json(), contactlist.json()]);
+      })
+      .then(([data, contactlist]) => {
+        console.log("This is the data " + data.length);
+        setSmsQueue(contactlist);
+        console.log(contactlist);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     fetchBusiness();
-  }, [fetchBusiness]);
+  }, [fetchBusiness, token]);
 
   const handleClose = () => {
     setOpen(false);
@@ -309,7 +415,7 @@ function Monthlyschedule() {
                           <div className="headerboxContainer">
                             <div className="headerboxone">
                               <span>Scheduled Messages</span>
-                              <h3>400</h3>
+                              <h3>{emailQueue.length}</h3>
                             </div>
                             <div className="headerboxtwo">
                               <span>Pending Messages</span>
@@ -317,7 +423,7 @@ function Monthlyschedule() {
                             </div>
                             <div className="headerboxthree">
                               <span>Successful Messages</span>
-                              <h3>50</h3>
+                              <h3>{sentEmailValue.length}</h3>
                             </div>
                           </div>
                         </div>
@@ -340,18 +446,22 @@ function Monthlyschedule() {
                     <div style={{ marginTop: 25 }}>
                       <h3>MessagesQueue</h3>
                       <div className="messagesQueueTable card">
-                        <Dashnav />
-
                         <div
                           style={{
                             width: `100%`,
-                            height: `100%`,
+                            height: 500,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                           }}
                         >
-                          <h3>No messages to display</h3>
+                          <DataGrid
+                            rows={smsQueue}
+                            columns={dataVerticalSMS}
+                            pageSize={5}
+                            checkboxSelection
+                            disableSelectionOnClick={true}
+                          />
                         </div>
                       </div>
                     </div>

@@ -15,9 +15,15 @@ function Dashboard() {
   today = today.getFullYear() + "-" + month + "-" + days;
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
-  const token = userObj.message[0].token;
+
+
+  const [sentEmailValue, setSentEmailValue] = useState(0);
+  const [emailQueue, setEmailQueue] = useState([]);
   const [tokenValid, setTokenValid] = useState(false);
+  const token = userObj.message[0].token;
   const [loading, setLoading] = useState(true);
+
+
   const fetchBusiness = useCallback(async () => {
     fetch("https://asteric.herokuapp.com/mails", {
       method: "GET",
@@ -34,6 +40,8 @@ function Dashboard() {
         } else {
           // setEmailTemplates(data.filter((element) => element.messageCategory === "Email"));
           // setSmsTemplates(data.filter((element) => element.messageCategory === "SMS"));
+          setEmailQueue(data.filter((item) => item.status === "scheduled"));
+          setSentEmailValue(data.filter((item) => item.status === "sent"));
           setLoading(false);
         }
       })
@@ -93,7 +101,7 @@ function Dashboard() {
                   <div className="box box1 card">
                     <div className="outboundemails">
                       <h4>Total Outbound emails</h4>
-                      <CountUp start={0} end={100} delay={0} duration={2.75}>
+                      <CountUp start={0} end={`${emailQueue.length + sentEmailValue.length}`} delay={0} duration={2.75}>
                         {({ countUpRef }) => (
                           <div>
                             <span ref={countUpRef} />
@@ -110,16 +118,16 @@ function Dashboard() {
 
                     <div className="schedulemessages">
                       <h4>Scheduled Messages</h4>
-                      <h1>2</h1>
+                      <h1>{emailQueue.length}</h1>
                     </div>
                   </div>
                   <div className="box box2 card">
-                    <h4>Pending Messages</h4>
-                    <h1>350</h1>
+                    <h4>Scheduled Messages</h4>
+                    <h1>{emailQueue.length}</h1>
                   </div>
                   <div className="box box3 card">
                     <h4>Succesful Messages</h4>
-                    <h1>500</h1>
+                    <h1>{sentEmailValue.length}</h1>
                   </div>
                   <div className="box box4 card">
                     <Link

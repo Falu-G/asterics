@@ -35,7 +35,7 @@ function NewSchedule({ setOpenModal }) {
   var yyyy = today.getFullYear();
 
   today = `${yyyy}-${mm}-${dd}`;
-  console.log("This is todays date "+today)
+  console.log("This is todays date " + today);
 
   const data = React.useMemo(
     () => [
@@ -130,9 +130,8 @@ function NewSchedule({ setOpenModal }) {
     messageSubject: "",
     schedule_date: today,
     scheduleType: "Daily",
-    
   });
-  
+
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -146,6 +145,7 @@ function NewSchedule({ setOpenModal }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSend = async () => {
+    setSendingMessage(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/mails/schedule", {
         method: "POST",
@@ -154,7 +154,7 @@ function NewSchedule({ setOpenModal }) {
           Accept: "application/json",
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify(scheduleMessage)
+        body: JSON.stringify(scheduleMessage),
       });
 
       result = await result.json();
@@ -162,12 +162,15 @@ function NewSchedule({ setOpenModal }) {
         console.log(result.message);
         setSendingMessage(false);
         addToast("Saved Successfully", { appearance: "success" });
+        setOpenModal(false);
       } else {
         console.log(result.message);
         setSendingMessage(false);
+        setOpenModal(false);
         addToast(result.message, { appearance: "success" });
       }
     } catch (err) {
+      setSendingMessage(false);
       console.log("Something terrible happened " + err.message);
     }
   };
@@ -187,8 +190,7 @@ function NewSchedule({ setOpenModal }) {
         },
       });
       result = await result.json();
-      console.log("You clicked contact");
-
+      
       if (result.message === "Invalid Token") {
         setLoading(false);
         setInvalidToken(true);
@@ -243,15 +245,13 @@ function NewSchedule({ setOpenModal }) {
       />
       <Dashnav title="New Schedule" />
 
-      {console.log("Na date be dis "+scheduleMessage.schedule_date)}
+      {console.log("Na date be dis " + scheduleMessage.schedule_date)}
       <div className="ns-Scheduler">
         <div className="ns-Scheduler-container">
           <span>Select Message Type</span>
           <div className="ns-messagetab">
             <button
-              className={
-                messageType === "SMS" ? "ns-active" : null
-              }
+              className={messageType === "SMS" ? "ns-active" : null}
               onClick={() => {
                 setMessageType("SMS");
                 setScheduleMessage({
@@ -264,9 +264,7 @@ function NewSchedule({ setOpenModal }) {
             </button>
             <button
               style={{ marginLeft: "10px" }}
-              className={
-                messageType === "Email" ? "ns-active" : null
-              }
+              className={messageType === "Email" ? "ns-active" : null}
               onClick={() => {
                 setMessageType("Email");
                 setScheduleMessage({
@@ -284,21 +282,15 @@ function NewSchedule({ setOpenModal }) {
             id="datetime-local"
             label="Schedule Time"
             type="datetime-local"
-            onChange={async (event) =>{
-
+            onChange={async (event) => {
               setScheduleMessage({
                 ...scheduleMessage,
                 schedule_date: event.target.value,
-              })
+              });
 
-              console.log(event.target.value)
-              console.log("Schedule shit "+scheduleMessage.schedule_date)
-            }
-             
-            }
-
-
-        
+              console.log(event.target.value);
+              console.log("Schedule shit " + scheduleMessage.schedule_date);
+            }}
             defaultValue={`${today}T00:00`}
             className={classes.textField}
             InputLabelProps={{
@@ -315,9 +307,7 @@ function NewSchedule({ setOpenModal }) {
               type={messageType === "SMS" ? "text" : "email"}
               name={messageType === "SMS" ? "sms" : "email"}
               placeholder={
-                messageType === "SMS"
-                  ? "PhoneNumber"
-                  : "Enter Email"
+                messageType === "SMS" ? "PhoneNumber" : "Enter Email"
               }
               value={scheduleMessage.recieverAddress}
             />
@@ -371,9 +361,7 @@ function NewSchedule({ setOpenModal }) {
                 aria-hidden="true"
               />
               <span className="visually">
-                {messageType === "SMS"
-                  ? "Schedule SMS"
-                  : "Schedule Email"}
+                {messageType === "SMS" ? "Schedule SMS" : "Schedule Email"}
               </span>
             </ReactBootStrap.Button>
           </div>
