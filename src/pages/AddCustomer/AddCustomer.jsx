@@ -10,7 +10,7 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
-import dateFormat from "dateformat";
+
 function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
   const [sessionExpired, setSessionExpired] = useState(false);
 
@@ -89,14 +89,20 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
     );
 
     if (selectedBirthdayDate != null) {
-      let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
-      customer.addDateOfBirth(date);
+      //let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
+      const day = selectedBirthdayDate.getDate()
+      const month = selectedBirthdayDate.toLocaleString('default', { month: 'short' })
+      customer.addDateOfBirth(day+","+month)
+      //customer.addDateOfBirth(date);
     }
 
     if (selectedAnniversaryDate != null) {
-      let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
-      customer.addAnniversary(datee);
-      console.log(datee);
+     // let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
+      const day = selectedAnniversaryDate.getDate()
+      const month = selectedAnniversaryDate.toLocaleString('default', { month: 'short' })
+      customer.addAnniversary(day+","+month)
+      console.log(day+","+month)
+      //console.log(datee);
     }
 
     if (phoneNumber !== "") {

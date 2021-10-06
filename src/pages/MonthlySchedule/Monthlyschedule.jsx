@@ -296,7 +296,7 @@ function Monthlyschedule() {
       }),
     ])
       .then(([items, contactlist]) => {
-        console.log("I made it here");
+        
         return Promise.all([items.json(), contactlist.json()]);
       })
       .then(([data, contactlist]) => {
@@ -446,15 +446,7 @@ function Monthlyschedule() {
                     <div style={{ marginTop: 25 }}>
                       <h3>MessagesQueue</h3>
                       <div className="messagesQueueTable card">
-                        <div
-                          style={{
-                            width: `100%`,
-                            height: 500,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                        <div style={{height:400, width: "100%" }} >
                           <DataGrid
                             rows={smsQueue}
                             columns={dataVerticalSMS}
@@ -468,7 +460,7 @@ function Monthlyschedule() {
 
                     <div className="Emailqueue">
                       <h3>Email queue</h3>
-                      <div style={{ height: 400, width: "100%" }}>
+                      <div style={{height:400, width: "100%" }}>
                         <DataGrid
                           rows={emailQueue}
                           columns={dataVertical}

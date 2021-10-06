@@ -19,22 +19,39 @@ function Dashboard() {
 
   const [sentEmailValue, setSentEmailValue] = useState(0);
   const [emailQueue, setEmailQueue] = useState([]);
+  const [totalSms, setTotalSms] = useState([]);
   const [tokenValid, setTokenValid] = useState(false);
   const token = userObj.message[0].token;
   const [loading, setLoading] = useState(true);
 
 
-  const fetchBusiness = useCallback(async () => {
-    fetch("https://asteric.herokuapp.com/mails", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
+  const fetchBusiness = useCallback( () => {
+
+
+    Promise.all([
+      fetch("https://asteric.herokuapp.com/mails", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }),
+      fetch("https://asteric.herokuapp.com/vonageSms/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }),
+    ])
+      .then(([items, contactlist]) => {
+        return Promise.all([items.json(), contactlist.json()]);
+      })
+      .then(([data, contactlist]) => {
+
+
         if (data.message === "Invalid Token") {
           setTokenValid(true);
         } else {
@@ -42,13 +59,17 @@ function Dashboard() {
           // setSmsTemplates(data.filter((element) => element.messageCategory === "SMS"));
           setEmailQueue(data.filter((item) => item.status === "scheduled"));
           setSentEmailValue(data.filter((item) => item.status === "sent"));
+          setTotalSms(contactlist)
           setLoading(false);
-        }
+        } // console.log("This is the data " + data.length);
+        // setSmsQueue(contactlist);
+        // console.log(contactlist);
       })
       .catch((err) => {
         console.log("This is the error that was caught" + err);
         setLoading(false);
       });
+
   }, [token]);
 
   useEffect(() => {
@@ -113,7 +134,7 @@ function Dashboard() {
                     <div className="outboundsms">
                       <h4>Total Outbound sms</h4>
 
-                      <h1>5</h1>
+                      <h1>{totalSms.length}</h1>
                     </div>
 
                     <div className="schedulemessages">
