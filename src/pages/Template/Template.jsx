@@ -101,7 +101,6 @@ function Templates() {
   };
   const handleCloseEmailTosSend = () => setEmailToSend(false);
 
-
   const [openEmailNested, setOpenEmailNested] = useState(false);
 
   const handleOpenEmailNested = () => {
@@ -110,7 +109,6 @@ function Templates() {
   const handleCloseEmailNested = () => {
     setOpenEmailNested(false);
   };
-
 
   const handleOpenSMSToSend = () => {
     setSmsToSend(true);
@@ -507,33 +505,27 @@ function Templates() {
                         ligula.
                       </Typography>
 
-
-
-
-                      <Button onClick={handleOpenSmsNested}>Open Child Modal</Button>
-                    <Modal
-                      hideBackdrop
-                      open={openSmsNested}
-                      onClose={handleCloseSmsNested}
-                      aria-labelledby="child-modal-title"
-                      aria-describedby="child-modal-description"
-                    >
-                      <Box sx={{ ...style, width: 200 }}>
-                        <h2 id="child-modal-title">Text in a child modal</h2>
-                        <p id="child-modal-description">
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit.
-                        </p>
-                        <Button onClick={handleCloseSmsNested}>
-                          Close Child Modal
-                        </Button>
-
+                      <Button onClick={handleOpenSmsNested}>
+                        Open Child Modal
+                      </Button>
+                      <Modal
+                        hideBackdrop
+                        open={openSmsNested}
+                        onClose={handleCloseSmsNested}
+                        aria-labelledby="child-modal-title"
+                        aria-describedby="child-modal-description"
+                      >
+                        <Box sx={{ ...style, width: 200 }}>
+                          <h2 id="child-modal-title">Text in a child modal</h2>
+                          <p id="child-modal-description">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing
+                            elit.
+                          </p>
+                          <Button onClick={handleCloseSmsNested}>
+                            Close Child Modal
+                          </Button>
                         </Box>
-
-                        </Modal>
-
-
-                      
+                      </Modal>
                     </Box>
                   </Fade>
                 </Modal>
@@ -551,7 +543,9 @@ function Templates() {
                       ligula.
                     </p>
 
-                    <Button onClick={handleOpenSmsNested}>Open Child Modal</Button>
+                    <Button onClick={handleOpenSmsNested}>
+                      Open Child Modal
+                    </Button>
                     <Modal
                       hideBackdrop
                       open={openSmsNested}
