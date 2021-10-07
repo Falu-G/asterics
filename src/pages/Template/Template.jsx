@@ -91,17 +91,40 @@ function Templates() {
     message: "",
   });
 
+  //const [open, setOpen] = React.useState(false);
+
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
+
   const handleOpenEmailToSend = (id) => {
     setEmailToSend(true);
   };
   const handleCloseEmailTosSend = () => setEmailToSend(false);
 
+
+  const [openEmailNested, setOpenEmailNested] = useState(false);
+
+  const handleOpenEmailNested = () => {
+    setOpenEmailNested(true);
+  };
+  const handleCloseEmailNested = () => {
+    setOpenEmailNested(false);
+  };
+
+
   const handleOpenSMSToSend = () => {
     setSmsToSend(true);
   };
   const handleCloseSmsTosSend = () => setSmsToSend(false);
+  const [openSmsNested, setOpenSmsNested] = useState(false);
+
+  const handleOpenSmsNested = () => {
+    setOpenSmsNested(true);
+  };
+  const handleCloseSmsNested = () => {
+    setOpenSmsNested(false);
+  };
+
   const showSideBar = () => setSideBar(!sidebar);
   const deleteFromArray = (id) => {
     console.log("deleting from array " + id);
@@ -285,9 +308,6 @@ function Templates() {
 
   const handleCloseSMS = () => setOpenSMS(false);
 
-
- 
-
   return (
     <>
       {tokenValid ? (
@@ -384,7 +404,9 @@ function Templates() {
                         </div>
                       </div>
                     </div>
-                    <Button onClick={handleOpenSMSToSend}>Open Child Modal</Button>
+                    <Button onClick={handleOpenSMSToSend}>
+                      Open Child Modal
+                    </Button>
                     <div className="SMSTemplate">
                       <h3>SMS Template</h3>
                       <div className="em_templatebox">
@@ -403,9 +425,7 @@ function Templates() {
                                 style={{
                                   cursor: "pointer",
                                 }}
-                                onClick={() =>
-                                  handleOpenSMSToSend()
-                                }
+                                onClick={() => handleOpenSMSToSend()}
                               >
                                 {smsTemplate.message}
                               </h5>
@@ -486,6 +506,34 @@ function Templates() {
                         Duis mollis, est non commodo luctus, nisi erat porttitor
                         ligula.
                       </Typography>
+
+
+
+
+                      <Button onClick={handleOpenSmsNested}>Open Child Modal</Button>
+                    <Modal
+                      hideBackdrop
+                      open={openSmsNested}
+                      onClose={handleCloseSmsNested}
+                      aria-labelledby="child-modal-title"
+                      aria-describedby="child-modal-description"
+                    >
+                      <Box sx={{ ...style, width: 200 }}>
+                        <h2 id="child-modal-title">Text in a child modal</h2>
+                        <p id="child-modal-description">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit.
+                        </p>
+                        <Button onClick={handleCloseSmsNested}>
+                          Close Child Modal
+                        </Button>
+
+                        </Box>
+
+                        </Modal>
+
+
+                      
                     </Box>
                   </Fade>
                 </Modal>
@@ -497,10 +545,17 @@ function Templates() {
                   aria-describedby="parent-modal-description"
                 >
                   <Box sx={{ ...style, width: 400 }}>
+                    <h2 id="parent-modal-title">Text in a modal</h2>
+                    <p id="parent-modal-description">
+                      Duis mollis, est non commodo luctus, nisi erat porttitor
+                      ligula.
+                    </p>
+
+                    <Button onClick={handleOpenSmsNested}>Open Child Modal</Button>
                     <Modal
                       hideBackdrop
-                      open={smsToSend}
-                      onClose={handleCloseSmsTosSend}
+                      open={openSmsNested}
+                      onClose={handleCloseSmsNested}
                       aria-labelledby="child-modal-title"
                       aria-describedby="child-modal-description"
                     >
@@ -510,7 +565,7 @@ function Templates() {
                           Lorem ipsum, dolor sit amet consectetur adipisicing
                           elit.
                         </p>
-                        <Button onClick={handleCloseSmsTosSend}>
+                        <Button onClick={handleCloseSmsNested}>
                           Close Child Modal
                         </Button>
 
@@ -581,7 +636,7 @@ function Templates() {
 
                       <div
                         style={{
-                          width: "100%",
+                          width: `100%`,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -595,7 +650,7 @@ function Templates() {
                           <TextareaAutosize
                             aria-label="minimum height"
                             minRows={3}
-                            style={{ width: 400 }}
+                            style={{ width: 340 }}
                             type="text"
                             id="contentSchedule"
                             name="message"
