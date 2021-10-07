@@ -38,12 +38,26 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-
+  width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  pt: 2,
+  px: 4,
+  pb: 3,
 };
+
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
 function Templates() {
   // const handleOpen = () => setOpen(true);
@@ -57,7 +71,7 @@ function Templates() {
   const [loading, setLoading] = useState(true);
   const [modalTemplate, setModalTemplate] = useState(false);
   const { sidebar, setSideBar } = useContext(MenuContext);
-  const [openModalEmail, setOpenModalEmail] = useState(false);
+  //const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -68,12 +82,31 @@ function Templates() {
   const [templateId, setTemplateId] = useState(null);
   const [openAddEmail, setOpenAddEmail] = useState(false);
   const [openSMS, setOpenSMS] = useState(false);
+  const [smsToSend, setSmsToSend] = useState(false);
 
+  const [emailToSend, setEmailToSend] = useState(false);
+  const [sendMessage, setSendMessage] = useState({
+    sender: "Asterics",
+    receiver: "",
+    message: "",
+  });
+
+  const [allCustomers, setAllCustomers] = useState([]);
+  const [invalidToken, setInvalidToken] = useState(false);
+  const handleOpenEmailToSend = (id) => {
+    setEmailToSend(true);
+  };
+  const handleCloseEmailTosSend = () => setEmailToSend(false);
+
+  const handleOpenSMSToSend = () => {
+    setSmsToSend(true);
+  };
+  const handleCloseSmsTosSend = () => setSmsToSend(false);
   const showSideBar = () => setSideBar(!sidebar);
   const deleteFromArray = (id) => {
     console.log("deleting from array " + id);
     setLoading(true);
-    setOpenModalEmail(false);
+    //setOpenModalEmail(false);
     fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
       method: "DELETE",
       headers: {
@@ -93,7 +126,7 @@ function Templates() {
           );
 
           setSmsTemplates(smsTemplates.filter((element) => element.id !== id));
-          
+
           setLoading(false);
           setOpen(false);
           addToast("Templates deleted Successfully", { appearance: "success" });
@@ -201,6 +234,36 @@ function Templates() {
     }
   };
 
+  const handleSelectCustomers = async () => {
+    handleOpenSMSToSend();
+    setLoading(true);
+    try {
+      let result = await fetch("https://asteric.herokuapp.com/customer", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      result = await result.json();
+      console.log("You clicked contact");
+
+      if (result.message === "Invalid Token") {
+        setLoading(false);
+        setInvalidToken(true);
+        console.log(result.message);
+      } else {
+        setAllCustomers(result);
+        setLoading(false);
+        console.log("receiver of customers " + allCustomers.length);
+      }
+    } catch (e) {
+      setLoading(false);
+      console.log("Error In catch " + e.message);
+    }
+  };
+
   const handleClickOpen = (id) => {
     setTemplateId(id);
     setOpen(true);
@@ -221,6 +284,9 @@ function Templates() {
   const handleOpenSMS = () => setOpenSMS(true);
 
   const handleCloseSMS = () => setOpenSMS(false);
+
+
+ 
 
   return (
     <>
@@ -280,10 +346,12 @@ function Templates() {
                               <h5
                                 style={{
                                   marginTop: "10px",
+                                  cursor: "pointer",
                                 }}
-                                onClick={() =>
-                                  setOpenModalEmail(!openModalEmail)
-                                }
+                                onClick={() => {
+                                  handleOpenEmailToSend();
+                                  //setOpenModalEmail(!openModalEmail)
+                                }}
                               >
                                 {emailTemplate.message}
                               </h5>
@@ -316,7 +384,7 @@ function Templates() {
                         </div>
                       </div>
                     </div>
-
+                    <Button onClick={handleOpenSMSToSend}>Open Child Modal</Button>
                     <div className="SMSTemplate">
                       <h3>SMS Template</h3>
                       <div className="em_templatebox">
@@ -331,7 +399,16 @@ function Templates() {
                                 )
                               }
                             >
-                              <h5>{smsTemplate.message}</h5>
+                              <h5
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleOpenSMSToSend()
+                                }
+                              >
+                                {smsTemplate.message}
+                              </h5>
                               <p>{smsTemplate.message}</p>
 
                               <Delete
@@ -381,6 +458,105 @@ function Templates() {
                     </Button>
                   </DialogActions>
                 </Dialog>
+
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={emailToSend}
+                  onClose={handleCloseEmailTosSend}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
+                >
+                  <Fade in={emailToSend}>
+                    <Box sx={style}>
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Send this email
+                      </Typography>
+                      <Typography
+                        id="transition-modal-description"
+                        sx={{ mt: 2 }}
+                      >
+                        Duis mollis, est non commodo luctus, nisi erat porttitor
+                        ligula.
+                      </Typography>
+                    </Box>
+                  </Fade>
+                </Modal>
+
+                <Modal
+                  open={smsToSend}
+                  onClose={handleCloseSmsTosSend}
+                  aria-labelledby="parent-modal-title"
+                  aria-describedby="parent-modal-description"
+                >
+                  <Box sx={{ ...style, width: 400 }}>
+                    <Modal
+                      hideBackdrop
+                      open={smsToSend}
+                      onClose={handleCloseSmsTosSend}
+                      aria-labelledby="child-modal-title"
+                      aria-describedby="child-modal-description"
+                    >
+                      <Box sx={{ ...style, width: 200 }}>
+                        <h2 id="child-modal-title">Text in a child modal</h2>
+                        <p id="child-modal-description">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit.
+                        </p>
+                        <Button onClick={handleCloseSmsTosSend}>
+                          Close Child Modal
+                        </Button>
+
+                        {/* <form className="scheduleform">
+                            <div className="inputIcon">
+                              <input
+                                className="phone"
+                                type="phonenumber"
+                                name="phone"
+                                placeholder="Phone Number"
+                                disabled
+                                value={sendMessage.receiver}
+                                onChange={(e) =>
+                                  setSendMessage({
+                                    ...sendMessage,
+                                    receiver: e.target.value,
+                                  })
+                                }
+                              />
+                              <img
+                                style={{
+                                  cursor: `pointer`,
+                                }}
+                                onClick={handleSelectCustomers}
+                                src="/images/contact.png"
+                                alt="contact"
+                              />
+                            </div>
+
+                            <textArea
+                              type="text"
+                              name="message"
+                              value={sendMessage.message}
+                              placeholder="Messages..."
+                              onChange={(e) =>
+                                setSendMessage({
+                                  ...sendMessage,
+                                  message: e.target.value,
+                                })
+                              }
+                            />
+                          </form> */}
+                      </Box>
+                    </Modal>
+                  </Box>
+                </Modal>
 
                 <Modal
                   aria-labelledby="transition-modal-title"
