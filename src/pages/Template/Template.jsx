@@ -402,9 +402,7 @@ function Templates() {
                         </div>
                       </div>
                     </div>
-                    <Button onClick={handleOpenSMSToSend}>
-                      Open Child Modal
-                    </Button>
+                  
                     <div className="SMSTemplate">
                       <h3>SMS Template</h3>
                       <div className="em_templatebox">
@@ -537,7 +535,7 @@ function Templates() {
                   aria-describedby="parent-modal-description"
                 >
                   <Box sx={{ ...style, width: 400 }}>
-                    <h2 id="parent-modal-title">Text in a modal</h2>
+                    <h2 id="parent-modal-title">Send sms</h2>
                     <p id="parent-modal-description">
                       Duis mollis, est non commodo luctus, nisi erat porttitor
                       ligula.
