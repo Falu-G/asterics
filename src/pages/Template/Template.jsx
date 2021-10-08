@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import "./template.css";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
-
+import TextField from "@mui/material/TextField";
 import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
-
+import { useTable, usePagination, useRowSelect } from "react-table";
 import { Delete } from "@material-ui/icons";
+
+import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
 
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
@@ -28,6 +32,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Checkbox } from "../../components/Checkbox";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -46,6 +51,10 @@ const style = {
   px: 4,
   pb: 3,
 };
+
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 
 // const style = {
 //   position: "absolute",
@@ -83,7 +92,7 @@ function Templates() {
   const [openAddEmail, setOpenAddEmail] = useState(false);
   const [openSMS, setOpenSMS] = useState(false);
   const [smsToSend, setSmsToSend] = useState(false);
-
+const [defaultValue, setDefaultValue] = useState("");
   const [emailToSend, setEmailToSend] = useState(false);
   const [sendMessage, setSendMessage] = useState({
     sender: "Asterics",
@@ -92,6 +101,14 @@ function Templates() {
   });
 
   //const [open, setOpen] = React.useState(false);
+
+  const [chipData, setChipData] = React.useState([
+    { key: 0, label: "Angular" },
+    { key: 1, label: "jQuery" },
+    { key: 2, label: "Polymer" },
+    { key: 3, label: "React" },
+    { key: 4, label: "Vue.js" },
+  ]);
 
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
@@ -110,8 +127,9 @@ function Templates() {
     setOpenEmailNested(false);
   };
 
-  const handleOpenSMSToSend = () => {
+  const handleOpenSMSToSend = (def) => {
     setSmsToSend(true);
+    setDefaultValue(def)
   };
   const handleCloseSmsTosSend = () => setSmsToSend(false);
   const [openSmsNested, setOpenSmsNested] = useState(false);
@@ -254,9 +272,13 @@ function Templates() {
       }
     }
   };
-
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) =>
+      chips.filter((chip) => chip.key !== chipToDelete.key)
+    );
+  };
   const handleSelectCustomers = async () => {
-    handleOpenSMSToSend();
+    //handleOpenSMSToSend();
     setLoading(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/customer", {
@@ -305,6 +327,73 @@ function Templates() {
   const handleOpenSMS = () => setOpenSMS(true);
 
   const handleCloseSMS = () => setOpenSMS(false);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Full Name",
+        accessor: "firstname",
+      },
+      {
+        Header: "Phone Number",
+        accessor: "phone",
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useTable(
+    { columns, data: allCustomers },
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => {
+        return [
+          {
+            id: "name",
+            Header: ({ getToggleAllRowsSelectedProps }) => (
+              <Checkbox {...getToggleAllRowsSelectedProps()} />
+            ),
+
+            Cell: ({ row }) => {
+              return <Checkbox {...row.getToggleRowSelectedProps()} />;
+            },
+          },
+          ...columns,
+        ];
+      });
+    }
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    state,
+    pageOptions,
+    selectedFlatRows,
+  } = tableInstance;
+
+  const page = rows.slice(0, 10);
+  const { pageIndex } = state;
+
+  const phoneNumberHandler = () =>
+    selectedFlatRows.map((row) => {
+      let promises = selectedFlatRows.map((row) => row.original.phone);
+      Promise.all(promises).then(function (results) {
+        setSendMessage({ ...sendMessage, receiver: results });
+        console.log(sendMessage.recieverAddress);
+      });
+
+      handleCloseSmsNested();
+      return null;
+    });
 
   return (
     <>
@@ -402,7 +491,7 @@ function Templates() {
                         </div>
                       </div>
                     </div>
-                  
+
                     <div className="SMSTemplate">
                       <h3>SMS Template</h3>
                       <div className="em_templatebox">
@@ -421,7 +510,7 @@ function Templates() {
                                 style={{
                                   cursor: "pointer",
                                 }}
-                                onClick={() => handleOpenSMSToSend()}
+                                onClick={() => handleOpenSMSToSend(smsTemplate.message)}
                               >
                                 {smsTemplate.message}
                               </h5>
@@ -534,16 +623,89 @@ function Templates() {
                   aria-labelledby="parent-modal-title"
                   aria-describedby="parent-modal-description"
                 >
-                  <Box sx={{ ...style, width: 400 }}>
+                  <Box sx={{ ...style, width: 700 }}>
                     <h2 id="parent-modal-title">Send sms</h2>
-                    <p id="parent-modal-description">
-                      Duis mollis, est non commodo luctus, nisi erat porttitor
-                      ligula.
-                    </p>
 
-                    <Button onClick={handleOpenSmsNested}>
-                      Open Child Modal
+                    <Paper
+                      sx={{
+                        position: `relative`,
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                        listStyle: "none",
+                        width: `100%`,
+                        p: 0.5,
+                        m: 0,
+                      }}
+                      component="ul"
+                    >
+                      {chipData.map((data) => {
+                        let icon;
+
+                        return (
+                          <ListItem key={data.key}>
+                            <Chip
+                              icon={icon}
+                              label={data.label}
+                              onDelete={
+                                data.label === "React"
+                                  ? undefined
+                                  : handleDelete(data)
+                              }
+                            />
+                          </ListItem>
+                        );
+                      })}
+
+                      <img
+                        style={{
+                          cursor: `pointer`,
+                          position: `absolute`,
+                          top: 10,
+                          right: 10,
+                        }}
+                        src="/images/contact.png"
+                        alt="contact"
+                        onClick={() => {
+                          handleOpenSmsNested();
+                          handleSelectCustomers();
+                        }}
+                      />
+                    </Paper>
+
+                    <Box
+                      component="form"
+                      sx={{
+                        "& .MuiTextField-root": { mt: 2, width: "50ch" },
+                      }}
+                      noValidate
+                      autoComplete="off"
+                    >
+                      <div>
+                        <TextField
+                          style={{
+                            width: "100%",
+                          }}
+                          id="outlined-multiline-static"
+                          multiline
+                          rows={4}
+                          onChange={(e)=>setDefaultValue(e.target.value)}
+                          value = {defaultValue}
+                          defaultValue={defaultValue}
+                        />
+                      </div>
+                    </Box>
+
+                    <Button
+                      sx={{
+                        marginTop: 2,
+                        float: `right`,
+                      }}
+                      variant="contained"
+                    >
+                      Send
                     </Button>
+
                     <Modal
                       hideBackdrop
                       open={openSmsNested}
@@ -551,55 +713,91 @@ function Templates() {
                       aria-labelledby="child-modal-title"
                       aria-describedby="child-modal-description"
                     >
-                      <Box sx={{ ...style, width: 200 }}>
-                        <h2 id="child-modal-title">Text in a child modal</h2>
-                        <p id="child-modal-description">
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit.
-                        </p>
-                        <Button onClick={handleCloseSmsNested}>
-                          Close Child Modal
-                        </Button>
+                      <Box sx={{ ...style, width: 700 }}>
 
-                        {/* <form className="scheduleform">
-                            <div className="inputIcon">
-                              <input
-                                className="phone"
-                                type="phonenumber"
-                                name="phone"
-                                placeholder="Phone Number"
-                                disabled
-                                value={sendMessage.receiver}
-                                onChange={(e) =>
-                                  setSendMessage({
-                                    ...sendMessage,
-                                    receiver: e.target.value,
-                                  })
-                                }
-                              />
-                              <img
-                                style={{
-                                  cursor: `pointer`,
-                                }}
-                                onClick={handleSelectCustomers}
-                                src="/images/contact.png"
-                                alt="contact"
-                              />
-                            </div>
 
-                            <textArea
-                              type="text"
-                              name="message"
-                              value={sendMessage.message}
-                              placeholder="Messages..."
-                              onChange={(e) =>
-                                setSendMessage({
-                                  ...sendMessage,
-                                  message: e.target.value,
-                                })
-                              }
-                            />
-                          </form> */}
+                        <h3>Contact List</h3>
+                        <div>
+                          <table {...getTableProps()}>
+                            <thead>
+                              {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                  {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps()}>
+                                      {column.render("Header")}
+                                    </th>
+                                  ))}
+                                </tr>
+                              ))}
+                            </thead>
+                            {/* Apply the table body props */}
+                            <tbody {...getTableBodyProps()}>
+                              {page.map((row) => {
+                                prepareRow(row);
+                                return (
+                                  <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => {
+                                      return (
+                                        <td {...cell.getCellProps()}>
+                                          {cell.render("Cell")}
+                                        </td>
+                                      );
+                                    })}
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+
+                          <div
+                            style={{
+                              marginTop: "10px",
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Button
+                              disabled={!canNextPage}
+                              onClick={() => previousPage()}
+                              variant="contained"
+                            >
+                              Previous page
+                            </Button>
+
+                            <span>
+                              Page{" "}
+                              <strong>
+                                {pageIndex + 1} of {pageOptions.length}
+                              </strong>
+                            </span>
+                            <Button
+                              disabled={!canPreviousPage}
+                              onClick={() => nextPage()}
+                              variant="contained"
+                            >
+                              Next Page
+                            </Button>
+                          </div>
+
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              marginTop: "10px",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Button
+                              variant="contained"
+                              onClick={phoneNumberHandler}
+                            >
+                              CONFIRM SELECTION
+                            </Button>
+                          </div>
+                        </div>
                       </Box>
                     </Modal>
                   </Box>
