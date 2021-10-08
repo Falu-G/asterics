@@ -102,13 +102,15 @@ function Templates() {
 
   //const [open, setOpen] = React.useState(false);
 
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: "Angular" },
-    { key: 1, label: "jQuery" },
-    { key: 2, label: "Polymer" },
-    { key: 3, label: "React" },
-    { key: 4, label: "Vue.js" },
-  ]);
+  const [chipData, setChipData] = React.useState([]);
+
+  // const [chipData, setChipData] = React.useState([
+  //   { key: 0, label: "Angular" },
+  //   { key: 1, label: "jQuery" },
+  //   { key: 2, label: "Polymer" },
+  //   { key: 3, label: "React" },
+  //   { key: 4, label: "Vue.js" },
+  // ]);
 
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
@@ -276,7 +278,7 @@ function Templates() {
   };
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
+      chips.filter((chip) => chip.phone !== chipToDelete.phone)
     );
   };
   const handleSelectCustomers = async () => {
@@ -385,17 +387,21 @@ function Templates() {
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
 
-  const phoneNumberHandler = () =>
-    selectedFlatRows.map((row) => {
-      let promises = selectedFlatRows.map((row) => row.original.phone);
-      Promise.all(promises).then(function (results) {
-        setSendMessage({ ...sendMessage, receiver: results });
-        console.log(sendMessage.recieverAddress);
-      });
-
-      handleCloseSmsNested();
-      return null;
+  const phoneNumberHandler = () => {
+    let promises = selectedFlatRows.map((row) => row.original);
+    Promise.all(promises).then(function (results) {
+      setChipData(results);
+      console.log(results)
+      return results.phone
+    }).then((phone)=> {
+      console.log("This are phones "+phone)
+      setSendMessage({ ...sendMessage, receiver: phone })
+      console.log("This claims to be " + sendMessage.reciever);
     });
+
+    handleCloseSmsNested();
+    return null;
+  };
 
   return (
     <>
@@ -466,7 +472,7 @@ function Templates() {
                               </h5>
                               <p>{emailTemplate.message}</p>
 
-                              {console.log(index)}
+                              {console.log("Is dis workin" + index)}
 
                               <Delete
                                 className="delete"
@@ -686,11 +692,7 @@ function Templates() {
                       aria-labelledby="child-modal-title"
                       aria-describedby="child-modal-description"
                     >
-                      <Box sx={{ ...style, width: 200 }}>
-                        <Button onClick={handleCloseSmsNested}>
-                          Close Child Modal
-                        </Button>
-
+                      <Box>
                         <ShowUpEmail
                           allCustomers={allCustomers}
                           handleClose={handleCloseEmailNested}
@@ -718,33 +720,34 @@ function Templates() {
                     <Paper
                       sx={{
                         position: `relative`,
-                        display: "flex",
-                        justifyContent: "center",
+                        display: `flex`,
+                        paddingRight: 5,
                         flexWrap: "wrap",
                         listStyle: "none",
+                        minHeight: 50,
                         width: `100%`,
                         p: 0.5,
                         m: 0,
                       }}
                       component="ul"
                     >
-                      {chipData.map((data) => {
-                        let icon;
+                      {chipData.length > 0 ? (
+                        chipData.map((data) => {
+                          let icon;
 
-                        return (
-                          <ListItem key={data.key}>
-                            <Chip
-                              icon={icon}
-                              label={data.label}
-                              onDelete={
-                                data.label === "React"
-                                  ? undefined
-                                  : handleDelete(data)
-                              }
-                            />
-                          </ListItem>
-                        );
-                      })}
+                          return (
+                            <ListItem key={data.id}>
+                              <Chip
+                                icon={icon}
+                                label={data.phone}
+                                onDelete={handleDelete(data)}
+                              />
+                            </ListItem>
+                          );
+                        })
+                      ) : (
+                        <h3>Please Click the Icon to select users</h3>
+                      )}
 
                       <img
                         style={{
