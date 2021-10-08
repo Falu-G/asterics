@@ -6,7 +6,7 @@ import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import { Delete } from "@material-ui/icons";
-
+import ShowUpEmail from "../ShowUpEmail/ShowUpEmail";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
@@ -92,7 +92,7 @@ function Templates() {
   const [openAddEmail, setOpenAddEmail] = useState(false);
   const [openSMS, setOpenSMS] = useState(false);
   const [smsToSend, setSmsToSend] = useState(false);
-const [defaultValue, setDefaultValue] = useState("");
+  const [defaultValue, setDefaultValue] = useState("");
   const [emailToSend, setEmailToSend] = useState(false);
   const [sendMessage, setSendMessage] = useState({
     sender: "Asterics",
@@ -113,8 +113,10 @@ const [defaultValue, setDefaultValue] = useState("");
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
 
-  const handleOpenEmailToSend = (id) => {
+  const [emailmessage, setEmailMessage] = useState("");
+  const handleOpenEmailToSend = (message) => {
     setEmailToSend(true);
+    setEmailMessage(message);
   };
   const handleCloseEmailTosSend = () => setEmailToSend(false);
 
@@ -129,7 +131,7 @@ const [defaultValue, setDefaultValue] = useState("");
 
   const handleOpenSMSToSend = (def) => {
     setSmsToSend(true);
-    setDefaultValue(def)
+    setDefaultValue(def);
   };
   const handleCloseSmsTosSend = () => setSmsToSend(false);
   const [openSmsNested, setOpenSmsNested] = useState(false);
@@ -456,7 +458,7 @@ const [defaultValue, setDefaultValue] = useState("");
                                   cursor: "pointer",
                                 }}
                                 onClick={() => {
-                                  handleOpenEmailToSend();
+                                  handleOpenEmailToSend(emailTemplate.message);
                                   //setOpenModalEmail(!openModalEmail)
                                 }}
                               >
@@ -510,7 +512,9 @@ const [defaultValue, setDefaultValue] = useState("");
                                 style={{
                                   cursor: "pointer",
                                 }}
-                                onClick={() => handleOpenSMSToSend(smsTemplate.message)}
+                                onClick={() =>
+                                  handleOpenSMSToSend(smsTemplate.message)
+                                }
                               >
                                 {smsTemplate.message}
                               </h5>
@@ -575,8 +579,8 @@ const [defaultValue, setDefaultValue] = useState("");
                     timeout: 500,
                   }}
                 >
-                  <Fade in={emailToSend}>
-                    <Box sx={style}>
+                  <Box sx={style}>
+                    <Box sx={{ ...style, width: 700 }}>
                       <Typography
                         id="transition-modal-title"
                         variant="h6"
@@ -584,37 +588,122 @@ const [defaultValue, setDefaultValue] = useState("");
                       >
                         Send this email
                       </Typography>
-                      <Typography
-                        id="transition-modal-description"
-                        sx={{ mt: 2 }}
-                      >
-                        Duis mollis, est non commodo luctus, nisi erat porttitor
-                        ligula.
-                      </Typography>
 
-                      <Button onClick={handleOpenSmsNested}>
-                        Open Child Modal
-                      </Button>
-                      <Modal
-                        hideBackdrop
-                        open={openSmsNested}
-                        onClose={handleCloseSmsNested}
-                        aria-labelledby="child-modal-title"
-                        aria-describedby="child-modal-description"
+                      <Paper
+                        sx={{
+                          position: `relative`,
+                          display: "flex",
+                          justifyContent: "center",
+                          flexWrap: "wrap",
+                          listStyle: "none",
+                          width: `100%`,
+                          p: 0.5,
+                          m: 0,
+                        }}
+                        component="ul"
                       >
-                        <Box sx={{ ...style, width: 200 }}>
-                          <h2 id="child-modal-title">Text in a child modal</h2>
-                          <p id="child-modal-description">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing
-                            elit.
-                          </p>
-                          <Button onClick={handleCloseSmsNested}>
-                            Close Child Modal
-                          </Button>
-                        </Box>
-                      </Modal>
+                        {chipData.map((data) => {
+                          let icon;
+
+                          return (
+                            <ListItem key={data.key}>
+                              <Chip
+                                icon={icon}
+                                label={data.label}
+                                onDelete={
+                                  data.label === "React"
+                                    ? undefined
+                                    : handleDelete(data)
+                                }
+                              />
+                            </ListItem>
+                          );
+                        })}
+
+                        <img
+                          style={{
+                            cursor: `pointer`,
+                            position: `absolute`,
+                            top: 10,
+                            right: 10,
+                          }}
+                          src="/images/contact.png"
+                          alt="contact"
+                          onClick={() => {
+                            handleOpenEmailNested();
+                            handleSelectCustomers();
+                          }}
+                        />
+                      </Paper>
+
+                      <Box
+                        component="form"
+                        sx={{
+                          "& .MuiTextField-root": { mt: 2, width: "50ch" },
+                        }}
+                        noValidate
+                        autoComplete="off"
+                      >
+                        <div>
+                          <TextField
+                            style={{
+                              width: "100%",
+                            }}
+                            id="standard-error-helper-text"
+                            label="Title"
+                            defaultValue=""
+                            helperText="Please supply title"
+                            variant="outlined"
+                          />
+                          <TextField
+                            style={{
+                              width: "100%",
+                            }}
+                            id="outlined-multiline-static"
+                            multiline
+                            rows={4}
+                            onChange={(e) => setEmailMessage(e.target.value)}
+                            defaultValue={emailmessage}
+                          />
+                        </div>
+                      </Box>
+
+                      <Button
+                        sx={{
+                          marginTop: 2,
+                          float: `right`,
+                        }}
+                        variant="contained"
+                      >
+                        Send
+                      </Button>
                     </Box>
-                  </Fade>
+
+                    <Modal
+                      hideBackdrop
+                      open={openEmailNested}
+                      onClose={handleCloseEmailNested}
+                      aria-labelledby="child-modal-title"
+                      aria-describedby="child-modal-description"
+                    >
+                      <Box sx={{ ...style, width: 200 }}>
+                        <Button onClick={handleCloseSmsNested}>
+                          Close Child Modal
+                        </Button>
+
+                        <ShowUpEmail
+                          allCustomers={allCustomers}
+                          handleClose={handleCloseEmailNested}
+                          loading={loading}
+                          open={handleOpenEmailNested}
+                          scheduleMessage={null}
+                          setScheduleMessage={null}
+                          confirmSelection={null}
+                          invalidToken={invalidToken}
+                        />
+                      </Box>
+                    </Modal>
+                  </Box>
                 </Modal>
 
                 <Modal
@@ -689,8 +778,8 @@ const [defaultValue, setDefaultValue] = useState("");
                           id="outlined-multiline-static"
                           multiline
                           rows={4}
-                          onChange={(e)=>setDefaultValue(e.target.value)}
-                          value = {defaultValue}
+                          onChange={(e) => setDefaultValue(e.target.value)}
+                          value={defaultValue}
                           defaultValue={defaultValue}
                         />
                       </div>
@@ -714,8 +803,6 @@ const [defaultValue, setDefaultValue] = useState("");
                       aria-describedby="child-modal-description"
                     >
                       <Box sx={{ ...style, width: 700 }}>
-
-
                         <h3>Contact List</h3>
                         <div>
                           <table {...getTableProps()}>
@@ -923,7 +1010,7 @@ const [defaultValue, setDefaultValue] = useState("");
                           <TextareaAutosize
                             aria-label="minimum height"
                             minRows={3}
-                            style={{ width: 400 }}
+                            style={{ width: 330 }}
                             type="text"
                             id="contentSchedule"
                             name="message"
