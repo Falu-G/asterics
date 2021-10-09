@@ -216,20 +216,20 @@ function NewSchedule({ setOpenModal }) {
     return null;
   };
 
-  const confirmSelection = () => {
-    let promises = selectedFlatRows.map((row) => row.original.email);
-    console.log("Clicking confirmation");
-    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
-    Promise.all(promises).then(function (results) {
-      setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+  // const confirmSelection = () => {
+  //   let promises = selectedFlatRows.map((row) => row.original.email);
+  //   console.log("Clicking confirmation");
+  //   //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
+  //   Promise.all(promises).then(function (results) {
+  //     setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
 
-      console.log("tis is receivers" + scheduleMessage.recieverAddress);
-    });
+  //     console.log("tis is receivers" + scheduleMessage.recieverAddress);
+  //   });
 
-    handleClose();
+  //   handleClose();
 
-    return null;
-  };
+  //   return null;
+  // };
 
   return (
     <div className="ns-Container">
@@ -492,7 +492,6 @@ function NewSchedule({ setOpenModal }) {
             open={open}
             scheduleMessage={scheduleMessage}
             setScheduleMessage={setScheduleMessage}
-            confirmSelection={confirmSelection}
             invalidToken={invalidToken}
           />
         </>

@@ -6,11 +6,9 @@ import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import { Delete } from "@material-ui/icons";
-import ShowUpEmail from "../ShowUpEmail/ShowUpEmail";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
 //import Button from "@material-ui/core/Button";
@@ -33,6 +31,7 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
+import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -99,6 +98,15 @@ function Templates() {
     receiver: "",
     message: "",
   });
+
+  const [scheduleMessage, setScheduleMessage] = useState({
+    recieverAddress: "",
+    messageBody: "",
+    messageSubject: "",
+  });
+
+
+  const [chipDataEmail, setChipDataEmail] = useState([]);
 
   //const [open, setOpen] = React.useState(false);
 
@@ -276,11 +284,7 @@ function Templates() {
       }
     }
   };
-  const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.phone !== chipToDelete.phone)
-    );
-  };
+  
   const handleSelectCustomers = async () => {
     //handleOpenSMSToSend();
     setLoading(true);
@@ -391,17 +395,34 @@ function Templates() {
     let promises = selectedFlatRows.map((row) => row.original);
     Promise.all(promises).then(function (results) {
       setChipData(results);
-      console.log(results)
-      return results.phone
-    }).then((phone)=> {
-      console.log("This are phones "+phone)
-      setSendMessage({ ...sendMessage, receiver: phone })
-      console.log("This claims to be " + sendMessage.reciever);
-    });
+      setSendMessage({ ...sendMessage, receiver: results });
+    
+    })
 
     handleCloseSmsNested();
     return null;
   };
+
+
+  const handleDelete = (chipToDelete) => {
+    let newData = chipData.filter((chip) => chip.phone !== chipToDelete.phone);
+    Promise.all(newData)
+    .then(function (results) {
+      setChipData(results);
+      setSendMessage({ ...sendMessage, receiver: results });
+     
+    })
+  
+  };
+
+const handleDeleteEmail = (chipToDelete) => {
+  let newDataEmail = chipDataEmail.filter((chip) => chip.email !== chipToDelete.email);
+  Promise.all(newDataEmail)
+  .then((results)=>{
+    setChipDataEmail(results);
+    setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+  })
+}
 
   return (
     <>
@@ -534,6 +555,8 @@ function Templates() {
                           </>
                         ))}
 
+                     
+
                         <div className="em_gen em_add">
                           <img
                             src="images/add.png"
@@ -601,30 +624,49 @@ function Templates() {
                           display: "flex",
                           justifyContent: "center",
                           flexWrap: "wrap",
+                          minHeight: 50,
                           listStyle: "none",
                           width: `100%`,
                           p: 0.5,
+                          backgroundColor: `#f5f5f5`,
                           m: 0,
                         }}
                         component="ul"
                       >
-                        {chipData.map((data) => {
+
+                        
+                        {
+                        
+                        chipDataEmail.length > 0 ? 
+                        
+
+                        chipDataEmail.map((data) => {
                           let icon;
 
+
+                          console.log(scheduleMessage.recieverAddress)
                           return (
-                            <ListItem key={data.key}>
+                            <ListItem key={data.id}>
                               <Chip
                                 icon={icon}
-                                label={data.label}
-                                onDelete={
-                                  data.label === "React"
-                                    ? undefined
-                                    : handleDelete(data)
-                                }
+                                label={data.email}
+                                onDelete={()=>handleDeleteEmail(data)}
                               />
                             </ListItem>
                           );
-                        })}
+                        })
+                        
+                        :
+
+                        <p
+                        style={{
+                          textAlign: `center`,
+                          width: `100%`,
+                          marginTop: `5px`,
+                        }}
+                        >Please Click the Icon to select users</p>
+                        
+                       }
 
                         <img
                           style={{
@@ -693,14 +735,16 @@ function Templates() {
                       aria-describedby="child-modal-description"
                     >
                       <Box>
-                        <ShowUpEmail
+                        <ShowUpEmailPro
                           allCustomers={allCustomers}
                           handleClose={handleCloseEmailNested}
                           loading={loading}
                           open={handleOpenEmailNested}
-                          scheduleMessage={null}
-                          setScheduleMessage={null}
-                          confirmSelection={null}
+                          scheduleMessage={scheduleMessage}
+                          setScheduleMessage={setScheduleMessage}
+                          setChipDataEmail = {setChipDataEmail}
+                         
+                          setChipData = {setChipData}
                           invalidToken={invalidToken}
                         />
                       </Box>
@@ -725,6 +769,7 @@ function Templates() {
                         flexWrap: "wrap",
                         listStyle: "none",
                         minHeight: 50,
+                        backgroundColor: `#f5f5f5`,
                         width: `100%`,
                         p: 0.5,
                         m: 0,
@@ -740,13 +785,19 @@ function Templates() {
                               <Chip
                                 icon={icon}
                                 label={data.phone}
-                                onDelete={handleDelete(data)}
+                                onDelete={()=>handleDelete(data)}
                               />
                             </ListItem>
                           );
                         })
                       ) : (
-                        <h3>Please Click the Icon to select users</h3>
+                        <p
+                        style={{
+                          textAlign: `center`,
+                          width: `100%`,
+                          marginTop: `5px`,
+                        }}
+                        >Please Click the Icon to select users</p>
                       )}
 
                       <img
