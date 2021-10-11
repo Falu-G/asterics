@@ -32,7 +32,34 @@ function UpdateCustomer({
   setAllCustomers,
   setSessionExpired,
 }) {
+
+
+  const { addToast } = useToasts();
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
+  const token = userObj.message[0].token;
+
+  // const convertStringToDate = (dateStr) => {
+  //   var parts = dateStr.split("/");
+  //   // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
+  //   // January - 0, February - 1, etc.
+  //   var mydate = new Date(parts[0], parts[1] - 1, parts[2]);
+  //   console.log(mydate.toDateString());
+  //   return mydate;
+  // };
+
+  const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
+  const [selectedAnniversaryDate, setselectedAnniversaryDate] = useState(null);
+  const [Updatinguser, setUpdatingUser] = useState(false);
+
+
+
+
+
+
   const fetchUser = (id) => {
+
+    console.log("fetchUser with the id "+id);
     fetch(`https://asteric.herokuapp.com/customer${id}`, {
       method: "GET",
       headers: {
@@ -54,27 +81,11 @@ function UpdateCustomer({
       });
   };
 
-  const { addToast } = useToasts();
-  const loggedInUser = localStorage.getItem("user-info");
-  const userObj = JSON.parse(loggedInUser);
-  const token = userObj.message[0].token;
 
-  // const convertStringToDate = (dateStr) => {
-  //   var parts = dateStr.split("/");
-  //   // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-  //   // January - 0, February - 1, etc.
-  //   var mydate = new Date(parts[0], parts[1] - 1, parts[2]);
-  //   console.log(mydate.toDateString());
-  //   return mydate;
-  // };
-
-  const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
-  const [selectedAnniversaryDate, setselectedAnniversaryDate] = useState(null);
-  const [Updatinguser, setUpdatingUser] = useState(false);
 
   const updateCustomer = async (id) => {
     setUpdatingUser(true);
-
+    console.log(`The value of the id is ${id}`);
     let result = await fetch(`https://asteric.herokuapp.com/customer/${id}`, {
       method: "PUT",
       headers: {
@@ -88,31 +99,20 @@ function UpdateCustomer({
     result = await result.json();
 
     if (result.status === 401) {
+      setUpdatingUser(false);
       setSessionExpired(true);
+      handleClose();
     } else if (result.status === 200) {
-      fetchUser();
+      fetchUser(user.id);
+      setUpdatingUser(false);
+      handleClose();
       addToast("User updated Successfully", { appearance: "success" });
+    } else {
+      handleClose();
+      fetchUser(user.id);
+      setUpdatingUser(false);
+      addToast(result.message, { appearance: "success" });
     }
-    // if (selectedBirthdayDate !== null) {
-    //   let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
-    //   // console.log("This is hapening in if and date is "+date)
-    //   setUser({ ...user, birthday: date });
-    //   console.log("This is hapening in if and user is " + user.birthday);
-    // }
-
-    // if (selectedAnniversaryDate !== null) {
-    //   let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
-    //   setUser({ ...user, anniversary: datee });
-    //   console.log(
-    //     "This is hapening in if of user anniversary " + user.anniversary
-    //   );
-    // }
-    // console.log("Customer info " + user.firstname);
-    // console.log("Customer info " + user.email);
-    // console.log("Customer info " + user.lastname);
-    // console.log("Customer info " + user.birthday);
-    // console.log("Customer info " + user.anniversary);
-    // console.log("Customer info " + user.phone);
   };
 
   return (
@@ -217,7 +217,7 @@ function UpdateCustomer({
                 onSelect={setSelectedBirthdayDate} //when day is clicked
                 onChange={(date) => setSelectedBirthdayDate(date)} //only when value has changed
                 defaultValue={user.birthday}
-                value = {`Date of birth: ${user.birthday}`}
+                value={`Date of birth: ${user.birthday}`}
                 className="updatebirthday"
                 placeholderText="Select anniversary date"
                 disabled
@@ -268,16 +268,15 @@ function UpdateCustomer({
                 display: `flex`,
                 alignItems: "center",
                 width: `100%`,
-               
               }}
             >
               <Datepicker
                 label="Basic example"
                 defaultValue={user.anniversaryDate}
                 selected={selectedAnniversaryDate}
-                value = {`Date of Anniversary: ${user.anniversary}`}
+                value={`Date of Anniversary: ${user.anniversary}`}
                 onSelect={(date) => setselectedAnniversaryDate(date)}
-                onChange={(date) => setselectedAnniversaryDate(date)} //only when value has changed
+                onChange={(date) => setselectedAnniversaryDate(date)}
                 className="updateanniversary"
                 placeholderText="Select anniversary date"
                 disabled
@@ -295,27 +294,24 @@ function UpdateCustomer({
                 }}
               />
 
-
-
               <ReactBootStrap.Button
-                    style={{  width: "200px" }}
-                    variant="primary"
-                    
-                    onClick={() => updateCustomer()}
-                    disabled={Updatinguser}
-                  >
-                    <ReactBootStrap.Spinner
-                      as="span"
-                      className={Updatinguser ? "visible" : "visually-hidden"}
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    <span className="visually">
-                      {Updatinguser ? "UPDATING..." : "UPDATE"}
-                    </span>
-                  </ReactBootStrap.Button>
+                style={{ width: "200px" }}
+                variant="primary"
+                onClick={() => updateCustomer(user.id)}
+                disabled={Updatinguser}
+              >
+                <ReactBootStrap.Spinner
+                  as="span"
+                  className={Updatinguser ? "visible" : "visually-hidden"}
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span className="visually">
+                  {Updatinguser ? "UPDATING..." : "UPDATE"}
+                </span>
+              </ReactBootStrap.Button>
             </div>
           </Box>
         </Fade>

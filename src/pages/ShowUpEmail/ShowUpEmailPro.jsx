@@ -88,21 +88,37 @@ function ShowUpEmailPro({
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
 
-  const confirmSelection = () => {
-    let promises = selectedFlatRows.map((row) => row.original);
+  const confirmSelection = async () => {
+    let promises = await selectedFlatRows.map((row) => row.original);
     console.log("Clicking confirmation");
     //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
     Promise.all(promises).then(function (results) {
       setChipDataEmail(results);
-      setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
-
-      console.log("tis is receivers" + scheduleMessage.recieverAddress);
+      emailProcessor(results)
+      //setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+    console.log("this are the receivers from ShowUpEmailPro" + scheduleMessage.recieverAddress);
     });
+
+
 
     handleClose();
 
     return null;
   };
+
+
+  const emailProcessor = async (chipDataEmail)=>{
+    let emails = await chipDataEmail.map(chip => chip.email);
+
+    Promise.all(emails).then(results => {
+      let mails = results.join(",");
+      setScheduleMessage ({ ...scheduleMessage, recieverAddress: mails });
+      console.log(scheduleMessage);
+    });
+
+
+
+  }
 
 
   return (

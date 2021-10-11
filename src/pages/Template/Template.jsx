@@ -11,9 +11,6 @@ import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
-//import Button from "@material-ui/core/Button";
-//import { makeStyles } from "@material-ui/core/styles";
-//import Button from "@material-ui/core/Button";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import TemplateObject from "../../classes/TemplateObject";
 import * as ReactBootStrap from "react-bootstrap";
@@ -55,22 +52,7 @@ const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-
-//   bgcolor: "background.paper",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-// };
-
 function Templates() {
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-
   let templateObj = new TemplateObject("", "", "");
   const [emailTemplates, setEmailTemplates] = useState([]);
   const [smsTemplates, setSmsTemplates] = useState([]);
@@ -79,7 +61,6 @@ function Templates() {
   const [loading, setLoading] = useState(true);
   const [modalTemplate, setModalTemplate] = useState(false);
   const { sidebar, setSideBar } = useContext(MenuContext);
-  //const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -91,42 +72,32 @@ function Templates() {
   const [openAddEmail, setOpenAddEmail] = useState(false);
   const [openSMS, setOpenSMS] = useState(false);
   const [smsToSend, setSmsToSend] = useState(false);
-  const [defaultValue, setDefaultValue] = useState("");
   const [emailToSend, setEmailToSend] = useState(false);
-  const [sendMessage, setSendMessage] = useState({
+  const [sendingMessage, setSendingMessage] = useState(false);
+
+  const [sendSms, setSendSms] = useState({
     sender: "Asterics",
     receiver: "",
     message: "",
   });
 
-  const [scheduleMessage, setScheduleMessage] = useState({
+  const [sendEmail, setSendEmail] = useState({
     recieverAddress: "",
     messageBody: "",
     messageSubject: "",
   });
 
-
   const [chipDataEmail, setChipDataEmail] = useState([]);
 
-  //const [open, setOpen] = React.useState(false);
-
   const [chipData, setChipData] = React.useState([]);
-
-  // const [chipData, setChipData] = React.useState([
-  //   { key: 0, label: "Angular" },
-  //   { key: 1, label: "jQuery" },
-  //   { key: 2, label: "Polymer" },
-  //   { key: 3, label: "React" },
-  //   { key: 4, label: "Vue.js" },
-  // ]);
 
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
 
-  const [emailmessage, setEmailMessage] = useState("");
   const handleOpenEmailToSend = (message) => {
     setEmailToSend(true);
-    setEmailMessage(message);
+    setSendEmail({ ...sendEmail, messageBody: message });
+    console.log("This message shows " + message);
   };
   const handleCloseEmailTosSend = () => setEmailToSend(false);
 
@@ -141,7 +112,7 @@ function Templates() {
 
   const handleOpenSMSToSend = (def) => {
     setSmsToSend(true);
-    setDefaultValue(def);
+    setSendSms({ ...sendSms, message: def });
   };
   const handleCloseSmsTosSend = () => setSmsToSend(false);
   const [openSmsNested, setOpenSmsNested] = useState(false);
@@ -154,8 +125,8 @@ function Templates() {
   };
 
   const showSideBar = () => setSideBar(!sidebar);
+
   const deleteFromArray = (id) => {
-    console.log("deleting from array " + id);
     setLoading(true);
     //setOpenModalEmail(false);
     fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
@@ -233,6 +204,74 @@ function Templates() {
     return !str || /^\s*$/.test(str);
   };
 
+  const handleSendEmail = async () => {
+    console.log(sendEmail);
+    setSendingMessage(true);
+    try {
+      let result = await fetch("https://asteric.herokuapp.com/mails/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(sendEmail),
+      });
+
+      result = await result.json();
+      if (result.status === 200) {
+        console.log(result.message);
+        setSendingMessage(false);
+        handleCloseEmailTosSend()
+        addToast(result.message, { appearance: "success" });
+      } else {
+        console.log(result.message);
+        setSendingMessage(false);
+        handleCloseEmailTosSend()
+        addToast(result.message, { appearance: "success" });
+      }
+    } catch (err) {
+      console.log("Something terrible happened " + err.message);
+    }
+
+  };
+
+  const handleSendMessage = async () => {
+    setSendingMessage(true);
+    console.log("SMS is meant to be sent");
+    console.log(sendSms);
+    try {
+      let result = await fetch("https://asteric.herokuapp.com/vonageSms/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(sendSms),
+      });
+
+      result = await result.json();
+      if (result.message === "Invalid Token") {
+        setLoading(false);
+        handleCloseSmsTosSend()
+        setInvalidToken(true);
+        console.log(result.message);
+      } else if (result.status === 200) {
+        
+        setSendingMessage(false);
+        handleCloseSmsTosSend()
+        addToast(result.message, { appearance: "success" });
+      } else {
+        handleCloseSmsTosSend()
+        setSendingMessage(false);
+        addToast(result.message, { appearance: "error" });
+      }
+    } catch (err) {
+      console.log("Something terrible happened " + err.message);
+    }
+  };
+
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
     if (isBlank(templateObjstate.message)) {
@@ -284,10 +323,10 @@ function Templates() {
       }
     }
   };
-  
+
   const handleSelectCustomers = async () => {
     //handleOpenSMSToSend();
-    setLoading(true);
+    //setLoading(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/customer", {
         method: "GET",
@@ -391,38 +430,55 @@ function Templates() {
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
 
-  const phoneNumberHandler = () => {
-    let promises = selectedFlatRows.map((row) => row.original);
+  const phoneNumberHandler = async () => {
+    console.log("phonehandler clicked");
+    let promises = await selectedFlatRows.map((row) => row.original);
     Promise.all(promises).then(function (results) {
       setChipData(results);
-      setSendMessage({ ...sendMessage, receiver: results });
-    
-    })
-
+      SMSProcessor(results);
+      //setSendSms({ ...sendSms, receiver: results });
+    });
     handleCloseSmsNested();
     return null;
   };
 
-
-  const handleDelete = (chipToDelete) => {
-    let newData = chipData.filter((chip) => chip.phone !== chipToDelete.phone);
-    Promise.all(newData)
-    .then(function (results) {
+  const handleDelete = async (chipToDelete) => {
+    let newData = await chipData.filter(
+      (chip) => chip.phone !== chipToDelete.phone
+    );
+    Promise.all(newData).then(function (results) {
       setChipData(results);
-      setSendMessage({ ...sendMessage, receiver: results });
-     
-    })
-  
+      SMSProcessor(results);
+    });
   };
 
-const handleDeleteEmail = (chipToDelete) => {
-  let newDataEmail = chipDataEmail.filter((chip) => chip.email !== chipToDelete.email);
-  Promise.all(newDataEmail)
-  .then((results)=>{
-    setChipDataEmail(results);
-    setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
-  })
-}
+  const emailProcessor = async (param) => {
+    let emails = await param.map((chip) => chip.email);
+    Promise.all(emails).then((results) => {
+      let mails = results.join(",");
+      setSendEmail({ ...sendEmail, recieverAddress: mails });
+      console.log(sendEmail);
+    });
+  };
+
+  const SMSProcessor = async (param) => {
+    let numbers = await param.map((chiparam) => chiparam.phone);
+    Promise.all(numbers).then((results) => {
+      let numbsToString = results.join(",");
+      setSendSms({ ...sendSms, receiver: numbsToString });
+      console.log(sendSms);
+    });
+  };
+
+  const handleDeleteEmail = async (chipToDelete) => {
+    let newDataEmail = await chipDataEmail.filter(
+      (chip) => chip.email !== chipToDelete.email
+    );
+    Promise.all(newDataEmail).then((results) => {
+      setChipDataEmail(results);
+      emailProcessor(results);
+    });
+  };
 
   return (
     <>
@@ -486,14 +542,11 @@ const handleDeleteEmail = (chipToDelete) => {
                                 }}
                                 onClick={() => {
                                   handleOpenEmailToSend(emailTemplate.message);
-                                  //setOpenModalEmail(!openModalEmail)
                                 }}
                               >
                                 {emailTemplate.message}
                               </h5>
                               <p>{emailTemplate.message}</p>
-
-                              {console.log("Is dis workin" + index)}
 
                               <Delete
                                 className="delete"
@@ -554,8 +607,6 @@ const handleDeleteEmail = (chipToDelete) => {
                             </div>
                           </>
                         ))}
-
-                     
 
                         <div className="em_gen em_add">
                           <img
@@ -633,40 +684,30 @@ const handleDeleteEmail = (chipToDelete) => {
                         }}
                         component="ul"
                       >
-
-                        
-                        {
-                        
-                        chipDataEmail.length > 0 ? 
-                        
-
-                        chipDataEmail.map((data) => {
-                          let icon;
-
-
-                          console.log(scheduleMessage.recieverAddress)
-                          return (
-                            <ListItem key={data.id}>
-                              <Chip
-                                icon={icon}
-                                label={data.email}
-                                onDelete={()=>handleDeleteEmail(data)}
-                              />
-                            </ListItem>
-                          );
-                        })
-                        
-                        :
-
-                        <p
-                        style={{
-                          textAlign: `center`,
-                          width: `100%`,
-                          marginTop: `5px`,
-                        }}
-                        >Please Click the Icon to select users</p>
-                        
-                       }
+                        {chipDataEmail.length > 0 ? (
+                          chipDataEmail.map((data) => {
+                            let icon;
+                            return (
+                              <ListItem key={data.id}>
+                                <Chip
+                                  icon={icon}
+                                  label={data.email}
+                                  onDelete={() => handleDeleteEmail(data)}
+                                />
+                              </ListItem>
+                            );
+                          })
+                        ) : (
+                          <p
+                            style={{
+                              textAlign: `center`,
+                              width: `100%`,
+                              marginTop: `5px`,
+                            }}
+                          >
+                            Please Click the Icon to select users
+                          </p>
+                        )}
 
                         <img
                           style={{
@@ -699,7 +740,13 @@ const handleDeleteEmail = (chipToDelete) => {
                             }}
                             id="standard-error-helper-text"
                             label="Title"
-                            defaultValue=""
+                            onChange={(e) =>
+                              setSendEmail({
+                                ...sendEmail,
+                                messageSubject: e.target.value,
+                              })
+                            }
+                            defaultValue={sendEmail.messageSubject}
                             helperText="Please supply title"
                             variant="outlined"
                           />
@@ -710,21 +757,36 @@ const handleDeleteEmail = (chipToDelete) => {
                             id="outlined-multiline-static"
                             multiline
                             rows={4}
-                            onChange={(e) => setEmailMessage(e.target.value)}
-                            defaultValue={emailmessage}
+                            onChange={(e) =>
+                              setSendEmail({
+                                ...sendEmail,
+                                messageBody: e.target.value,
+                              })
+                            }
+                            defaultValue={sendEmail.messageBody}
                           />
                         </div>
                       </Box>
-
-                      <Button
-                        sx={{
-                          marginTop: 2,
-                          float: `right`,
-                        }}
-                        variant="contained"
+                      <ReactBootStrap.Button
+                        className="sendbtn"
+                        variant="primary"
+                        onClick={()=>handleSendEmail()}
+                        disabled={sendingMessage}
                       >
-                        Send
-                      </Button>
+                        <ReactBootStrap.Spinner
+                          as="span"
+                          className={
+                            sendingMessage ? "visible" : "visually-hidden"
+                          }
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span className="visually">
+                          {sendingMessage ? "Loading..." : "Send Email"}
+                        </span>
+                      </ReactBootStrap.Button>
                     </Box>
 
                     <Modal
@@ -740,11 +802,10 @@ const handleDeleteEmail = (chipToDelete) => {
                           handleClose={handleCloseEmailNested}
                           loading={loading}
                           open={handleOpenEmailNested}
-                          scheduleMessage={scheduleMessage}
-                          setScheduleMessage={setScheduleMessage}
-                          setChipDataEmail = {setChipDataEmail}
-                         
-                          setChipData = {setChipData}
+                          scheduleMessage={sendEmail}
+                          setScheduleMessage={setSendEmail}
+                          setChipDataEmail={setChipDataEmail}
+                          setChipData={setChipData}
                           invalidToken={invalidToken}
                         />
                       </Box>
@@ -760,7 +821,6 @@ const handleDeleteEmail = (chipToDelete) => {
                 >
                   <Box sx={{ ...style, width: 700 }}>
                     <h2 id="parent-modal-title">Send sms</h2>
-
                     <Paper
                       sx={{
                         position: `relative`,
@@ -785,19 +845,21 @@ const handleDeleteEmail = (chipToDelete) => {
                               <Chip
                                 icon={icon}
                                 label={data.phone}
-                                onDelete={()=>handleDelete(data)}
+                                onDelete={() => handleDelete(data)}
                               />
                             </ListItem>
                           );
                         })
                       ) : (
                         <p
-                        style={{
-                          textAlign: `center`,
-                          width: `100%`,
-                          marginTop: `5px`,
-                        }}
-                        >Please Click the Icon to select users</p>
+                          style={{
+                            textAlign: `center`,
+                            width: `100%`,
+                            marginTop: `5px`,
+                          }}
+                        >
+                          Please Click the Icon to select users
+                        </p>
                       )}
 
                       <img
@@ -832,27 +894,41 @@ const handleDeleteEmail = (chipToDelete) => {
                           id="outlined-multiline-static"
                           multiline
                           rows={4}
-                          onChange={(e) => setDefaultValue(e.target.value)}
-                          value={defaultValue}
-                          defaultValue={defaultValue}
+                          onChange={(e) =>
+                            setSendSms({
+                              ...sendSms,
+                              message: e.target.value,
+                            })
+                          }
+                          defaultValue={sendSms.message}
                         />
                       </div>
                     </Box>
 
-                    <Button
-                      sx={{
-                        marginTop: 2,
-                        float: `right`,
-                      }}
-                      variant="contained"
-                    >
-                      Send
-                    </Button>
+
+                    <ReactBootStrap.Button
+                        className="sendbtn"
+                        variant="primary"
+                        onClick={()=>handleSendMessage()}
+                        disabled={sendingMessage}
+                      >
+                        <ReactBootStrap.Spinner
+                          as="span"
+                          className={sendingMessage ? "visible" : "visually-hidden"}
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span className="visually">
+                          {sendingMessage ? "Loading..." : "Send Message"}
+                        </span>
+                      </ReactBootStrap.Button>
 
                     <Modal
                       hideBackdrop
                       open={openSmsNested}
-                      onClose={handleCloseSmsNested}
+                      onClose={()=>handleCloseSmsNested()}
                       aria-labelledby="child-modal-title"
                       aria-describedby="child-modal-description"
                     >
@@ -933,7 +1009,7 @@ const handleDeleteEmail = (chipToDelete) => {
                           >
                             <Button
                               variant="contained"
-                              onClick={phoneNumberHandler}
+                              onClick={() => phoneNumberHandler()}
                             >
                               CONFIRM SELECTION
                             </Button>
