@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "./menu.css";
 import MenuIcon from "@material-ui/icons/Menu";
 import { MenuContext } from "../MenuContext";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Subscriptions,
   Assessment,
@@ -12,11 +12,12 @@ import {
   Settings,
   ExitToApp,
   MailOutline,
-  Dashboard
+  Dashboard,
 } from "@material-ui/icons";
 
 function Menus({ controlSideBar }) {
   const value = useContext(MenuContext);
+  let history = useHistory();
   let menustate = value.sidebar;
   console.log("This is coming from menus " + value.sidebar);
   return (
@@ -121,7 +122,13 @@ function Menus({ controlSideBar }) {
             <span>Settings</span>
           </Link>
 
-          <Link className={menustate ? "menuItem" : "menuItem closed"} to="/login">
+          <Link
+            className={menustate ? "menuItem" : "menuItem closed"}
+            onClick={() => {
+              localStorage.removeItem("user-info");
+              history.push("/login");
+            }}
+          >
             <ExitToApp />
             <span>LogOut</span>
           </Link>
