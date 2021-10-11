@@ -121,7 +121,7 @@ function Menus({ controlSideBar }) {
             <span>Settings</span>
           </Link>
 
-          <Link className={menustate ? "menuItem" : "menuItem closed"}>
+          <Link className={menustate ? "menuItem" : "menuItem closed"} to="/login">
             <ExitToApp />
             <span>LogOut</span>
           </Link>
