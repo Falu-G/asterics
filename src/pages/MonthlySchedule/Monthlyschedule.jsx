@@ -183,15 +183,18 @@ function Monthlyschedule() {
       headerName: "Receiver",
       width: 160,
       renderCell: ({ row }) => (
+        
         <div
           style={{
             width: `100%`,
             display: "flex",
+            backgroundColor: "#F5F5F5",
             alignItems: `center`,
             justifyContent: "center",
           }}
-        >
-          {row.receiver}
+          
+        > <span>{row.receiver}</span>
+        
         </div>
       ),
     },

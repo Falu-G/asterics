@@ -3,12 +3,16 @@ import React from "react";
 import Navbar from "../../components/navbar/Navbar";
 
 function Home() {
+
+
   return (
     <div className="homeContainer">
       <div className="firstbox">
         <Navbar />
         <div className="astericDesc">
           <span>Asterics CRM</span>
+
+
           <p>
             Get instant access to exciting tools to support your business that
             will bring you close to customers for you.
