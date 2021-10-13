@@ -198,11 +198,11 @@ function Sendsms() {
       } else if (result.status === 200) {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        addToast("Saved Successfully", { appearance: "success" });
+        addToast("Saved Successfully", { appearance: "success", autoDismiss: true});
       } else {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        addToast(result.message, { appearance: "error" });
+        addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
       console.log("Something terrible happened " + err.message);

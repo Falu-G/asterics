@@ -75,13 +75,18 @@ function Customer() {
 
   const dataVertical = [
     {
-      field: "firstname",
+      field: "lastname",
       headerName: "Name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      width: 160,
-      renderCell: () => {},
-    },
+      width: 260,
+      renderCell: ({row}) => {
+        return (
+            <span>{row.firstname+" "+ row.lastname}</span>
+        );
+      },
+      },
+   
     {
       field: "email",
       headerName: "Email",
@@ -93,7 +98,7 @@ function Customer() {
       headerName: "Phone Number",
       width: 200,
       renderCell: ({ row }) => {
-        <div className="CentralizeCell">{row.status}</div>;
+        
       },
     },
 
@@ -102,7 +107,7 @@ function Customer() {
       headerName: "Birthday",
       width: 160,
       renderCell: ({ row }) => {
-        <div className="CentralizeCell">{row.status}</div>;
+        
       },
     },
 

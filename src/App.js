@@ -31,18 +31,18 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path = "/login" component = {()=><ToastProvider> <Login/> </ToastProvider>} />
+          <Route path = "/login" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
           <Route path = "/testpage" component = {Testpage} />
-          <Route path = "/signup" component = {()=><ToastProvider> <SignUp/> </ToastProvider>} />
+          <Route path = "/signup" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <SignUp/> </ToastProvider>} />
           <MenuContext.Provider value = {{sidebar, setSideBar}}> 
-          <Route path = "/sendsms" component = {()=> <ToastProvider> <Sendsms/> </ToastProvider>} />
+          <Route path = "/sendsms" component = {()=> <ToastProvider autoDismissTimeout = {3000}> <Sendsms/> </ToastProvider>} />
           <Route path = '/huhgddyuhtrthwh' component = {Menus}/>
-          <Route path = "/sendemail" component = {()=> <ToastProvider> <SendEmail/> </ToastProvider>} />
+          <Route path = "/sendemail" component = {()=> <ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <SendEmail/> </ToastProvider>} />
           <Route path = "/maindashboard" component = {Maindashboard} />
-          <Route path = "/schedule" component = {()=> <ToastProvider> <MonthlySchedule/> </ToastProvider>}  />
-          <Route path = "/templates" component = {()=> <ToastProvider><Templates/></ToastProvider>} />
-          <Route path = "/customer" component = {()=> <ToastProvider> <Customer/> </ToastProvider>} />
+          <Route path = "/schedule" component = {()=> <ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <MonthlySchedule/> </ToastProvider>}  />
+          <Route path = "/templates" component = {()=> <ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}><Templates/></ToastProvider>} />
+          <Route path = "/customer" component = {()=> <ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Customer/> </ToastProvider>} />
           <Route path = "/resetpassword" component = {ResetPassword} />
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />
