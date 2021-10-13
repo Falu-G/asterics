@@ -28,8 +28,7 @@ function UpdateCustomer({
   handleClose,
   user,
   setUser,
-  setTokenValid,
-  setAllCustomers,
+  fetchBusiness,
   setSessionExpired,
 }) {
 
@@ -57,48 +56,48 @@ function UpdateCustomer({
 
 
 
-  const fetchUser = () => {
-    console.log()
-    fetch(`https://asteric.herokuapp.com/customer`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message === "Invalid Token") {
-          setTokenValid(true);
-        } else {
-          setAllCustomers(data);
-          console.log("This is going on "+data)
-        }
-      })
-      .catch((err) => {
-        console.log("This is the error that was caught" + err);
-      });
-    // fetch(`https://asteric.herokuapp.com/customer${id}`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     Authorization: "Bearer " + token,
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data.message === "Invalid Token") {
-    //       setTokenValid(true);
-    //     } else {
-    //       setAllCustomers(data);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("This is the error that was caught" + err);
-    //   });
-  };
+  // const fetchUser = () => {
+  //   console.log()
+  //   fetch(`https://asteric.herokuapp.com/customer`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.message === "Invalid Token") {
+  //         setTokenValid(true);
+  //       } else {
+  //         setAllCustomers(data);
+  //         console.log("This is going on "+data)
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("This is the error that was caught" + err);
+  //     });
+  //   // fetch(`https://asteric.herokuapp.com/customer${id}`, {
+  //   //   method: "GET",
+  //   //   headers: {
+  //   //     "Content-Type": "application/json",
+  //   //     Accept: "application/json",
+  //   //     Authorization: "Bearer " + token,
+  //   //   },
+  //   // })
+  //   //   .then((response) => response.json())
+  //   //   .then((data) => {
+  //   //     if (data.message === "Invalid Token") {
+  //   //       setTokenValid(true);
+  //   //     } else {
+  //   //       setAllCustomers(data);
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     console.log("This is the error that was caught" + err);
+  //   //   });
+  // };
 
 
 
@@ -122,13 +121,14 @@ function UpdateCustomer({
       setSessionExpired(true);
       handleClose();
     } else if (result.status === 200) {
-      fetchUser();
+      fetchBusiness()
       setUpdatingUser(false);
       handleClose();
       addToast("User updated Successfully", { appearance: "success" });
     } else {
       handleClose();
-      fetchUser();
+     
+    
       setUpdatingUser(false);
       addToast(result.message, { appearance: "success" });
     }

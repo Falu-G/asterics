@@ -306,11 +306,13 @@ function Monthlyschedule() {
         console.log("This is the data " + data.length);
         setSmsQueue(contactlist);
         console.log(contactlist);
+       
       })
       .catch((err) => {
         console.log(err);
+       
       });
-    fetchBusiness();
+   fetchBusiness();
   }, [fetchBusiness, token]);
 
   const handleClose = () => {

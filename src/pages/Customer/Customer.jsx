@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useCallback } from "react";
 import { MenuContext } from "../../components/MenuContext";
 import Menus from "../../components/menu/Menu";
 import "./customer.css";
@@ -50,7 +50,11 @@ function Customer() {
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
-  useEffect(() => {
+
+
+
+
+  const fetchBusiness = useCallback(async () => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
@@ -72,6 +76,15 @@ function Customer() {
         console.log("This is the error that was caught" + err);
       });
   }, [token]);
+
+
+
+
+
+  useEffect(() => {
+    fetchBusiness();
+  }, [fetchBusiness]);
+ 
 
   const dataVertical = [
     {
@@ -298,6 +311,7 @@ function Customer() {
                     open={openUpdate}
                     handleClose={handleCloseUpdate}
                     user={user}
+                    fetchBusiness = {fetchBusiness}
                     setUser={setUser}
                   />
                   <Modal
