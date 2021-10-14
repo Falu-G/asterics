@@ -52,9 +52,34 @@ function Customer() {
   const { addToast } = useToasts();
 
 
-
+const fetchoo = ()=>{
+  setSkeleton(true)
+  console.log("fetchoo")
+  fetch("https://asteric.herokuapp.com/customer", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else {
+          setAllCustomers(data);
+          setSkeleton(false);
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+      });
+}
 
   const fetchBusiness = useCallback(async () => {
+    setSkeleton(true)
+    console.log("This should reload")
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
@@ -311,7 +336,7 @@ function Customer() {
                     open={openUpdate}
                     handleClose={handleCloseUpdate}
                     user={user}
-                    fetchBusiness = {fetchBusiness}
+                    fetchBusiness = {fetchoo}
                     setUser={setUser}
                   />
                   <Modal
@@ -360,7 +385,7 @@ function Customer() {
                     }}
                     className="dashboardContainer"
                   >
-                    <NavigationComponent title="Dashboard" />
+                    <NavigationComponent title="Customer" />
 
                     <div className="customerWrapper">
                       <div>

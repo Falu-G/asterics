@@ -50,35 +50,35 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
       });
   };
 
-  const regFromCSV = async () => {
-    let result = await fetch(
-      "https://asteric.herokuapp.com/customer/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(),
-      }
-    );
+  // const regFromCSV = async () => {
+  //   let result = await fetch(
+  //     "https://asteric.herokuapp.com/customer/register",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //         Authorization: "Bearer " + token,
+  //       },
+  //       body: JSON.stringify(),
+  //     }
+  //   );
 
-    result = await result.json();
+  //   result = await result.json();
 
-    if (result.status === 401) {
-      setSessionExpired(true);
-      setAddingUser(false);
-      return;
-    }
+  //   if (result.status === 401) {
+  //     setSessionExpired(true);
+  //     setAddingUser(false);
+  //     return;
+  //   }
 
-    fetchUser();
-    setAddingUser(false);
-    setOpenModal(false);
-    addToast("User added Successfully", { appearance: "success" });
-    console.log(`This is the ${JSON.stringify(result)}`);
-    console.log();
-  };
+  //   fetchUser();
+  //   setAddingUser(false);
+  //   setOpenModal(false);
+  //   addToast("User added Successfully", { appearance: "success" });
+  //   console.log(`This is the ${JSON.stringify(result)}`);
+  //   console.log();
+  // };
   const register = async (e) => {
     e.preventDefault();
     setAddingUser(true);
@@ -249,7 +249,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                   />
                 </div>
 
-                <div className="submitcont">
+                {/* <div className="submitcont">
                   <ReactBootStrap.Button
                     style={{
                       float: "right",
@@ -270,7 +270,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                       {addingUser ? "Loading..." : "Register"}
                     </span>
                   </ReactBootStrap.Button>
-                </div>
+                </div> */}
               </form>
 
               <div className="horline"></div>
@@ -294,13 +294,37 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                     accept=".csv"
                   />
                 </div>
-                <ReactBootStrap.Button
+                {/* <ReactBootStrap.Button
                   style={{
                     marginTop: 20,
-                    
+                    float: "right",
                   }}
                   variant="primary"
-                  onClick={regFromCSV}
+                  onClick={"regFromCSV"}
+                  disabled={addingUser}
+                >
+                  <ReactBootStrap.Spinner
+                    as="span"
+                    className={addingUser ? "visible" : "visually-hidden"}
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually">
+                    {addingUser ? "Loading..." : "Register"}
+                  </span>
+                </ReactBootStrap.Button> */}
+              </div>
+
+              <ReactBootStrap.Button
+                  style={{
+                    marginTop: 20,
+                    float: "right",
+                    width:`100%`
+                  }}
+                  variant="primary"
+                  onClick={register}
                   disabled={addingUser}
                 >
                   <ReactBootStrap.Spinner
@@ -315,7 +339,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                     {addingUser ? "Loading..." : "Register"}
                   </span>
                 </ReactBootStrap.Button>
-              </div>
+              
             </div>
           </div>
         </div>

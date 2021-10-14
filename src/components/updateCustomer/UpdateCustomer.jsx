@@ -127,8 +127,7 @@ function UpdateCustomer({
       addToast("User updated Successfully", { appearance: "success" });
     } else {
       handleClose();
-     
-    
+      fetchBusiness()
       setUpdatingUser(false);
       addToast(result.message, { appearance: "success" });
     }

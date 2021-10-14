@@ -351,7 +351,7 @@ function Monthlyschedule() {
           }}
           className="dashboardContainer"
         >
-          <NavigationComponent title="Dashboard" />
+          <NavigationComponent title="Schedule" />
 
           {tokenValid ? (
             <>
