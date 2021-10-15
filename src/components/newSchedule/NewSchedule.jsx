@@ -132,6 +132,14 @@ function NewSchedule({ setOpenModal }) {
     scheduleType: "Daily",
   });
 
+  const [scheduleMessageSms, setScheduleMessageSms] = useState({
+    reciever: "",
+    messageBody: "",
+    messageSubject: "",
+    schedule_date: today,
+    scheduleType: "Daily",
+  });
+
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -144,35 +152,66 @@ function NewSchedule({ setOpenModal }) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleSend = async () => {
+  const handleScheduleMessage = async () => {
     setSendingMessage(true);
-    try {
-      let result = await fetch("https://asteric.herokuapp.com/mails/schedule", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(scheduleMessage),
-      });
-
-      result = await result.json();
-      if (result.status === 200) {
-        console.log(result.message);
+    if(messageType === "Email"){
+      try {
+        let result = await fetch("https://asteric.herokuapp.com/mails/schedule", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(scheduleMessage),
+        });
+  
+        result = await result.json();
+        if (result.status === 200) {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast("Saved Successfully", { appearance: "success" });
+          setOpenModal(false);
+        } else {
+          console.log(result.message);
+          setSendingMessage(false);
+          setOpenModal(false);
+          addToast(result.message, { appearance: "success" });
+        }
+      } catch (err) {
         setSendingMessage(false);
-        addToast("Saved Successfully", { appearance: "success" });
-        setOpenModal(false);
-      } else {
-        console.log(result.message);
-        setSendingMessage(false);
-        setOpenModal(false);
-        addToast(result.message, { appearance: "success" });
+        console.log("Something terrible happened " + err.message);
       }
-    } catch (err) {
-      setSendingMessage(false);
-      console.log("Something terrible happened " + err.message);
+    }else{
+      try {
+        let result = await fetch("https://asteric.herokuapp.com/vonageSms/schedule", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(scheduleMessageSms),
+        });
+  
+        result = await result.json();
+        if (result.status === 200) {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast("Saved Successfully", { appearance: "success" });
+          setOpenModal(false);
+        } else {
+          console.log(result.message);
+          setSendingMessage(false);
+          setOpenModal(false);
+          addToast(result.message, { appearance: "success" });
+        }
+      } catch (err) {
+        setSendingMessage(false);
+        console.log("Something terrible happened " + err.message);
+      }
     }
+   
   };
 
   const classes = useStyles();
@@ -209,7 +248,7 @@ function NewSchedule({ setOpenModal }) {
   const phoneNumberHandler = () => {
     let promises = selectedFlatRows.map((row) => row.original.phone);
     Promise.all(promises).then(function (results) {
-      setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
+      setScheduleMessage({ ...scheduleMessageSms, reciever: results });
     });
 
     handleClose();
@@ -283,11 +322,15 @@ function NewSchedule({ setOpenModal }) {
             label="Schedule Time"
             type="datetime-local"
             onChange={async (event) => {
-              setScheduleMessage({
+
+              messageType === "Email" ?  setScheduleMessage({
                 ...scheduleMessage,
                 schedule_date: event.target.value,
-              });
-
+              }) : setScheduleMessageSms({
+                ...scheduleMessageSms,
+                schedule_date: event.target.value,
+              })
+             
               console.log(event.target.value);
               console.log("Schedule shit " + scheduleMessage.schedule_date);
             }}
@@ -309,7 +352,7 @@ function NewSchedule({ setOpenModal }) {
               placeholder={
                 messageType === "SMS" ? "PhoneNumber" : "Enter Email"
               }
-              value={scheduleMessage.recieverAddress}
+              value={ messageType === "Email" ? scheduleMessage.receiverAddress : scheduleMessageSms.receiver}
             />
 
             <img
@@ -326,11 +369,11 @@ function NewSchedule({ setOpenModal }) {
             type="text"
             name="title"
             placeholder={"Title of the message"}
-            onChange={(event) =>
-              setScheduleMessage({
-                ...scheduleMessage,
-                messageSubject: event.target.value,
-              })
+            onChange={(event) =>{
+              if(messageType === "Email") setScheduleMessage({...scheduleMessage, messageSubject: event.target.value,})
+              else setScheduleMessageSms({...scheduleMessageSms, messageSubject: event.target.value})
+            }
+              
             }
             value={scheduleMessage.messageSubject}
           />
@@ -338,8 +381,12 @@ function NewSchedule({ setOpenModal }) {
             type="messages"
             name="name"
             onChange={(event) =>
-              setScheduleMessage({
+              messageType === "Email" ? setScheduleMessage({
                 ...scheduleMessage,
+                messageBody: event.target.value,
+              })
+               : setScheduleMessageSms({
+                ...scheduleMessageSms,
                 messageBody: event.target.value,
               })
             }
@@ -349,7 +396,7 @@ function NewSchedule({ setOpenModal }) {
             <ReactBootStrap.Button
               className="sendEmailbtn"
               variant="primary"
-              onClick={handleSend}
+              onClick={handleScheduleMessage}
               disabled={sendingMessage}
             >
               <ReactBootStrap.Spinner
