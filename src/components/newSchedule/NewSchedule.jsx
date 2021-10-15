@@ -285,6 +285,16 @@ function NewSchedule({ setOpenModal }) {
       <Dashnav title="New Schedule" />
 
       {console.log("Na date be dis " + scheduleMessage.schedule_date)}
+      <div style = {{
+        height:`100%`,
+        alignItems:`center`,
+        display:`flex`,
+        justifyContent:`center`,
+        flexDirection:`column`
+      }}>
+
+
+    
       <div className="ns-Scheduler">
         <div className="ns-Scheduler-container">
           <span>Select Message Type</span>
@@ -415,6 +425,8 @@ function NewSchedule({ setOpenModal }) {
         </div>
       </form>
 
+
+
       {messageType === "SMS" ? (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -543,6 +555,8 @@ function NewSchedule({ setOpenModal }) {
           />
         </>
       )}
+
+</div>
     </div>
   );
 }

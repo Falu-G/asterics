@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import './Dropdown.css'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 function Dropdown({tasks}) {
 
 
@@ -7,7 +8,15 @@ function Dropdown({tasks}) {
 
     return (
         <div class="dropdown">
+            <div style = {{
+                display : `flex`,
+                
+            }}>
+
             <h6 class="dropbtnn">{messageType}</h6>
+            <ArrowDropDownIcon/>
+            </div>
+        
             <div class="dropdown-content">
 
                 {tasks.map((task, index) => (<>

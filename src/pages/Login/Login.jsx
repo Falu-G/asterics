@@ -108,7 +108,6 @@ function Login() {
         <Link to="/">
           <span>Asteric</span>
         </Link>
-
         <div className="LoginImg">
           <img src="images/loginimg.png" alt="Login" />
           {/* <span>Login to your account</span> */}
@@ -136,22 +135,24 @@ function Login() {
             />
 
             <FormControl className={classes.margin} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password"  style ={{
-                  marginTop:15
-                }}>
+              <InputLabel
+                htmlFor="outlined-adornment-password"
+                style={{
+                  marginTop: 15,
+                }}
+              >
                 Password
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
-                style ={{
-                  marginTop:15
+                style={{
+                  marginTop: 15,
                 }}
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
                 onChange={handleChange("password")}
                 endAdornment={
-                  <InputAdornment position="end"
-                  >
+                  <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
@@ -162,10 +163,11 @@ function Login() {
                     </IconButton>
                   </InputAdornment>
                 }
-                labelWidth={70}
+                fullWidth={true}
+                labelWidth={90}
               />
             </FormControl>
-         
+
             {/* <input
               className="forminput"
               onChange={(e) => setEmail(e.target.value)}

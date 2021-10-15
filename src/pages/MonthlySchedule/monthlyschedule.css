@@ -159,12 +159,14 @@ margin-top: 10px;
     border-radius: 10px;
   }
   
-  .dropdown {
+  /* .dropdown {
     position: relative;
     display: inline-block;
     border-radius: 10px;
+   
+    height: 100%;
   }
-  
+   */
   .dropdown-content {
     display: none;
     position: absolute;
