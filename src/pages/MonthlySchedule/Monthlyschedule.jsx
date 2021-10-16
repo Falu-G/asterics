@@ -157,12 +157,25 @@ function Monthlyschedule() {
       field: "message",
       headerName: "Message Content",
       sortable: false,
-      width: 500,
-      renderCell: () => {},
+      width: 200,
+      renderCell: ({row}) => (
+
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+          }}
+        >
+          {row.message}
+        </div>
+      ),
     },
     {
       field: "status",
       headerName: "Status",
+      sortable: false,
       width: 160,
       renderCell: ({ row }) => (
         <div
@@ -181,6 +194,7 @@ function Monthlyschedule() {
     {
       field: "receiver",
       headerName: "Receiver",
+      sortable: false,
       width: 160,
       renderCell: ({ row }) => (
         
@@ -236,13 +250,26 @@ function Monthlyschedule() {
       field: "messageBody",
       headerName: "Message Content",
       sortable: false,
-      width: 500,
-      renderCell: () => {},
+      width: 200,
+      renderCell: (param) => (
+
+        <div
+        style={{
+          width: `100%`,
+          display: "flex",
+          alignItems: `center`,
+          justifyContent: "center",
+        }}
+      >
+        {param.row.messageBody}
+      </div>
+      ),
     },
     {
       field: "status",
       headerName: "Status",
       width: 160,
+      sortable: false,
       renderCell: ({ row }) => (
         <div
           style={{
@@ -260,7 +287,7 @@ function Monthlyschedule() {
     {
       field: "",
       headerName: "",
-      width: 160,
+      
       renderCell: ({ row }) => (
         <>
           <div className="userdelete">
@@ -279,7 +306,7 @@ function Monthlyschedule() {
   ];
 
   useEffect(() => {
-    console.log("I am here");
+    
     Promise.all([
       fetch("https://asteric.herokuapp.com/mails", {
         method: "GET",
@@ -450,8 +477,8 @@ function Monthlyschedule() {
                     </div>
                     <div style={{ marginTop: 25 }}>
                       <h3>MessagesQueue</h3>
-                      <div className="messagesQueueTable card">
-                        <div style={{height:400, width: "100%" }} >
+                      <div className="messagesQueueTable">
+                        <div style={{height:400, width: "70%" }} >
                           <DataGrid
                             rows={smsQueue}
                             columns={dataVerticalSMS}
@@ -465,8 +492,9 @@ function Monthlyschedule() {
 
                     <div className="Emailqueue">
                       <h3>Email queue</h3>
-                      <div style={{height:400, width: "100%" }}>
+                      <div style={{height:400, width: "70%" }}>
                         <DataGrid
+                      
                           rows={emailQueue}
                           columns={dataVertical}
                           pageSize={5}

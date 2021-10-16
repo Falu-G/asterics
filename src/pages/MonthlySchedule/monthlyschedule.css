@@ -124,7 +124,6 @@ color: #FFFFFF;
     margin-top: 10px;
     display: flex;
     height:400px;
-    background-color:#fff;
     flex-direction: column;
 }
 
@@ -144,7 +143,9 @@ margin-top: 10px;
     background-color:#18A0FB;  
 }
 
-
+.MuiDataGrid-root .MuiDataGrid-columnHeaderTitleContainer{
+    justify-content: center
+}
 
 
 /*Design of the dropdown */

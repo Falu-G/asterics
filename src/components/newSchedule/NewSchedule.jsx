@@ -133,7 +133,7 @@ function NewSchedule({ setOpenModal }) {
   });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
-    reciever: "",
+    receiver: "",
     messageBody: "",
     messageSubject: "",
     schedule_date: today,
@@ -156,6 +156,7 @@ function NewSchedule({ setOpenModal }) {
     setSendingMessage(true);
     if(messageType === "Email"){
       try {
+        console.log(scheduleMessage)
         let result = await fetch("https://asteric.herokuapp.com/mails/schedule", {
           method: "POST",
           headers: {
@@ -184,6 +185,7 @@ function NewSchedule({ setOpenModal }) {
       }
     }else{
       try {
+        console.log(scheduleMessageSms)
         let result = await fetch("https://asteric.herokuapp.com/vonageSms/schedule", {
           method: "POST",
           headers: {
@@ -248,9 +250,8 @@ function NewSchedule({ setOpenModal }) {
   const phoneNumberHandler = () => {
     let promises = selectedFlatRows.map((row) => row.original.phone);
     Promise.all(promises).then(function (results) {
-      setScheduleMessage({ ...scheduleMessageSms, reciever: results });
+      setScheduleMessageSms({ ...scheduleMessageSms, receiver: results });
     });
-
     handleClose();
     return null;
   };
@@ -285,6 +286,8 @@ function NewSchedule({ setOpenModal }) {
       <Dashnav title="New Schedule" />
 
       {console.log("Na date be dis " + scheduleMessage.schedule_date)}
+      {console.log("This are the numbers you selected"+scheduleMessageSms.receiver)}
+      {console.log("This are the emails you selected"+scheduleMessage.recieverAddress)}
       <div style = {{
         height:`100%`,
         alignItems:`center`,
@@ -303,9 +306,9 @@ function NewSchedule({ setOpenModal }) {
               className={messageType === "SMS" ? "ns-active" : null}
               onClick={() => {
                 setMessageType("SMS");
-                setScheduleMessage({
-                  ...scheduleMessage,
-                  recieverAddress: "",
+                setScheduleMessageSms({
+                  ...scheduleMessageSms,
+                  receiver: "",
                 });
               }}
             >
@@ -362,7 +365,7 @@ function NewSchedule({ setOpenModal }) {
               placeholder={
                 messageType === "SMS" ? "PhoneNumber" : "Enter Email"
               }
-              value={ messageType === "Email" ? scheduleMessage.receiverAddress : scheduleMessageSms.receiver}
+              value={messageType === "Email" ? scheduleMessage.recieverAddress :scheduleMessageSms.receiver}
             />
 
             <img
@@ -385,7 +388,7 @@ function NewSchedule({ setOpenModal }) {
             }
               
             }
-            value={scheduleMessage.messageSubject}
+            value={messageType === "Email" ? scheduleMessage.messageSubject : scheduleMessageSms.messageSubject}
           />
           <textArea
             type="messages"
