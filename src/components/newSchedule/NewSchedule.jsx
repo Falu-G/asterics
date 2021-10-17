@@ -28,7 +28,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function NewSchedule({ setOpenModal }) {
+function NewSchedule({ setOpenModal, setTokenValid, setEmailQueue, setSentEmailValue}) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -152,6 +152,43 @@ function NewSchedule({ setOpenModal }) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+
+
+
+
+  const fetchBusiness = async () => {
+    setLoading(true)
+    console.log("Fetch Loading is called")
+    fetch("https://asteric.herokuapp.com/mails", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+        } else {
+          setEmailQueue(data.filter((item) => item.status === "scheduled"));
+          setSentEmailValue(data.filter((item) => item.status === "sent"));
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+        setLoading(false);
+      });
+  }
+
+
+
+
+  
+
   const handleScheduleMessage = async () => {
     setSendingMessage(true);
     if(messageType === "Email"){
@@ -172,12 +209,14 @@ function NewSchedule({ setOpenModal }) {
           console.log(result.message);
           setSendingMessage(false);
           addToast("Saved Successfully", { appearance: "success" });
-          setOpenModal(false);
+          //setOpenModal(false);
+          fetchBusiness()
         } else {
           console.log(result.message);
           setSendingMessage(false);
-          setOpenModal(false);
+          //setOpenModal(false);
           addToast(result.message, { appearance: "success" });
+          fetchBusiness()
         }
       } catch (err) {
         setSendingMessage(false);
@@ -185,7 +224,7 @@ function NewSchedule({ setOpenModal }) {
       }
     }else{
       try {
-        console.log(scheduleMessageSms)
+        console.log(scheduleMessageSms.messageBody)
         let result = await fetch("https://asteric.herokuapp.com/vonageSms/schedule", {
           method: "POST",
           headers: {
@@ -202,11 +241,13 @@ function NewSchedule({ setOpenModal }) {
           setSendingMessage(false);
           addToast("Saved Successfully", { appearance: "success" });
           setOpenModal(false);
+          fetchBusiness()
         } else {
           console.log(result.message);
           setSendingMessage(false);
           setOpenModal(false);
           addToast(result.message, { appearance: "success" });
+          fetchBusiness()
         }
       } catch (err) {
         setSendingMessage(false);
@@ -256,20 +297,6 @@ function NewSchedule({ setOpenModal }) {
     return null;
   };
 
-  // const confirmSelection = () => {
-  //   let promises = selectedFlatRows.map((row) => row.original.email);
-  //   console.log("Clicking confirmation");
-  //   //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
-  //   Promise.all(promises).then(function (results) {
-  //     setScheduleMessage({ ...scheduleMessage, recieverAddress: results });
-
-  //     console.log("tis is receivers" + scheduleMessage.recieverAddress);
-  //   });
-
-  //   handleClose();
-
-  //   return null;
-  // };
 
   return (
     <div className="ns-Container">
@@ -396,13 +423,14 @@ function NewSchedule({ setOpenModal }) {
             onChange={(event) =>
               messageType === "Email" ? setScheduleMessage({
                 ...scheduleMessage,
-                messageBody: event.target.value,
+                messageBody: event.target.value
               })
                : setScheduleMessageSms({
                 ...scheduleMessageSms,
-                messageBody: event.target.value,
+                messageBody: event.target.value
               })
             }
+            value={messageType === "Email" ? scheduleMessage.messageBody : scheduleMessageSms.messageBody}
           />
 
           <div style={{ width: "100%" }}>

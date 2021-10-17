@@ -408,6 +408,10 @@ function Monthlyschedule() {
                           setOpenModal={() =>
                             setOpenModal(() => (openModal ? false : true))
                           }
+
+                          setTokenValid = {()=>setTokenValid(tokenValid)} 
+                          setEmailQueue = {()=>setEmailQueue(emailQueue)} 
+                          setSentEmailValue = {()=>setSentEmailValue(sentEmailValue)}
                         />
                       </ToastProvider>
                     </Modal>
