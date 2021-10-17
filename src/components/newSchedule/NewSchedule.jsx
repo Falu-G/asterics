@@ -209,13 +209,13 @@ function NewSchedule({ setOpenModal, setTokenValid, setEmailQueue, setSentEmailV
           console.log(result.message);
           setSendingMessage(false);
           addToast("Saved Successfully", { appearance: "success" });
-          //setOpenModal(false);
+          setOpenModal(false);
           fetchBusiness()
         } else {
           console.log(result.message);
           setSendingMessage(false);
-          //setOpenModal(false);
           addToast(result.message, { appearance: "success" });
+          setOpenModal(false);
           fetchBusiness()
         }
       } catch (err) {
