@@ -166,7 +166,8 @@ function Templates() {
         setOpen(false);
       });
   };
-
+  const letterReducer = (letter) => letter.substring(0,50);
+  const letterReducerToSixty = (letter) => letter.substring(0,60);
   const fetchBusinesses = useCallback(() => {
     fetch("https://asteric.herokuapp.com/messageTemplate", {
       method: "GET",
@@ -544,9 +545,9 @@ function Templates() {
                                   handleOpenEmailToSend(emailTemplate.message);
                                 }}
                               >
-                                {emailTemplate.message}
+                                {letterReducer(emailTemplate.message)}
                               </h5>
-                              <p>{emailTemplate.message}</p>
+                              <p>{letterReducerToSixty(emailTemplate.message)}</p>
 
                               <Delete
                                 className="delete"
@@ -596,9 +597,9 @@ function Templates() {
                                   handleOpenSMSToSend(smsTemplate.message)
                                 }
                               >
-                                {smsTemplate.message}
+                                {letterReducer(smsTemplate.message)}
                               </h5>
-                              <p>{smsTemplate.message}</p>
+                              <p>{letterReducerToSixty(smsTemplate.message)}</p>
 
                               <Delete
                                 className="delete"

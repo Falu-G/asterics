@@ -75,6 +75,9 @@ function Monthlyschedule() {
     },
   };
 
+
+
+  
   const fetchBusiness = useCallback(async () => {
     fetch("https://asteric.herokuapp.com/mails", {
       method: "GET",
@@ -215,7 +218,7 @@ function Monthlyschedule() {
     {
       field: "",
       headerName: "",
-      width: 160,
+      sortable: false,
       renderCell: ({ row }) => (
         <>
           <div className="userdelete">
@@ -270,6 +273,7 @@ function Monthlyschedule() {
       headerName: "Status",
       width: 160,
       sortable: false,
+      disableColumnFilter :true,
       renderCell: ({ row }) => (
         <div
           style={{
@@ -287,7 +291,7 @@ function Monthlyschedule() {
     {
       field: "",
       headerName: "",
-      
+      sortable: false,
       renderCell: ({ row }) => (
         <>
           <div className="userdelete">
@@ -409,9 +413,11 @@ function Monthlyschedule() {
                             setOpenModal(() => (openModal ? false : true))
                           }
 
-                          setTokenValid = {()=>setTokenValid(tokenValid)} 
-                          setEmailQueue = {()=>setEmailQueue(emailQueue)} 
-                          setSentEmailValue = {()=>setSentEmailValue(sentEmailValue)}
+                          spinnerDisplay = {setLoading}
+                          setSmsQueue = {setSmsQueue}
+                          setTokenValid = {setTokenValid} 
+                          setEmailQueue = {setEmailQueue} 
+                          setSentEmailValue = {setSentEmailValue}
                         />
                       </ToastProvider>
                     </Modal>
