@@ -5,7 +5,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useToasts } from "react-toast-notifications";
 import * as ReactBootStrap from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/styles";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -16,6 +15,10 @@ import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
 import Skeleton from "@mui/material/Skeleton";
 import ShowUpEmail from "../../pages/ShowUpEmail/ShowUpEmail";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import Stack from "@mui/material/Stack";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 
 const style = {
   position: "absolute",
@@ -42,7 +45,7 @@ function NewSchedule({
   var yyyy = today.getFullYear();
 
   today = `${yyyy}-${mm}-${dd}`;
-  console.log("This is todays date " + today);
+  //console.log("This is todays date " + today);
 
   const data = React.useMemo(
     () => [
@@ -77,18 +80,6 @@ function NewSchedule({
     ],
     []
   );
-
-  const useStyles = makeStyles(() => ({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    textField: {
-      marginLeft: 1,
-      marginRight: 1,
-      width: 200,
-    },
-  }));
 
   const tableInstance = useTable(
     { columns, data: allCustomers },
@@ -135,17 +126,31 @@ function NewSchedule({
     recieverAddress: "",
     messageBody: "",
     messageSubject: "",
-    schedule_date: today,
+    schedule_date: "",
     scheduleType: "Daily",
   });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
-    sender:"Asterics",
+    sender: "Asterics",
     receiver: "",
     message: "",
-    schedule_date: today,
+    schedule_date: "",
     scheduleType: "Daily",
   });
+
+  const [value, setValue] = React.useState(new Date());
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    if(messageType === "SMS"){
+      
+      setScheduleMessageSms({ ...scheduleMessageSms, schedule_date: value });
+    }else{
+      setScheduleMessage({ ...scheduleMessage, schedule_date: value });
+    }
+
+   
+  };
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
@@ -205,8 +210,12 @@ function NewSchedule({
 
   const handleScheduleMessage = async () => {
     setSendingMessage(true);
+
+
     if (messageType === "Email") {
       try {
+        setScheduleMessage({...scheduleMessage,schedule_date:value})
+        console.log("This is the date selected in email "+value+" but the date is"+scheduleMessage.schedule_date)
         console.log(scheduleMessage);
         let result = await fetch(
           "https://asteric.herokuapp.com/mails/schedule",
@@ -242,6 +251,9 @@ function NewSchedule({
     } else {
       try {
         console.log(scheduleMessageSms.messageBody);
+        setScheduleMessageSms({...scheduleMessageSms,schedule_date:value})
+    
+        console.log("This is the date selected in email "+value+" but the date is" +scheduleMessageSms.schedule_date)
         let result = await fetch(
           "https://asteric.herokuapp.com/vonageSms/schedule",
           {
@@ -256,14 +268,15 @@ function NewSchedule({
         );
 
         result = await result.json();
-        if (result.status === 200) {
-          console.log(result.message);
+        if (result.responsecode === 200) {
+          console.log("finaly in 200"+result.message);
           setSendingMessage(false);
-          addToast("Saved Successfully", { appearance: "success" });
+          addToast(result.message, { appearance: "success" });
           setOpenModal(false);
           fetchBusiness();
         } else {
           console.log(result.message);
+          console.log("finaly not in 200"+result.message);
           setSendingMessage(false);
           setOpenModal(false);
           addToast(result.message, { appearance: "success" });
@@ -276,7 +289,7 @@ function NewSchedule({
     }
   };
 
-  const classes = useStyles();
+
 
   const handleSelectCustomers = async () => {
     handleOpen();
@@ -330,13 +343,13 @@ function NewSchedule({
       />
       <Dashnav title="New Schedule" />
 
-      {console.log("Na date be dis " + scheduleMessage.schedule_date)}
+      {/* {console.log("Na date be dis " + scheduleMessage.schedule_date)}
       {console.log(
         "This are the numbers you selected" + scheduleMessageSms.receiver
       )}
       {console.log(
         "This are the emails you selected" + scheduleMessage.recieverAddress
-      )}
+      )} */}
       <div
         style={{
           height: `100%`,
@@ -378,6 +391,17 @@ function NewSchedule({
             </div>
           </div>
           <div>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Stack spacing={3}>
+                <DateTimePicker
+                  label="Date&Time picker"
+                  value={value}
+                  onChange={handleChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Stack>
+            </LocalizationProvider>
+{/* 
             <TextField
               id="datetime-local"
               label="Schedule Time"
@@ -401,7 +425,7 @@ function NewSchedule({
               InputLabelProps={{
                 shrink: true,
               }}
-            />
+            /> */}
           </div>
         </div>
 

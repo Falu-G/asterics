@@ -59,6 +59,7 @@ function Monthlyschedule() {
   const [sentEmailValue, setSentEmailValue] = useState(0);
   const [emailId, setEmailId] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [opensmsdialogue, setOpenopensmsdialogue] = React.useState(false);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
@@ -75,9 +76,6 @@ function Monthlyschedule() {
     },
   };
 
-
-
-  
   const fetchBusiness = useCallback(async () => {
     fetch("https://asteric.herokuapp.com/mails", {
       method: "GET",
@@ -104,6 +102,39 @@ function Monthlyschedule() {
   }, [token]);
 
   const { sidebar, setSideBar } = useContext(MenuContext);
+
+  const handledeleteSms = (id) => {
+    setLoading(true);
+    fetch(`https://asteric.herokuapp.com/vonageSms/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Invalid Token") {
+          setTokenValid(true);
+          setOpenopensmsdialogue(false);
+        } else if (data.responsecode === "200") {
+          setSmsQueue(smsQueue.filter((item) => item.id !== id));
+          setOpenopensmsdialogue(false);
+          setLoading(false);
+          addToast(data.message, { appearance: "success" });
+        } else {
+          setOpenopensmsdialogue(false);
+          setLoading(false);
+          addToast("Error in saving templates", { appearance: "error" });
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error that was caught" + err);
+        setLoading(false);
+      });
+  };
+
   const handledelete = (id) => {
     setLoading(true);
     fetch(`https://asteric.herokuapp.com/mails/${id}`, {
@@ -161,8 +192,7 @@ function Monthlyschedule() {
       headerName: "Message Content",
       sortable: false,
       width: 200,
-      renderCell: ({row}) => (
-
+      renderCell: ({ row }) => (
         <div
           style={{
             width: `100%`,
@@ -200,7 +230,6 @@ function Monthlyschedule() {
       sortable: false,
       width: 160,
       renderCell: ({ row }) => (
-        
         <div
           style={{
             width: `100%`,
@@ -209,9 +238,9 @@ function Monthlyschedule() {
             alignItems: `center`,
             justifyContent: "center",
           }}
-          
-        > <span>{row.receiver}</span>
-        
+        >
+          {" "}
+          <span>{row.receiver}</span>
         </div>
       ),
     },
@@ -228,7 +257,7 @@ function Monthlyschedule() {
                 color: "red",
                 cursor: "pointer",
               }}
-              onClick={() => handleClickOpen(row.id)}
+              onClick={() => handleClickOpenSmsDialogue(row.id)}
             />
           </div>
         </>
@@ -255,17 +284,16 @@ function Monthlyschedule() {
       sortable: false,
       width: 200,
       renderCell: (param) => (
-
         <div
-        style={{
-          width: `100%`,
-          display: "flex",
-          alignItems: `center`,
-          justifyContent: "center",
-        }}
-      >
-        {param.row.messageBody}
-      </div>
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+          }}
+        >
+          {param.row.messageBody}
+        </div>
       ),
     },
     {
@@ -273,7 +301,7 @@ function Monthlyschedule() {
       headerName: "Status",
       width: 160,
       sortable: false,
-      disableColumnFilter :true,
+      disableColumnFilter: true,
       renderCell: ({ row }) => (
         <div
           style={{
@@ -310,7 +338,6 @@ function Monthlyschedule() {
   ];
 
   useEffect(() => {
-    
     Promise.all([
       fetch("https://asteric.herokuapp.com/mails", {
         method: "GET",
@@ -330,20 +357,17 @@ function Monthlyschedule() {
       }),
     ])
       .then(([items, contactlist]) => {
-        
         return Promise.all([items.json(), contactlist.json()]);
       })
       .then(([data, contactlist]) => {
         console.log("This is the data " + data.length);
         setSmsQueue(contactlist);
         console.log(contactlist);
-       
       })
       .catch((err) => {
         console.log(err);
-       
       });
-   fetchBusiness();
+    fetchBusiness();
   }, [fetchBusiness, token]);
 
   const handleClose = () => {
@@ -353,6 +377,15 @@ function Monthlyschedule() {
   const handleClickOpen = (id) => {
     setEmailId(id);
     setOpen(true);
+  };
+
+
+  const handleCloseSmsDialogue = ()=>{
+    setOpenopensmsdialogue(false)
+  }
+  const handleClickOpenSmsDialogue = (id) => {
+    setOpenopensmsdialogue(true);
+    setEmailId(id);
   };
 
   return (
@@ -412,16 +445,16 @@ function Monthlyschedule() {
                           setOpenModal={() =>
                             setOpenModal(() => (openModal ? false : true))
                           }
-
-                          spinnerDisplay = {setLoading}
-                          setSmsQueue = {setSmsQueue}
-                          setTokenValid = {setTokenValid} 
-                          setEmailQueue = {setEmailQueue} 
-                          setSentEmailValue = {setSentEmailValue}
+                          spinnerDisplay={setLoading}
+                          setSmsQueue={setSmsQueue}
+                          setTokenValid={setTokenValid}
+                          setEmailQueue={setEmailQueue}
+                          setSentEmailValue={setSentEmailValue}
                         />
                       </ToastProvider>
                     </Modal>
 
+                    {/**Email dialogue */}
                     <Dialog
                       open={open}
                       TransitionComponent={Transition}
@@ -438,6 +471,28 @@ function Monthlyschedule() {
                       <DialogActions>
                         <Button onClick={handleClose}>CANCEL</Button>
                         <Button onClick={() => handledelete(emailId)}>
+                          DELETE
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+
+                    {/* SMS DIALOGUE */}
+                    <Dialog
+                      open={opensmsdialogue}
+                      TransitionComponent={Transition}
+                      keepMounted
+                      onClose={handleCloseSmsDialogue}
+                      aria-describedby="alert-dialog-slide-description"
+                    >
+                      <DialogTitle>{"Delete Customer?"}</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                          Are you sure you want to delete this sms from queue?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleCloseSmsDialogue}>CANCEL</Button>
+                        <Button onClick={() => handledeleteSms(emailId)}>
                           DELETE
                         </Button>
                       </DialogActions>
@@ -488,7 +543,7 @@ function Monthlyschedule() {
                     <div style={{ marginTop: 25 }}>
                       <h3>MessagesQueue</h3>
                       <div className="messagesQueueTable">
-                        <div style={{height:400, width: "70%" }} >
+                        <div style={{ height: 400, width: "70%" }}>
                           <DataGrid
                             rows={smsQueue}
                             columns={dataVerticalSMS}
@@ -502,9 +557,8 @@ function Monthlyschedule() {
 
                     <div className="Emailqueue">
                       <h3>Email queue</h3>
-                      <div style={{height:400, width: "70%" }}>
+                      <div style={{ height: 400, width: "70%" }}>
                         <DataGrid
-                      
                           rows={emailQueue}
                           columns={dataVertical}
                           pageSize={5}
