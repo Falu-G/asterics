@@ -15,10 +15,10 @@ import Skeleton from "@mui/material/Skeleton";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import htmlToDraft from "html-to-draftjs";
+//import htmlToDraft from "html-to-draftjs";
 
 //import TagFacesIcon from '@mui/icons-material/TagFaces';
 
