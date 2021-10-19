@@ -15,7 +15,10 @@ import Skeleton from "@mui/material/Skeleton";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
-
+import { EditorState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import htmlToDraft from "html-to-draftjs";
 
 //import TagFacesIcon from '@mui/icons-material/TagFaces';
 
@@ -30,8 +33,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-
 
 function SendEmail() {
   const { sidebar, setSideBar } = useContext(MenuContext);
@@ -175,12 +176,16 @@ function SendEmail() {
       console.log(emailContent.recieverAddress);
     });
 
-    handleClose()
-
+    handleClose();
 
     return null;
   };
 
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+  };
   return (
     <>
       {invalidToken ? (
@@ -373,6 +378,21 @@ function SendEmail() {
                       }
                       placeholder="Message Title"
                     />
+                    <div
+                      style={{
+                        width: "937px",
+                        backgroundColor: "white",
+                      }}
+                    >
+                      <Editor
+                        editorState={editorState}
+                        toolbarClassName="toolbarClassName"
+                        wrapperClassName="wrapperClassName"
+                        editorClassName="editorClassName"
+                        onEditorStateChange={onEditorStateChange}
+                      />
+                      
+                    </div>
                     <textArea
                       type="text"
                       name="message"
@@ -408,18 +428,6 @@ function SendEmail() {
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
         </>
       )}

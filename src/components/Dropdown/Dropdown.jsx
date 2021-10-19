@@ -10,11 +10,16 @@ function Dropdown({tasks}) {
         <div class="dropdown">
             <div style = {{
                 display : `flex`,
-                
+                justifyContent:`space-between`,
+                alignItems: "center",
+               
             }}>
 
             <h6 class="dropbtnn">{messageType}</h6>
-            <ArrowDropDownIcon/>
+            <ArrowDropDownIcon sx = {{
+                color: `white`,
+              
+            }}/>
             </div>
         
             <div class="dropdown-content">

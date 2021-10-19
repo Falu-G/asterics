@@ -1,19 +1,15 @@
 .dropbtnn {
   cursor: pointer;
   color: white;
+  width: "100%"
 }
 
 .dropdown {
   position: relative;
   display: inline-block;
-  border-radius: 10px;
-  padding-top: 7px;
-  padding-bottom: 5px;
-  padding-right: 8px;
-  padding-left: 8px;
+  width: 200px;
+  padding : 5px;
   background-color: #18A0FB;
-
-
 }
 
 .dropdown-content {

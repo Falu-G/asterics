@@ -14,6 +14,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 //import TextField from "@material-ui/core/TextField";
 import { useToasts } from "react-toast-notifications";
 import TextField from "@mui/material/TextField";
+import CssBaseline from '@mui/material/CssBaseline';
 const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
@@ -104,6 +105,7 @@ function Login() {
 
   return (
     <div className="LoginContainer">
+        <CssBaseline />
       <div className="LoginContainerfirstbox">
         <Link to="/">
           <span>Asteric</span>

@@ -13,7 +13,6 @@ import SessionExpired from "../SessionExpired/SessionExpired";
 import * as ReactBootStrap from "react-bootstrap";
 import { ToastProvider } from "react-toast-notifications";
 import dateFormat from "dateformat";
-import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { useToasts } from "react-toast-notifications";
 import Dialog from "@mui/material/Dialog";
@@ -27,19 +26,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Monthlyschedule() {
-  const useStyles = makeStyles(() => ({
-    root: {
-      "& > *": {
-        margin: 1,
-      },
-
-      button: {
-        backgroundColor: "#18A0FB",
-      },
-    },
-  }));
-
-  const classes = useStyles();
   let today = new Date();
   let month = today.getMonth() + 1;
   month = month < 10 ? "0" + month : month;
@@ -530,8 +516,12 @@ function Monthlyschedule() {
                         <Dropdown tasks={listOfTasks} />
 
                         <Button
-                          className={classes.button}
+                         
                           variant="contained"
+                          sx = {{
+                            backgroundColor:`#18A0FB`,
+                            padding:`8px`
+                          }}
                           onClick={() =>
                             setOpenModal(() => (openModal ? false : true))
                           }
