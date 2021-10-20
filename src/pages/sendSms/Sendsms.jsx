@@ -286,6 +286,9 @@ function Sendsms() {
                     </div>
 
                     <textArea
+                    style = {{
+                      width: "937px",
+                    }}
                       type="text"
                       name="message"
                       value={sendMessage.message}
