@@ -1,0 +1,9 @@
+.editorClassName{
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 100px;
+    overflow-y: scroll;
+    background-color: "white";
+}
+
+

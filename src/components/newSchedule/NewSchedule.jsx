@@ -19,6 +19,12 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import DateTimePicker from "@mui/lab/DateTimePicker";
+import TextEditor from "../TextEditor/TextEditor";
+import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import CssBaseline from "@mui/material/CssBaseline";
+import { EditorState, convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+
 
 const style = {
   position: "absolute",
@@ -142,14 +148,11 @@ function NewSchedule({
 
   const handleChange = (newValue) => {
     setValue(newValue);
-    if(messageType === "SMS"){
-      
+    if (messageType === "SMS") {
       setScheduleMessageSms({ ...scheduleMessageSms, schedule_date: value });
-    }else{
+    } else {
       setScheduleMessage({ ...scheduleMessage, schedule_date: value });
     }
-
-   
   };
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -211,11 +214,21 @@ function NewSchedule({
   const handleScheduleMessage = async () => {
     setSendingMessage(true);
 
-
     if (messageType === "Email") {
       try {
-        setScheduleMessage({...scheduleMessage,schedule_date:value})
-        console.log("This is the date selected in email "+value+" but the date is"+scheduleMessage.schedule_date)
+        setScheduleMessage({ ...scheduleMessage, schedule_date: value });
+        setScheduleMessage({
+          ...scheduleMessage,
+          messageBody: draftToHtml(
+            convertToRaw(editorState.getCurrentContent())
+          ),
+        });
+        console.log(
+          "This is the date selected in email " +
+            value +
+            " but the date is" +
+            scheduleMessage.schedule_date
+        );
         console.log(scheduleMessage);
         let result = await fetch(
           "https://asteric.herokuapp.com/mails/schedule",
@@ -251,9 +264,14 @@ function NewSchedule({
     } else {
       try {
         console.log(scheduleMessageSms.messageBody);
-        setScheduleMessageSms({...scheduleMessageSms,schedule_date:value})
-    
-        console.log("This is the date selected in email "+value+" but the date is" +scheduleMessageSms.schedule_date)
+        setScheduleMessageSms({ ...scheduleMessageSms, schedule_date: value });
+
+        console.log(
+          "This is the date selected in email " +
+            value +
+            " but the date is" +
+            scheduleMessageSms.schedule_date
+        );
         let result = await fetch(
           "https://asteric.herokuapp.com/vonageSms/schedule",
           {
@@ -269,14 +287,14 @@ function NewSchedule({
 
         result = await result.json();
         if (result.responsecode === 200) {
-          console.log("finaly in 200"+result.message);
+          console.log("finaly in 200" + result.message);
           setSendingMessage(false);
           addToast(result.message, { appearance: "success" });
           setOpenModal(false);
           fetchBusiness();
         } else {
           console.log(result.message);
-          console.log("finaly not in 200"+result.message);
+          console.log("finaly not in 200" + result.message);
           setSendingMessage(false);
           setOpenModal(false);
           addToast(result.message, { appearance: "success" });
@@ -288,8 +306,6 @@ function NewSchedule({
       }
     }
   };
-
-
 
   const handleSelectCustomers = async () => {
     handleOpen();
@@ -329,8 +345,20 @@ function NewSchedule({
     return null;
   };
 
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+    setScheduleMessage({
+      ...scheduleMessage,
+      messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    });
+  };
+  //setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
+
   return (
     <div className="ns-Container">
+      <CssBaseline />
       <CloseIcon
         style={{
           position: "absolute",
@@ -401,7 +429,7 @@ function NewSchedule({
                 />
               </Stack>
             </LocalizationProvider>
-{/* 
+            {/* 
             <TextField
               id="datetime-local"
               label="Schedule Time"
@@ -468,48 +496,47 @@ function NewSchedule({
                 value={scheduleMessage.messageSubject}
               />
             ) : null}
+          </div>
 
+          {messageType === "Email" ? (
+            <TextEditor
+              sizeOfMessageBox={"832px"}
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+            />
+          ) : (
             <textArea
               type="messages"
               name="name"
               onChange={(event) =>
-                messageType === "Email"
-                  ? setScheduleMessage({
-                      ...scheduleMessage,
-                      messageBody: event.target.value,
-                    })
-                  : setScheduleMessageSms({
-                      ...scheduleMessageSms,
-                      message: event.target.value,
-                    })
+                setScheduleMessageSms({
+                  ...scheduleMessageSms,
+                  message: event.target.value,
+                })
               }
-              value={
-                messageType === "Email"
-                  ? scheduleMessage.messageBody
-                  : scheduleMessageSms.message
-              }
+              value={scheduleMessageSms.message}
             />
+          )}
 
-            <div style={{ width: "100%" }}>
-              <ReactBootStrap.Button
-                className="sendEmailbtn"
-                variant="primary"
-                onClick={handleScheduleMessage}
-                disabled={sendingMessage}
-              >
-                <ReactBootStrap.Spinner
-                  as="span"
-                  className={sendingMessage ? "visible" : "visually-hidden"}
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                <span className="visually">
-                  {messageType === "SMS" ? "Schedule SMS" : "Schedule Email"}
-                </span>
-              </ReactBootStrap.Button>
-            </div>
+          <div style={{ width: "100%" }}>
+            <ReactBootStrap.Button
+              className="sendEmailbtn"
+              variant="primary"
+              onClick={handleScheduleMessage}
+              disabled={sendingMessage}
+            >
+              <ReactBootStrap.Spinner
+                as="span"
+                className={sendingMessage ? "visible" : "visually-hidden"}
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              <span className="visually">
+                {messageType === "SMS" ? "Schedule SMS" : "Schedule Email"}
+              </span>
+            </ReactBootStrap.Button>
           </div>
         </form>
 

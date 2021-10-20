@@ -3,8 +3,6 @@ import { MenuContext } from "../../components/MenuContext";
 import { useToasts } from "react-toast-notifications";
 import "./sendsms.css";
 import SessionExpired from "../SessionExpired/SessionExpired";
-//import Modal from "react-modal";
-//import FormRadio from "../../components/formRadio/FormRadio";
 import Menus from "../../components/menu/Menu";
 import White from "../../components/whitenav/White";
 import * as ReactBootStrap from "react-bootstrap";
@@ -260,7 +258,6 @@ function Sendsms() {
                 className="ScheduleWrapper"
               >
                
-                {/* <p>{messageReport}</p> */}
                 <div>
                   <form className="scheduleform">
                     <div className="inputIcon">
@@ -440,20 +437,7 @@ function Sendsms() {
                                   CONFIRM SELECTION
                                 </Button>
                               </div>
-{/* 
-                              <pre>
-                                <code>
-                                  {JSON.stringify(
-                                    {
-                                      selectedFlatRows: selectedFlatRows.map(
-                                        (row) => row.original.firstname
-                                      ),
-                                    },
-                                    null,
-                                    2
-                                  )}
-                                </code>
-                              </pre> */}
+
                             </div>
                           </>
                         )}

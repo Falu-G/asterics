@@ -29,7 +29,11 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
-
+import TextEditor from "../../components/TextEditor/TextEditor";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import ReactHtmlParser from 'react-html-parser';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -53,6 +57,15 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 function Templates() {
+  let contentBlock
+  let contentState 
+
+  const html = `<p>This is the initial editor content.</p>`;
+  const [editorRocks, setEditorRocks] = useState(html);
+  contentBlock = htmlToDraft(editorRocks);
+  contentState = ContentState.createFromBlockArray(
+    contentBlock.contentBlocks
+  );
   let templateObj = new TemplateObject("", "", "");
   const [emailTemplates, setEmailTemplates] = useState([]);
   const [smsTemplates, setSmsTemplates] = useState([]);
@@ -93,8 +106,15 @@ function Templates() {
 
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
+  
 
   const handleOpenEmailToSend = (message) => {
+    setEditorRocks(message);
+    contentBlock = htmlToDraft(editorRocks);
+    contentState = ContentState.createFromBlockArray(
+      contentBlock.contentBlocks
+    );
+    console.log(message);
     setEmailToSend(true);
     setSendEmail({ ...sendEmail, messageBody: message });
     console.log("This message shows " + message);
@@ -166,8 +186,8 @@ function Templates() {
         setOpen(false);
       });
   };
-  const letterReducer = (letter) => letter.substring(0,50);
-  const letterReducerToSixty = (letter) => letter.substring(0,60);
+  //const letterReducer = (letter) => letter.substring(0, 50);
+  const letterReducerToSixty = (letter) => letter.substring(0, 60);
   const fetchBusinesses = useCallback(() => {
     fetch("https://asteric.herokuapp.com/messageTemplate", {
       method: "GET",
@@ -208,6 +228,10 @@ function Templates() {
   const handleSendEmail = async () => {
     console.log(sendEmail);
     setSendingMessage(true);
+    setSendEmail({
+      ...sendEmail,
+      message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    });
     try {
       let result = await fetch("https://asteric.herokuapp.com/mails/send", {
         method: "POST",
@@ -223,18 +247,17 @@ function Templates() {
       if (result.status === 200) {
         console.log(result.message);
         setSendingMessage(false);
-        handleCloseEmailTosSend()
+        handleCloseEmailTosSend();
         addToast(result.message, { appearance: "success" });
       } else {
         console.log(result.message);
         setSendingMessage(false);
-        handleCloseEmailTosSend()
+        handleCloseEmailTosSend();
         addToast(result.message, { appearance: "success" });
       }
     } catch (err) {
       console.log("Something terrible happened " + err.message);
     }
-
   };
 
   const handleSendMessage = async () => {
@@ -255,16 +278,15 @@ function Templates() {
       result = await result.json();
       if (result.message === "Invalid Token") {
         setLoading(false);
-        handleCloseSmsTosSend()
+        handleCloseSmsTosSend();
         setInvalidToken(true);
         console.log(result.message);
       } else if (result.status === 200) {
-        
         setSendingMessage(false);
-        handleCloseSmsTosSend()
+        handleCloseSmsTosSend();
         addToast(result.message, { appearance: "success" });
       } else {
-        handleCloseSmsTosSend()
+        handleCloseSmsTosSend();
         setSendingMessage(false);
         addToast(result.message, { appearance: "error" });
       }
@@ -275,6 +297,7 @@ function Templates() {
 
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
+    settemplateObjstate({...templateObjstate, message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent()))});
     if (isBlank(templateObjstate.message)) {
       alert("Message can not be empty");
     } else {
@@ -326,8 +349,6 @@ function Templates() {
   };
 
   const handleSelectCustomers = async () => {
-    //handleOpenSMSToSend();
-    //setLoading(true);
     try {
       let result = await fetch("https://asteric.herokuapp.com/customer", {
         method: "GET",
@@ -432,12 +453,10 @@ function Templates() {
   const { pageIndex } = state;
 
   const phoneNumberHandler = async () => {
-    console.log("phonehandler clicked");
     let promises = await selectedFlatRows.map((row) => row.original);
     Promise.all(promises).then(function (results) {
       setChipData(results);
       SMSProcessor(results);
-      //setSendSms({ ...sendSms, receiver: results });
     });
     handleCloseSmsNested();
     return null;
@@ -479,6 +498,34 @@ function Templates() {
       setChipDataEmail(results);
       emailProcessor(results);
     });
+  };
+
+  // let contentBlock = htmlToDraft(editorRocks);
+  // let contentState = ContentState.createFromBlockArray(
+  //   contentBlock.contentBlocks
+  // );
+
+  const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+  
+  
+ 
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+    setSendEmail({
+      ...sendEmail,
+      message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    });
+  };
+
+
+  const [editorStateEmpty, setEditorStateEmpty] = useState(
+    EditorState.createEmpty()
+  );
+
+  const onEditorStateChangeEmpty = (editorState) => {
+    setEditorStateEmpty(editorState);
+    settemplateObjstate({...templateObjstate, message: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
   };
 
   return (
@@ -545,9 +592,11 @@ function Templates() {
                                   handleOpenEmailToSend(emailTemplate.message);
                                 }}
                               >
-                                {letterReducer(emailTemplate.message)}
+                                {ReactHtmlParser(emailTemplate.message)}
                               </h5>
-                              <p>{letterReducerToSixty(emailTemplate.message)}</p>
+                              <p>
+                                {letterReducerToSixty(emailTemplate.message)}
+                              </p>
 
                               <Delete
                                 className="delete"
@@ -597,7 +646,7 @@ function Templates() {
                                   handleOpenSMSToSend(smsTemplate.message)
                                 }
                               >
-                                {letterReducer(smsTemplate.message)}
+                                {(smsTemplate.message)}
                               </h5>
                               <p>{letterReducerToSixty(smsTemplate.message)}</p>
 
@@ -751,7 +800,7 @@ function Templates() {
                             helperText="Please supply title"
                             variant="outlined"
                           />
-                          <TextField
+                          {/* <TextField
                             style={{
                               width: "100%",
                             }}
@@ -765,13 +814,20 @@ function Templates() {
                               })
                             }
                             defaultValue={sendEmail.messageBody}
+                          /> */}
+
+                          <TextEditor
+                          defaultValueOfEditor={sendEmail.messageBody}
+                            sizeOfMessageBox={632}
+                            editorState={editorState}
+                            onEditorStateChange={onEditorStateChange}
                           />
                         </div>
                       </Box>
                       <ReactBootStrap.Button
                         className="sendbtn"
                         variant="primary"
-                        onClick={()=>handleSendEmail()}
+                        onClick={() => handleSendEmail()}
                         disabled={sendingMessage}
                       >
                         <ReactBootStrap.Spinner
@@ -906,30 +962,31 @@ function Templates() {
                       </div>
                     </Box>
 
-
                     <ReactBootStrap.Button
-                        className="sendbtn"
-                        variant="primary"
-                        onClick={()=>handleSendMessage()}
-                        disabled={sendingMessage}
-                      >
-                        <ReactBootStrap.Spinner
-                          as="span"
-                          className={sendingMessage ? "visible" : "visually-hidden"}
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                        />
-                        <span className="visually">
-                          {sendingMessage ? "Loading..." : "Send Message"}
-                        </span>
-                      </ReactBootStrap.Button>
+                      className="sendbtn"
+                      variant="primary"
+                      onClick={() => handleSendMessage()}
+                      disabled={sendingMessage}
+                    >
+                      <ReactBootStrap.Spinner
+                        as="span"
+                        className={
+                          sendingMessage ? "visible" : "visually-hidden"
+                        }
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      <span className="visually">
+                        {sendingMessage ? "Loading..." : "Send Message"}
+                      </span>
+                    </ReactBootStrap.Button>
 
                     <Modal
                       hideBackdrop
                       open={openSmsNested}
-                      onClose={()=>handleCloseSmsNested()}
+                      onClose={() => handleCloseSmsNested()}
                       aria-labelledby="child-modal-title"
                       aria-describedby="child-modal-description"
                     >
@@ -1044,7 +1101,6 @@ function Templates() {
 
                       <div
                         style={{
-                          width: `100%`,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -1052,10 +1108,10 @@ function Templates() {
                       >
                         <div
                           style={{
-                            width: "100%",
+                            width: "832px",
                           }}
                         >
-                          <TextareaAutosize
+                          {/* <TextareaAutosize
                             aria-label="minimum height"
                             minRows={3}
                             style={{ width: 340 }}
@@ -1070,6 +1126,11 @@ function Templates() {
                               })
                             }
                             value={templateObjstate.message}
+                          /> */}
+
+                          <TextEditor 
+                            editorState={editorStateEmpty}
+                            onEditorStateChange={onEditorStateChangeEmpty}
                           />
                           <div>
                             <ReactBootStrap.Button

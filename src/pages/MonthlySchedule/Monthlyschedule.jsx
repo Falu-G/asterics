@@ -21,11 +21,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import parse from 'html-react-parser';
 
+//import htmlToDraft from 'html-to-draftjs';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Monthlyschedule() {
+
   let today = new Date();
   let month = today.getMonth() + 1;
   month = month < 10 ? "0" + month : month;
@@ -186,8 +189,14 @@ function Monthlyschedule() {
             alignItems: `center`,
             justifyContent: "center",
           }}
-        >
-          {row.message}
+        > {
+        
+           
+          parse(row.message)
+       
+        
+        }
+        
         </div>
       ),
     },
@@ -278,7 +287,7 @@ function Monthlyschedule() {
             justifyContent: "center",
           }}
         >
-          {param.row.messageBody}
+          {parse(param.row.messageBody)}
         </div>
       ),
     },

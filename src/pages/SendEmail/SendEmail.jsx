@@ -15,12 +15,12 @@ import Skeleton from "@mui/material/Skeleton";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
-import { EditorState} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import TextEditor from "../../components/TextEditor/TextEditor";
+import { EditorState,  convertToRaw } from "draft-js";
+import draftToHtml from 'draftjs-to-html';
 //import htmlToDraft from "html-to-draftjs";
 
-//import TagFacesIcon from '@mui/icons-material/TagFaces';
+//import TagFafcesIcon from '@mui/icons-material/TagFaces';
 
 const style = {
   position: "absolute",
@@ -142,6 +142,7 @@ function SendEmail() {
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
+    setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
     try {
       let result = await fetch("https://asteric.herokuapp.com/mails/send", {
         method: "POST",
@@ -185,6 +186,7 @@ function SendEmail() {
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
+    setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
   };
   return (
     <>
@@ -378,33 +380,7 @@ function SendEmail() {
                       }
                       placeholder="Message Title"
                     />
-                    <div
-                      style={{
-                        width: "937px",
-                        backgroundColor: "white",
-                      }}
-                    >
-                      <Editor
-                        editorState={editorState}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
-                        onEditorStateChange={onEditorStateChange}
-                      />
-                      
-                    </div>
-                    <textArea
-                      type="text"
-                      name="message"
-                      value={emailContent.messageBody}
-                      onChange={(e) =>
-                        setEmailContent({
-                          ...emailContent,
-                          messageBody: e.target.value,
-                        })
-                      }
-                      placeholder="Messages..."
-                    />
+                      <TextEditor sizeOfMessageBox = {937} editorState = {editorState} onEditorStateChange = {onEditorStateChange}/>
                   </form>
 
                   <ReactBootStrap.Button
