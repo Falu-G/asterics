@@ -99,7 +99,7 @@ function Menus({ controlSideBar }) {
 
           <Link
             className={menustate ? "menuItem" : "menuItem closed"}
-            to="/templates"
+            to="/subscription"
           >
             <Subscriptions />
             <span>Subscription</span>

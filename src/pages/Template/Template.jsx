@@ -30,10 +30,15 @@ import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
 import TextEditor from "../../components/TextEditor/TextEditor";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
+import {
+  EditorState,
+  convertToRaw,
+  ContentState,
+  convertFromRaw,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import ReactHtmlParser from 'react-html-parser';
+import ReactHtmlParser from "react-html-parser";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -57,15 +62,15 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 function Templates() {
-  let contentBlock
-  let contentState 
+  let contentBlock;
+  let contentState;
 
-  const html = `<p>This is the initial editor content.</p>`;
-  const [editorRocks, setEditorRocks] = useState(html);
-  contentBlock = htmlToDraft(editorRocks);
-  contentState = ContentState.createFromBlockArray(
-    contentBlock.contentBlocks
+  //const html = `<p>This is the initial editor content.</p>`;
+  const [editorRocks, setEditorRocks] = useState(
+    `<p>This is the initial editor content.</p>`
   );
+  contentBlock = htmlToDraft(editorRocks);
+  contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
   let templateObj = new TemplateObject("", "", "");
   const [emailTemplates, setEmailTemplates] = useState([]);
   const [smsTemplates, setSmsTemplates] = useState([]);
@@ -106,15 +111,17 @@ function Templates() {
 
   const [allCustomers, setAllCustomers] = useState([]);
   const [invalidToken, setInvalidToken] = useState(false);
-  
 
   const handleOpenEmailToSend = (message) => {
     setEditorRocks(message);
+    setEditorState(editorState);
+    console.log(editorState)
+    console.log("your editor rocks "+editorRocks);
     contentBlock = htmlToDraft(editorRocks);
     contentState = ContentState.createFromBlockArray(
       contentBlock.contentBlocks
     );
-    console.log(message);
+   
     setEmailToSend(true);
     setSendEmail({ ...sendEmail, messageBody: message });
     console.log("This message shows " + message);
@@ -297,7 +304,10 @@ function Templates() {
 
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
-    settemplateObjstate({...templateObjstate, message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent()))});
+    settemplateObjstate({
+      ...templateObjstate,
+      message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
+    });
     if (isBlank(templateObjstate.message)) {
       alert("Message can not be empty");
     } else {
@@ -504,11 +514,32 @@ function Templates() {
   // let contentState = ContentState.createFromBlockArray(
   //   contentBlock.contentBlocks
   // );
+  const contents = {
+    entityMap: {},
+    blocks: [
+      {
+        key: "637gr",
+        text: "Initialized from content state.",
+        type: "unstyled",
+        depth: 0,
+        inlineStyleRanges: [],
+        entityRanges: [],
+        data: {},
+      },
+    ],
+  };
 
-  const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
-  
-  
- 
+  const [contentStates, setcontentStates] = useState(convertFromRaw(contents));
+
+  const onContentStateChange = (contentStatess) =>{
+    setcontentStates(contentStatess);
+    console.log(contentStates)
+  }
+    
+
+  const [editorState, setEditorState] = useState(
+    EditorState.createWithContent(contentState)
+  );
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
@@ -518,14 +549,16 @@ function Templates() {
     });
   };
 
-
   const [editorStateEmpty, setEditorStateEmpty] = useState(
     EditorState.createEmpty()
   );
 
   const onEditorStateChangeEmpty = (editorState) => {
     setEditorStateEmpty(editorState);
-    settemplateObjstate({...templateObjstate, message: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
+    settemplateObjstate({
+      ...templateObjstate,
+      message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    });
   };
 
   return (
@@ -646,7 +679,7 @@ function Templates() {
                                   handleOpenSMSToSend(smsTemplate.message)
                                 }
                               >
-                                {(smsTemplate.message)}
+                                {smsTemplate.message}
                               </h5>
                               <p>{letterReducerToSixty(smsTemplate.message)}</p>
 
@@ -817,10 +850,15 @@ function Templates() {
                           /> */}
 
                           <TextEditor
-                          defaultValueOfEditor={sendEmail.messageBody}
                             sizeOfMessageBox={632}
                             editorState={editorState}
                             onEditorStateChange={onEditorStateChange}
+                          />
+
+                          <TextEditor
+                            sizeOfMessageBox={632}
+                            initialContentState={contentStates}
+                            onContentStateChange={onContentStateChange}
                           />
                         </div>
                       </Box>
@@ -1128,7 +1166,7 @@ function Templates() {
                             value={templateObjstate.message}
                           /> */}
 
-                          <TextEditor 
+                          <TextEditor
                             editorState={editorStateEmpty}
                             onEditorStateChange={onEditorStateChangeEmpty}
                           />

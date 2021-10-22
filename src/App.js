@@ -11,6 +11,7 @@ import Templates from './pages/Template/Template';
 import Customer from './pages/Customer/Customer';
 import Testpage from './pages/Testpage/Testpage';
 import SignUp from './pages/SignUp/SignUp';
+import Subscription from './pages/Subscription/Subscription';
 import Menus from './components/menu/Menu'
 import { ToastProvider} from 'react-toast-notifications';
 import {
@@ -46,6 +47,8 @@ function App() {
           <Route path = "/resetpassword" component = {ResetPassword} />
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />
+          <Route path = "/subscription" component = {Subscription} />
+
           </MenuContext.Provider>
         </Switch>
       </Router>
