@@ -30,7 +30,7 @@ import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
 import TextEditor from "../../components/TextEditor/TextEditor";
-import ReactQuill from "react-quill"; // ES6
+import ReactQuill, {Quill} from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
 
 import { EditorState, convertToRaw } from "draft-js";
@@ -183,7 +183,7 @@ function Templates() {
       });
   };
   //const letterReducer = (letter) => letter.substring(0, 50);
-  const letterReducerToSixty = (letter) => letter.substring(0, 60);
+  //const letterReducerToSixty = (letter) => letter.substring(0, 60);
   const fetchBusinesses = useCallback(() => {
     fetch("https://asteric.herokuapp.com/messageTemplate", {
       method: "GET",
@@ -513,6 +513,71 @@ function Templates() {
     });
   };
 
+
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image'
+  ]
+
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false]}],
+      ['bold', 'italic', 'underline','strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image','video','color','background'],
+      ['clean']
+    ]
+   
+  }
+
+
+  /*
+ * Custom toolbar component including the custom heart button and dropdowns
+ */
+// const CustomToolbar = () => (
+//   <div id="toolbar">
+//     <select className="ql-font">
+//       <option value="arial" selected>
+//         Arial
+//       </option>
+//       <option value="comic-sans">Comic Sans</option>
+//       <option value="courier-new">Courier New</option>
+//       <option value="georgia">Georgia</option>
+//       <option value="helvetica">Helvetica</option>
+//       <option value="lucida">Lucida</option>
+//     </select>
+//     <select className="ql-size">
+//       <option value="extra-small">Size 1</option>
+//       <option value="small">Size 2</option>
+//       <option value="medium" selected>
+//         Size 3
+//       </option>
+//       <option value="large">Size 4</option>
+//     </select>
+//     <select className="ql-align" />
+//     <select className="ql-color" />
+//     <select className="ql-background" />
+//     <button className="ql-clean" />
+//     <button className="ql-insertHeart">
+     
+//     </button>
+//   </div>
+// );
+
+  // Add fonts to whitelist and register them
+const Font = Quill.import("formats/font");
+Font.whitelist = [
+  "arial",
+  "comic-sans",
+  "courier-new",
+  "georgia",
+  "helvetica",
+  "lucida"
+];
+Quill.register(Font, true);
+
   return (
     <>
       {tokenValid ? (
@@ -568,9 +633,8 @@ function Templates() {
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
-                              <h5
+                              <p
                                 style={{
-                                  marginTop: "10px",
                                   cursor: "pointer",
                                 }}
                                 onClick={() => {
@@ -578,10 +642,8 @@ function Templates() {
                                 }}
                               >
                                 {ReactHtmlParser(emailTemplate.message)}
-                              </h5>
-                              <p>
-                                {letterReducerToSixty(emailTemplate.message)}
                               </p>
+                            
 
                               <Delete
                                 className="delete"
@@ -623,7 +685,7 @@ function Templates() {
                                 )
                               }
                             >
-                              <h5
+                              <p
                                 style={{
                                   cursor: "pointer",
                                 }}
@@ -632,8 +694,8 @@ function Templates() {
                                 }
                               >
                                 {smsTemplate.message}
-                              </h5>
-                              <p>{letterReducerToSixty(smsTemplate.message)}</p>
+                              </p>
+                             
 
                               <Delete
                                 className="delete"
@@ -785,11 +847,13 @@ function Templates() {
                             helperText="Please supply title"
                             variant="outlined"
                           />
-
-                          <ReactQuill
-                            theme="snow"
+ 
+                          <ReactQuill 
                             defaultValue={sendEmail.messageBody}
                             onChange={handleQuilChange}
+                            modules={modules}
+                            formats={formats}
+                            
                           />
                         </div>
                       </Box>
