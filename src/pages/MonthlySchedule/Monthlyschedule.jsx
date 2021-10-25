@@ -529,7 +529,8 @@ function Monthlyschedule() {
                           variant="contained"
                           sx = {{
                             backgroundColor:`#18A0FB`,
-                            padding:`8px`
+                            padding:`8px`,
+                            width:'150px'
                           }}
                           onClick={() =>
                             setOpenModal(() => (openModal ? false : true))
