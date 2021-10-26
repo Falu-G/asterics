@@ -73,3 +73,8 @@
 .SMSTemplate, .EmailTemplate{
     margin-top:20px;
 }
+
+.ql-editor{
+    overflow: auto !important;
+    height: 150px !important;
+}

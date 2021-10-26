@@ -147,6 +147,9 @@ function PricingContent() {
   //     </List>
   //   </Box>
   // );
+
+  const loggedInUser = localStorage.getItem("user-info");
+  const userObj = JSON.parse(loggedInUser);
   return (
     <React.Fragment>
       <GlobalStyles
@@ -170,6 +173,7 @@ function PricingContent() {
             noWrap
             sx={{ flexGrow: 1, cursor: `pointer`, color: `white` }}
             onClick={() => {
+              userObj !== null ? history.push("/maindashboard"):
               history.push("/");
             }}
           >
