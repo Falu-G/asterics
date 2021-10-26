@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback} from "react";
 import { Link } from "react-router-dom";
 import Dashnav from "../dashnav/Dashnav";
 import SessionExpired from "../../pages/SessionExpired/SessionExpired";
@@ -16,8 +16,6 @@ function Dashboard() {
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
 
-  const timeref = useRef(0)
-
   const [sentEmailValue, setSentEmailValue] = useState(0);
   const [emailQueue, setEmailQueue] = useState([]);
   const [totalSms, setTotalSms] = useState([]);
@@ -25,12 +23,15 @@ function Dashboard() {
   const token = userObj.message[0].token;
   const [loading, setLoading] = useState(true);
 
+  const time = new Date().toLocaleTimeString()
+  const [timing , setTiming] = useState(time)
+  const updateTime = ()=>{
+    const time = new Date().toLocaleTimeString()
+    setTiming(time)
+  }
 
-  const setTime = ()=> (setInterval(function() {
-  let date = new Date();
-  timeref.value = date.toLocaleTimeString(); //Method
-}, 1000));
-  
+  setInterval(updateTime, 1000)
+
   const fetchBusiness = useCallback( () => {
 
 
@@ -115,14 +116,17 @@ function Dashboard() {
           ) : (
             <>
               <div className="dashboardContainerWrapper">
-                {setTime}
+                
                 <div className="dateAndTime">
                   <h4>
                     Date:<span>{today}</span>
                   </h4>
-                  <p>
-                    Time:<span ref = {timeref}/>
-                  </p>
+                  <h4
+                  style = {{
+                    width:200
+                  }}>
+                    Time:<span>{" "+timing}</span>
+                  </h4>
                 </div>
 
                 <div className="dashboardViewReport">
