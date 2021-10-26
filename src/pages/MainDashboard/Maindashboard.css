@@ -3,7 +3,7 @@ display: flex;
 
 }
 .maindashboardContainerMenu{
-    flex: 1;
+  width: 200px;
 }
 
 .maindashboardContainerMenuClosed{
