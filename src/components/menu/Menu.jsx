@@ -29,7 +29,7 @@ function Menus({ controlSideBar }) {
               <img src="images/ABlogo.png" alt="" />
             </div>
 
-            <Link className="menuAsset">Assetrics CRM</Link>
+            <Link className="menuAsset">Asterix CRM</Link>
             <MenuIcon
               style={{
                 color: `#fff`,

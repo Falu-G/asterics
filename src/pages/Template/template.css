@@ -8,7 +8,7 @@
 .em_templatebox{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
+   
 }
 
 .em_gen{
@@ -22,7 +22,7 @@
     display: flex;
     overflow-y: hidden;
     margin-bottom: 20px;
-    margin-left: 20px;
+    margin-right: 20px;
     background: #FFFFFF;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }

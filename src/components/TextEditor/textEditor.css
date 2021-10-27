@@ -1,7 +1,8 @@
 .editorClassName{
     padding-left: 10px;
     padding-right: 10px;
-    height: 250px !important;
+   
+    max-height: 250px !important;
     overflow-y: auto !important;
     background-color: "white";
 }
