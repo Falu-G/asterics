@@ -698,8 +698,7 @@ Quill.register(Font, true);
                   <DialogTitle>{"Delete Customer?"}</DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                      Do you really want to delete this template? Nelson wont
-                      like it
+                      Do you really want to delete this template?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
