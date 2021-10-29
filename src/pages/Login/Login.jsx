@@ -133,7 +133,9 @@ function Login() {
               label="Enter your email address"
               className={classes.margin}
               onChange={(e) => setEmail(e.target.value)}
-              variant="outlined"
+              variant='standard'
+              margin = "dense"
+              
             />
 
             <FormControl className={classes.margin} variant="outlined">
@@ -153,6 +155,7 @@ function Login() {
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
                 onChange={handleChange("password")}
+              
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
