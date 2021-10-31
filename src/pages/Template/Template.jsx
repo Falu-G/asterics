@@ -295,6 +295,7 @@ function Templates() {
 
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
+   
     settemplateObjstate({
       ...templateObjstate,
       message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
@@ -608,9 +609,11 @@ function Templates() {
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
+                              
                               <p
                                 style={{
                                   cursor: "pointer",
+                                  marginTop:5
                                 }}
                                 onClick={() => {
                                   handleOpenEmailToSend(emailTemplate.message);
@@ -1111,7 +1114,7 @@ function Templates() {
                           flexDirection: "column",
                         }}
                       >
-                        <TextField
+                        {/* <TextField
                         sx = {{
                           marginBottom: "10px",
                           marginTop: "10px",
@@ -1127,7 +1130,7 @@ function Templates() {
                             })
                           }
                           //onChange={(e) => setSendEmail({ ...email, subject: e.target.value })}
-                        />
+                        /> */}
                         <div>
                           <TextEditor
                             editorState={editorStateEmpty}

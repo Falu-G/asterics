@@ -107,7 +107,7 @@ function Menus({ controlSideBar }) {
 
           <Link
             className={menustate ? "menuItem" : "menuItem closed"}
-            to="/templates"
+            to="/report"
           >
             <Assessment />
             <span>Reports</span>
