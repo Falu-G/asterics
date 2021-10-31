@@ -41,6 +41,7 @@ function Menus({ controlSideBar }) {
           <MenuIcon
             style={{
               color: `#fff`,
+              marginLeft: "10px",
             }}
             onClick={controlSideBar}
           />
