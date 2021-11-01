@@ -364,8 +364,8 @@ const fetchoo = ()=>{
                     <DialogTitle>{"Delete Customer?"}</DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-slide-description">
-                        This user would be deleted permanently from the database
-                        do you want to continue?
+                        This user would be deleted permanently.
+                        Do you want to continue?
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
