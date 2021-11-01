@@ -30,7 +30,7 @@ import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
 import TextEditor from "../../components/TextEditor/TextEditor";
-import ReactQuill, {Quill} from "react-quill"; // ES6
+import ReactQuill, { Quill } from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
 
 import { EditorState, convertToRaw } from "draft-js";
@@ -46,7 +46,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
+  width: 850,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -295,6 +295,7 @@ function Templates() {
 
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
+   
     settemplateObjstate({
       ...templateObjstate,
       message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
@@ -513,35 +514,45 @@ function Templates() {
     });
   };
 
-
   const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-  ]
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+  ];
 
   const modules = {
     toolbar: [
-      [{ 'header': [1, 2, false]}],
-      ['bold', 'italic', 'underline','strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image','video','color','background'],
-      ['clean']
-    ]
-   
-  }
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image", "video", "color", "background"],
+      ["clean"],
+    ],
+  };
 
-const Font = Quill.import("formats/font");
-Font.whitelist = [
-  "arial",
-  "comic-sans",
-  "courier-new",
-  "georgia",
-  "helvetica",
-  "lucida"
-];
-Quill.register(Font, true);
+  const Font = Quill.import("formats/font");
+  Font.whitelist = [
+    "arial",
+    "comic-sans",
+    "courier-new",
+    "georgia",
+    "helvetica",
+    "lucida",
+  ];
+  Quill.register(Font, true);
 
   return (
     <>
@@ -598,9 +609,11 @@ Quill.register(Font, true);
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
+                              
                               <p
                                 style={{
                                   cursor: "pointer",
+                                  marginTop:5
                                 }}
                                 onClick={() => {
                                   handleOpenEmailToSend(emailTemplate.message);
@@ -608,7 +621,6 @@ Quill.register(Font, true);
                               >
                                 {ReactHtmlParser(emailTemplate.message)}
                               </p>
-                            
 
                               <Delete
                                 className="delete"
@@ -660,7 +672,6 @@ Quill.register(Font, true);
                               >
                                 {smsTemplate.message}
                               </p>
-                             
 
                               <Delete
                                 className="delete"
@@ -721,7 +732,7 @@ Quill.register(Font, true);
                   }}
                 >
                   <Box sx={style}>
-                    <Box sx={{ ...style, width: 700 }}>
+                    <Box sx={{ ...style, width: 850 }}>
                       <Typography
                         id="transition-modal-title"
                         variant="h6"
@@ -800,7 +811,7 @@ Quill.register(Font, true);
                               width: "100%",
                             }}
                             id="standard-error-helper-text"
-                            label="Title"
+                            placeholder="Please enter"
                             onChange={(e) =>
                               setSendEmail({
                                 ...sendEmail,
@@ -811,13 +822,12 @@ Quill.register(Font, true);
                             helperText="Please supply title"
                             variant="outlined"
                           />
- 
-                          <ReactQuill 
+
+                          <ReactQuill
                             defaultValue={sendEmail.messageBody}
                             onChange={handleQuilChange}
                             modules={modules}
                             formats={formats}
-                            
                           />
                         </div>
                       </Box>
@@ -1101,13 +1111,27 @@ Quill.register(Font, true);
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
+                          flexDirection: "column",
                         }}
                       >
-                        <div
-                          style={{
-                            width: "832px",
-                          }}
-                        >
+                        {/* <TextField
+                        sx = {{
+                          marginBottom: "10px",
+                          marginTop: "10px",
+                          width: "100%",
+                        }}
+                          id="outlined-basic"
+                          placeholder="Email Subject"
+                          variant="outlined"
+                          onChange={(e) =>
+                            setSendEmail({
+                              ...sendEmail,
+                              messageSubject: e.target.value,
+                            })
+                          }
+                          //onChange={(e) => setSendEmail({ ...email, subject: e.target.value })}
+                        /> */}
+                        <div>
                           <TextEditor
                             editorState={editorStateEmpty}
                             onEditorStateChange={onEditorStateChangeEmpty}
@@ -1135,7 +1159,7 @@ Quill.register(Font, true);
                                 aria-hidden="true"
                               />
                               <span className="visually">
-                                {addEmail ? "Loading..." : "Send"}
+                                {addEmail ? "Loading..." : "Save Email"}
                               </span>
                             </ReactBootStrap.Button>
                           </div>

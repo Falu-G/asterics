@@ -41,6 +41,7 @@ function Menus({ controlSideBar }) {
           <MenuIcon
             style={{
               color: `#fff`,
+              marginLeft: "10px",
             }}
             onClick={controlSideBar}
           />
@@ -50,7 +51,7 @@ function Menus({ controlSideBar }) {
       <div className="menuHouse">
         <div className="firstMenu">
           <Link
-            className={menustate ? "menuItem" : "menuItem closed"}
+            className={menustate ? "menuItem activeMenu" : "menuItem closed"}
             to="/maindashboard"
           >
             <Dashboard />
@@ -107,7 +108,7 @@ function Menus({ controlSideBar }) {
 
           <Link
             className={menustate ? "menuItem" : "menuItem closed"}
-            to="/templates"
+            to="/report"
           >
             <Assessment />
             <span>Reports</span>

@@ -23,6 +23,7 @@ import ResetPassword from './pages/resetPassword/ResetPassword';
 import Passwordsent from './pages/passwordSent/Passwordsent';
 import SessionExpired from './pages/SessionExpired/SessionExpired';
 import {MenuContext} from './components/MenuContext';
+import Report from './pages/Report/Report';
 
 
 function App() {
@@ -48,6 +49,8 @@ function App() {
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />
           <Route path = "/subscription" component = {Subscription} />
+          <Route path = "/report" component = {Report} />
+          
 
           </MenuContext.Provider>
         </Switch>

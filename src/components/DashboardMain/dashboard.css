@@ -203,4 +203,5 @@
 
 .box {
   cursor: pointer;
+  min-width: 250px;
 }
