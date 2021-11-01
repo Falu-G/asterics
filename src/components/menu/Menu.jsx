@@ -51,7 +51,7 @@ function Menus({ controlSideBar }) {
       <div className="menuHouse">
         <div className="firstMenu">
           <Link
-            className={menustate ? "menuItem" : "menuItem closed"}
+            className={menustate ? "menuItem activeMenu" : "menuItem closed"}
             to="/maindashboard"
           >
             <Dashboard />
