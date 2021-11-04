@@ -1,6 +1,6 @@
 .menuContainer{
     height:100vh;
-    padding: 10px;
+   
     background:#18A0FB;
     position:sticky;
     top:0;
@@ -9,6 +9,7 @@
 .menuContainerDesc{
     display: flex;
     width: 100%;
+    padding-top: 10px;
     justify-content: space-between;
     align-items: center;
     height: 40px;
@@ -42,7 +43,7 @@ text-decoration: none;
 
 .activeMenu{
     background-color:#000;
-    border-radius:5px;
+    
 }
 .menuItem span{
     margin-left: 10px;

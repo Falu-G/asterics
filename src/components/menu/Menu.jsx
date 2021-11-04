@@ -13,7 +13,10 @@ import {
   ExitToApp,
   MailOutline,
   Dashboard,
+  Send
 } from "@material-ui/icons";
+
+//import SendIcon from '@mui/icons-material/Send';
 
 function Menus({ controlSideBar }) {
   const value = useContext(MenuContext);
@@ -70,7 +73,7 @@ function Menus({ controlSideBar }) {
             className={menustate ? "menuItem" : "menuItem closed"}
             to="/sendsms"
           >
-            <MenuIcon />
+            <Send />
             <span>Send SMS</span>
           </Link>
 

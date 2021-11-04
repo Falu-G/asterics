@@ -21,14 +21,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 //import htmlToDraft from 'html-to-draftjs';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Monthlyschedule() {
-
   let today = new Date();
   let month = today.getMonth() + 1;
   month = month < 10 ? "0" + month : month;
@@ -92,6 +91,52 @@ function Monthlyschedule() {
 
   const { sidebar, setSideBar } = useContext(MenuContext);
 
+  const ColoredStatus = (row) => {
+    console.log(row.status);
+    if (row.status === "sent") {
+      return (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+            color: "green",
+          }}
+        >
+          {row.status}
+        </div>
+      );
+    } else if (row.status === "scheduled") {
+      return (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+            color: "#FD9C0B",
+          }}
+        >
+          {row.status}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            width: `100%`,
+            display: "flex",
+            alignItems: `center`,
+            justifyContent: "center",
+            color: "red",
+          }}
+        >
+          {row.status}
+        </div>
+      );
+    }
+  };
   const handledeleteSms = (id) => {
     setLoading(true);
     fetch(`https://asteric.herokuapp.com/vonageSms/${id}`, {
@@ -189,14 +234,9 @@ function Monthlyschedule() {
             alignItems: `center`,
             justifyContent: "center",
           }}
-        > {
-        
-           
-          parse(row.message)
-       
-        
-        }
-        
+        >
+          {" "}
+          {parse(row.message)}
         </div>
       ),
     },
@@ -206,16 +246,19 @@ function Monthlyschedule() {
       sortable: false,
       width: 160,
       renderCell: ({ row }) => (
-        <div
-          style={{
-            width: `100%`,
-            display: "flex",
-            alignItems: `center`,
-            justifyContent: "center",
-          }}
-        >
-          {row.status}
-        </div>
+        // <div
+        //   style={{
+        //     width: `100%`,
+        //     display: "flex",
+        //     alignItems: `center`,
+        //     justifyContent: "center",
+        //     color: "green"
+        //   }}
+        // >
+        //   {row.status}
+        // </div>
+
+        <ColoredStatus status={row.status} />
       ),
     },
 
@@ -298,16 +341,17 @@ function Monthlyschedule() {
       sortable: false,
       disableColumnFilter: true,
       renderCell: ({ row }) => (
-        <div
-          style={{
-            width: `100%`,
-            display: "flex",
-            alignItems: `center`,
-            justifyContent: "center",
-          }}
-        >
-          {row.status}
-        </div>
+        // <div
+        //   style={{
+        //     width: `100%`,
+        //     display: "flex",
+        //     alignItems: `center`,
+        //     justifyContent: "center",
+        //   }}
+        // >
+        //   {row.status}
+        // </div>
+        <ColoredStatus status={row.status} />
       ),
     },
 
@@ -374,10 +418,9 @@ function Monthlyschedule() {
     setOpen(true);
   };
 
-
-  const handleCloseSmsDialogue = ()=>{
-    setOpenopensmsdialogue(false)
-  }
+  const handleCloseSmsDialogue = () => {
+    setOpenopensmsdialogue(false);
+  };
   const handleClickOpenSmsDialogue = (id) => {
     setOpenopensmsdialogue(true);
     setEmailId(id);
@@ -525,12 +568,12 @@ function Monthlyschedule() {
                         <Dropdown tasks={listOfTasks} />
 
                         <Button
-                         
                           variant="contained"
-                          sx = {{
-                            backgroundColor:`#18A0FB`,
-                            padding:`8px`,
-                            width:'150px'
+                          sx={{
+                            backgroundColor: `#18A0FB`,
+                            padding: `7px`,
+                            width: "150px",
+                            marginLeft: "4px"
                           }}
                           onClick={() =>
                             setOpenModal(() => (openModal ? false : true))

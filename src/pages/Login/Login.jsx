@@ -155,7 +155,7 @@ function Login() {
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
                 onChange={handleChange("password")}
-                placeholder = {"You can touch me ok dis is my first time doing dis "}
+               
               
                 endAdornment={
                   <InputAdornment position="end">
