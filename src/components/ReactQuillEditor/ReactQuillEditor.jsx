@@ -87,6 +87,7 @@ Font.whitelist = [
   "georgia",
   "helvetica",
   "lucida",
+  "montserrat",
 ];
 Quill.register(Font, true);
 
@@ -121,6 +122,7 @@ class Editor extends React.Component {
     "link",
     "image",
     "color",
+    "background"
   ];
 
   render() {
