@@ -92,7 +92,7 @@ Font.whitelist = [
 Quill.register(Font, true);
 
 class Editor extends React.Component {
-  state = { editorHtml: "" };
+  state = { editorHtml: "Nice beginner" };
 
   handleChange = (html) => {
     this.setState({ editorHtml: html });
