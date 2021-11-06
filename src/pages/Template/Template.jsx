@@ -37,6 +37,12 @@ import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 //import htmlToDraft from "html-to-draftjs";
 import ReactHtmlParser from "react-html-parser";
+import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor"
+
+
+
+
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -829,6 +835,8 @@ function Templates() {
                             modules={modules}
                             formats={formats}
                           />
+
+                          <ReactQuillEditor/>
                         </div>
                       </Box>
                       <ReactBootStrap.Button
