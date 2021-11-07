@@ -23,7 +23,6 @@ import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReactQuillEditor from "../ReactQuillEditor/ReactQuillEditor";
 
-
 const style = {
   position: "absolute",
   width: 700,
@@ -215,14 +214,7 @@ function NewSchedule({
     if (messageType === "Email") {
       try {
         setScheduleMessage({ ...scheduleMessage, schedule_date: value });
-        // setScheduleMessage({
-        //   ...scheduleMessage,
-        //   messageBody: draftToHtml(
-        //     convertToRaw(editorState.getCurrentContent())
-        //   ),
-        // });
-
-        setScheduleMessage({...scheduleMessage,messageBody:html})
+        setScheduleMessage({ ...scheduleMessage, messageBody: html });
         console.log(
           "This is the date selected in email " +
             value +
@@ -345,17 +337,6 @@ function NewSchedule({
     return null;
   };
 
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-  // const onEditorStateChange = (editorState) => {
-  //   setEditorState(editorState);
-  //   setScheduleMessage({
-  //     ...scheduleMessage,
-  //     messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-  //   });
-  // };
-  //setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
-
   return (
     <div className="ns-Container">
       <CssBaseline />
@@ -370,14 +351,6 @@ function NewSchedule({
         onClick={setOpenModal}
       />
       <Dashnav title="New Schedule" />
-
-      {/* {console.log("Na date be dis " + scheduleMessage.schedule_date)}
-      {console.log(
-        "This are the numbers you selected" + scheduleMessageSms.receiver
-      )}
-      {console.log(
-        "This are the emails you selected" + scheduleMessage.recieverAddress
-      )} */}
       <div
         style={{
           height: `100%`,
@@ -429,31 +402,7 @@ function NewSchedule({
                 />
               </Stack>
             </LocalizationProvider>
-            {/* 
-            <TextField
-              id="datetime-local"
-              label="Schedule Time"
-              type="datetime-local"
-              onChange={async (event) => {
-                messageType === "Email"
-                  ? setScheduleMessage({
-                      ...scheduleMessage,
-                      schedule_date: event.target.value,
-                    })
-                  : setScheduleMessageSms({
-                      ...scheduleMessageSms,
-                      schedule_date: event.target.value,
-                    });
-
-                console.log(event.target.value);
-                console.log("Schedule shit " + scheduleMessage.schedule_date);
-              }}
-              defaultValue={`${today}T00:00`}
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            /> */}
+  
           </div>
         </div>
 
@@ -506,10 +455,11 @@ function NewSchedule({
             // />
 
             <ReactQuillEditor
-            html = {html} 
-            setHtml = {setHtml}
-            setScheduleMessage = {setScheduleMessage}
-            scheduleMessage = {scheduleMessage}/>
+              html={html}
+              setHtml={setHtml}
+              setScheduleMessage={setScheduleMessage}
+              scheduleMessage={scheduleMessage}
+            />
           ) : (
             <textArea
               type="messages"
