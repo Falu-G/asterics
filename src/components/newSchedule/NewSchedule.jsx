@@ -19,11 +19,8 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import TextEditor from "../TextEditor/TextEditor";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import CssBaseline from "@mui/material/CssBaseline";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
 import ReactQuillEditor from "../ReactQuillEditor/ReactQuillEditor";
 
 
@@ -218,12 +215,14 @@ function NewSchedule({
     if (messageType === "Email") {
       try {
         setScheduleMessage({ ...scheduleMessage, schedule_date: value });
-        setScheduleMessage({
-          ...scheduleMessage,
-          messageBody: draftToHtml(
-            convertToRaw(editorState.getCurrentContent())
-          ),
-        });
+        // setScheduleMessage({
+        //   ...scheduleMessage,
+        //   messageBody: draftToHtml(
+        //     convertToRaw(editorState.getCurrentContent())
+        //   ),
+        // });
+
+        setScheduleMessage({...scheduleMessage,messageBody:html})
         console.log(
           "This is the date selected in email " +
             value +
@@ -346,15 +345,15 @@ function NewSchedule({
     return null;
   };
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-    setScheduleMessage({
-      ...scheduleMessage,
-      messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-    });
-  };
+  // const onEditorStateChange = (editorState) => {
+  //   setEditorState(editorState);
+  //   setScheduleMessage({
+  //     ...scheduleMessage,
+  //     messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+  //   });
+  // };
   //setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
 
   return (
