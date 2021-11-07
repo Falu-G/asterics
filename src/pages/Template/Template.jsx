@@ -29,19 +29,78 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
-import TextEditor from "../../components/TextEditor/TextEditor";
+//import TextEditor from "../../components/TextEditor/TextEditor";
 import ReactQuill, { Quill } from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
 
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+// import { EditorState, convertToRaw } from "draft-js";
+// import draftToHtml from "draftjs-to-html";
 //import htmlToDraft from "html-to-draftjs";
 import ReactHtmlParser from "react-html-parser";
-import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor"
+import QuillEditorFunc from "../../components/QuillEditorFunc/QuillEditorFunc";
+import "../../components/ReactQuillEditor/ReactQuillEditor.css"
 
 
 
+const CustomHeart = () => <span>♥</span>;
 
+function insertHeart() {
+  const cursorPosition = this.quill.getSelection().index;
+  this.quill.insertText(cursorPosition, "♥");
+  this.quill.setSelection(cursorPosition + 1);
+}
+
+/*
+ * Custom toolbar component including the custom heart button and dropdowns
+ */
+const CustomToolbar = () => (
+  <div id="toolbar">
+    <select className="ql-font">
+      <option value="arial" selected>
+        Arial
+      </option>
+      <option value="comic-sans">Comic Sans</option>
+      <option value="courier-new">Courier New</option>
+      <option value="georgia">Georgia</option>
+      <option value="helvetica">Helvetica</option>
+      <option value="lucida">Lucida</option>
+    </select>
+    <select className="ql-size">
+      <option value="extra-small">Size 1</option>
+      <option value="small">Size 2</option>
+      <option value="medium" selected>
+        Size 3
+      </option>
+      <option value="large">Size 4</option>
+    </select>
+    <select className="ql-align" />
+    <select className="ql-color" />
+    <select className="ql-background" />
+    <button className="ql-bold" />
+    <button className="ql-italic" />
+    <button className="ql-image" />
+    <button className="ql-underline" />
+    <button className="ql-strike" />
+    <button className="ql-link" />
+    <button className="ql-script" value="sub" />
+    <button className="ql-script" value="super" />
+    <button className="ql-indent" value="-1" />
+    <button className="ql-indent" value="+1" />
+    <button className="ql-list" value="ordered" />
+    <button className="ql-list" value="bullet" />
+    <button className="ql-direction" value="rtl" />
+    <button className="ql-direction" value="ltr" />
+    <button className="ql-code-block" />
+    <button className="ql-blockquote" />
+    <button className="ql-formula" />
+    <button className="ql-video" />
+    <button className="ql-header" value="1" />
+    <button className="ql-clean" />
+    <button className="ql-insertHeart">
+      <CustomHeart />
+    </button>
+  </div>
+);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -99,6 +158,8 @@ function Templates() {
     messageBody: "",
     messageSubject: "",
   });
+
+  const [html, setHtml] = useState("");
 
   const [chipDataEmail, setChipDataEmail] = useState([]);
 
@@ -301,10 +362,15 @@ function Templates() {
 
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
-   
+
+    // settemplateObjstate({
+    //   ...templateObjstate,
+    //   message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
+    // });
+
     settemplateObjstate({
       ...templateObjstate,
-      message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
+      message: html,
     });
     if (isBlank(templateObjstate.message)) {
       alert("Message can not be empty");
@@ -508,20 +574,22 @@ function Templates() {
     });
   };
 
-  const [editorStateEmpty, setEditorStateEmpty] = useState(
-    EditorState.createEmpty()
-  );
+  // const [editorStateEmpty, setEditorStateEmpty] = useState(
+  //   EditorState.createEmpty()
+  // );
 
-  const onEditorStateChangeEmpty = (editorState) => {
-    setEditorStateEmpty(editorState);
-    settemplateObjstate({
-      ...templateObjstate,
-      message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-    });
-  };
+  // const onEditorStateChangeEmpty = (editorState) => {
+  //   setEditorStateEmpty(editorState);
+  //   settemplateObjstate({
+  //     ...templateObjstate,
+  //     message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+  //   });
+  // };
 
   const formats = [
     "header",
+    "font",
+    "size",
     "bold",
     "italic",
     "underline",
@@ -532,21 +600,17 @@ function Templates() {
     "indent",
     "link",
     "image",
+    "color",
+    "background",
   ];
 
   const modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image", "video", "color", "background"],
-      ["clean"],
-    ],
+    toolbar: {
+      container: "#toolbar",
+      handlers: {
+        insertHeart: insertHeart,
+      },
+    },
   };
 
   const Font = Quill.import("formats/font");
@@ -615,11 +679,10 @@ function Templates() {
                         {emailTemplates.map((emailTemplate, index) => (
                           <>
                             <div className="em_gen" key={emailTemplate.id}>
-                              
                               <p
                                 style={{
                                   cursor: "pointer",
-                                  marginTop:5
+                                  marginTop: 5,
                                 }}
                                 onClick={() => {
                                   handleOpenEmailToSend(emailTemplate.message);
@@ -828,7 +891,7 @@ function Templates() {
                             helperText="Please supply title"
                             variant="outlined"
                           />
-
+                          <CustomToolbar />
                           <ReactQuill
                             defaultValue={sendEmail.messageBody}
                             onChange={handleQuilChange}
@@ -836,7 +899,6 @@ function Templates() {
                             formats={formats}
                           />
 
-                          <ReactQuillEditor/>
                         </div>
                       </Box>
                       <ReactBootStrap.Button
@@ -1122,28 +1184,14 @@ function Templates() {
                           flexDirection: "column",
                         }}
                       >
-                        {/* <TextField
-                        sx = {{
-                          marginBottom: "10px",
-                          marginTop: "10px",
-                          width: "100%",
-                        }}
-                          id="outlined-basic"
-                          placeholder="Email Subject"
-                          variant="outlined"
-                          onChange={(e) =>
-                            setSendEmail({
-                              ...sendEmail,
-                              messageSubject: e.target.value,
-                            })
-                          }
-                          //onChange={(e) => setSendEmail({ ...email, subject: e.target.value })}
-                        /> */}
                         <div>
-                          <TextEditor
-                            editorState={editorStateEmpty}
-                            onEditorStateChange={onEditorStateChangeEmpty}
+                          <QuillEditorFunc
+                            settemplateObjstate={settemplateObjstate}
+                            templateObjstate={templateObjstate}
+                            setHtml={setHtml}
+                            html={html}
                           />
+
                           <div>
                             <ReactBootStrap.Button
                               style={{

@@ -1,10 +1,7 @@
 import React from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css"; // ES6
-import "./ReactQuillEditor.css";
-
-
-
+import "react-quill/dist/quill.snow.css";
+import "./quillEditorFunc.css"
 
 const CustomHeart = () => <span>♥</span>;
 
@@ -83,23 +80,19 @@ Font.whitelist = [
 ];
 Quill.register(Font, true);
 
+function QuillEditorFunc({settemplateObjstate,templateObjstate,html, setHtml}) {
 
-function ReactQuillEditor({html, setHtml,setEmailContent,emailContent,setScheduleMessage,scheduleMessage}) {
+
   const handleChange = (html) => {
     //this.setState({ editorHtml: html });
     setHtml(html);
+    console.log(html)
+    settemplateObjstate({
+        ...templateObjstate,
+        message:html
+      });
 
-    if(emailContent){
-      setEmailContent({...emailContent,messageBody:html})
-      console.warn(emailContent.messageBody)
-    }
-    
-    if(scheduleMessage){
-      setScheduleMessage({...scheduleMessage,messageBody:html})
-      console.log(scheduleMessage.messageBody)
-    }
-    
-    
+      console.log(templateObjstate.message)
   };
 
   const modules = {
@@ -133,7 +126,7 @@ function ReactQuillEditor({html, setHtml,setEmailContent,emailContent,setSchedul
     <div>
       <CustomToolbar />
       <ReactQuill
-       value={html}
+        value={html}
         onChange={handleChange}
         placeholder={"New Beginning"}
         modules={modules}
@@ -143,4 +136,4 @@ function ReactQuillEditor({html, setHtml,setEmailContent,emailContent,setSchedul
   );
 }
 
-export default ReactQuillEditor;
+export default QuillEditorFunc;

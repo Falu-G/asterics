@@ -15,9 +15,10 @@ import Skeleton from "@mui/material/Skeleton";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
-import TextEditor from "../../components/TextEditor/TextEditor";
-import { EditorState,  convertToRaw } from "draft-js";
-import draftToHtml from 'draftjs-to-html';
+// import TextEditor from "../../components/TextEditor/TextEditor";
+// import { EditorState,  convertToRaw } from "draft-js";
+// import draftToHtml from 'draftjs-to-html';
+import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor";
 //import htmlToDraft from "html-to-draftjs";
 
 //import TagFafcesIcon from '@mui/icons-material/TagFaces';
@@ -139,34 +140,50 @@ function SendEmail() {
       console.log("Error In catch " + e.message);
     }
   };
+
+  const [html, setHtml] = useState("");
+  const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
+  };
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
-    setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
-    try {
-      let result = await fetch("https://asteric.herokuapp.com/mails/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(emailContent),
-      });
+    setEmailContent({...emailContent, messageBody: html});
 
-      result = await result.json();
-      if (result.status === 200) {
-        console.log(result.message);
-        setSendingMessage(false);
-        addToast("Saved Successfully", { appearance: "success" });
-      } else {
-        console.log(result.message);
-        setSendingMessage(false);
-        addToast(result.message, { appearance: "success" });
+    if (isBlank(emailContent.messageBody)) {
+      alert("Message can not be empty");
+     
+    }else{
+
+      try {
+        let result = await fetch("https://asteric.herokuapp.com/mails/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(emailContent),
+        });
+  
+        result = await result.json();
+        if (result.status === 200) {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast("Saved Successfully", { appearance: "success" });
+        } else {
+          console.log(result.message);
+          setSendingMessage(false);
+          addToast(result.message, { appearance: "success" });
+        }
+      } catch (err) {
+        console.log("Something terrible happened " + err.message);
       }
-    } catch (err) {
-      console.log("Something terrible happened " + err.message);
+
+
     }
+
+
   };
 
   const confirmSelection = () => {
@@ -182,12 +199,17 @@ function SendEmail() {
     return null;
   };
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-    setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
-  };
+  // const onEditorStateChange = (editorState) => {
+  //   setEditorState(editorState);
+  //   setEmailContent({...emailContent, messageBody: draftToHtml(convertToRaw(editorState.getCurrentContent()))});
+  // };
+
+
+ 
+
+
   return (
     <>
       {invalidToken ? (
@@ -380,7 +402,21 @@ function SendEmail() {
                       }
                       placeholder="Message Title"
                     />
-                      <TextEditor sizeOfMessageBox = {937} editorState = {editorState} onEditorStateChange = {onEditorStateChange}/>
+
+
+                  
+                  <ReactQuillEditor
+                  setHtml = {setHtml}
+                  html = {html}
+                  emailContent = {emailContent}
+                  setEmailContent = {setEmailContent}/>
+                      {/* <TextEditor sizeOfMessageBox = {937} editorState = {editorState} onEditorStateChange = {onEditorStateChange}/> */}
+                      {/* <QuillEditorFunc
+                            settemplateObjstate={settemplateObjstate}
+                            templateObjstate={templateObjstate}
+                            setHtml={setHtml}
+                            html={html}
+                          /> */}
                   </form>
 
                   <ReactBootStrap.Button

@@ -24,6 +24,7 @@ import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import ReactQuillEditor from "../ReactQuillEditor/ReactQuillEditor";
 
 
 const style = {
@@ -167,7 +168,7 @@ function NewSchedule({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [html, setHtml] = useState("");
   const fetchBusiness = async () => {
     spinnerDisplay(true);
     Promise.all([
@@ -499,11 +500,17 @@ function NewSchedule({
           </div>
 
           {messageType === "Email" ? (
-            <TextEditor
-              sizeOfMessageBox={"832px"}
-              editorState={editorState}
-              onEditorStateChange={onEditorStateChange}
-            />
+            // <TextEditor
+            //   sizeOfMessageBox={"832px"}
+            //   editorState={editorState}
+            //   onEditorStateChange={onEditorStateChange}
+            // />
+
+            <ReactQuillEditor
+            html = {html} 
+            setHtml = {setHtml}
+            setScheduleMessage = {setScheduleMessage}
+            scheduleMessage = {scheduleMessage}/>
           ) : (
             <textArea
               type="messages"
