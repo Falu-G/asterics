@@ -77,7 +77,7 @@
 .closed {
   position: relative;
   background-color: transparent;
-  padding-right: 10px;
+  padding-left: 20px;
 }
 
 .closed img:hover,
