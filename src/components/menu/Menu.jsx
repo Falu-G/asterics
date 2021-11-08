@@ -176,6 +176,9 @@ function Menus({ controlSideBar }) {
             );
           }
 
+
+          const [activeClicked, setActiveClicked ] =  useState(true)
+
           // if (item.icon === "Settings") {
           //   return (
           //     <div className="thirdMenu">
