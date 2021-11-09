@@ -38,6 +38,10 @@
   text-decoration: none;
   padding: 10px;
 }
+
+.menuItem:active,.menuItem:hover{
+  background-color: #000;
+}
 /* 
 .activeMenu {
   background-color: #000;
