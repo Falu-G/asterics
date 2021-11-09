@@ -47,19 +47,6 @@ function Sendsms() {
     []
   );
 
-  // const columns = React.useMemo(
-  //   () => [
-  //     {
-  //       Header: "Name",
-  //       accessor: "col1", // accessor is the "key" in the data
-  //     },
-  //     {
-  //       Header: "Phone Number",
-  //       accessor: "col2",
-  //     },
-  //   ],
-  //   []
-  // );
   const columns = React.useMemo(
     () => [
       {
@@ -132,7 +119,7 @@ function Sendsms() {
   // const [messageReport, setMessageReport] = useState("");
 
   const [sendMessage, setSendMessage] = useState({
-    sender:"Asterics",
+    sender: "Asterics",
     receiver: "",
     message: "",
   });
@@ -196,10 +183,14 @@ function Sendsms() {
       } else if (result.status === 200) {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        addToast("Saved Successfully", { appearance: "success", autoDismiss: true});
+        addToast("Saved Successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        });
       } else {
         // setMessageReport(result.message);
         setSendingMessage(false);
+        setSendMessage({ ...sendMessage, receiver: "", message: "" });
         addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
@@ -207,20 +198,18 @@ function Sendsms() {
     }
   };
 
-  const phoneNumberHandler = () => selectedFlatRows.map(row => {
-    
-    let promises = selectedFlatRows.map((row) => row.original.phone);
-    Promise.all(promises).then(function (results) {
-      setSendMessage({...sendMessage,receiver:results})
-      console.log(sendMessage.recieverAddress);
+  const phoneNumberHandler = () =>
+    selectedFlatRows.map((row) => {
+      let promises = selectedFlatRows.map((row) => row.original.phone);
+      Promise.all(promises).then(function (results) {
+        setSendMessage({ ...sendMessage, receiver: results });
+        console.log(sendMessage.recieverAddress);
+      });
+
+      handleClose();
+      return null;
     });
 
-    handleClose()
-    return null
-  })
-
-  
-  
   return (
     <>
       {invalidToken ? (
@@ -257,7 +246,6 @@ function Sendsms() {
                 }}
                 className="ScheduleWrapper"
               >
-               
                 <div>
                   <form className="scheduleform">
                     <div className="inputIcon">
@@ -286,9 +274,9 @@ function Sendsms() {
                     </div>
 
                     <textArea
-                    style = {{
-                      width: "937px",
-                    }}
+                      style={{
+                        width: "937px",
+                      }}
                       type="text"
                       name="message"
                       value={sendMessage.message}
@@ -301,8 +289,6 @@ function Sendsms() {
                       }
                     />
                   </form>
-
-            
 
                   <ReactBootStrap.Button
                     className="sendbtn"
@@ -430,17 +416,16 @@ function Sendsms() {
                                   display: "flex",
                                   marginTop: "10px",
                                   alignItems: "center",
-                                  justifyContent: "center"
+                                  justifyContent: "center",
                                 }}
                               >
                                 <Button
                                   variant="contained"
-                                  onClick = {phoneNumberHandler}
+                                  onClick={phoneNumberHandler}
                                 >
                                   CONFIRM SELECTION
                                 </Button>
                               </div>
-
                             </div>
                           </>
                         )}

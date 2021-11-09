@@ -170,10 +170,23 @@ function SendEmail() {
         if (result.status === 200) {
           console.log(result.message);
           setSendingMessage(false);
+          setEmailContent({
+            recieverAddress: "",
+          messageBody: "",
+          messageSubject: "",
+          })   
+          setHtml("")
           addToast("Saved Successfully", { appearance: "success" });
         } else {
           console.log(result.message);
           setSendingMessage(false);
+
+          setEmailContent({
+          recieverAddress: "",
+          messageBody: "",
+          messageSubject: "",
+          })   
+          setHtml("")
           addToast(result.message, { appearance: "success" });
         }
       } catch (err) {

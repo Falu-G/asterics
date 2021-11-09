@@ -1,6 +1,5 @@
 .menuContainer {
   height: 100vh;
-
   background: #18a0fb;
   position: sticky;
   top: 0;
@@ -17,6 +16,7 @@
   height: 40px;
   text-decoration: none;
 }
+
 
 .menuAsset {
   color: #fff;
@@ -38,10 +38,10 @@
   text-decoration: none;
   padding: 10px;
 }
-
+/* 
 .activeMenu {
   background-color: #000;
-}
+} */
 .menuItem span {
   margin-left: 10px;
   color: #fff;

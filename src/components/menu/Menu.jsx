@@ -82,7 +82,7 @@ const MenusList = [
 function Menus({ controlSideBar }) {
   const value = useContext(MenuContext);
   let history = useHistory();
-
+  //const [activeClicked, setActiveClicked ] =  useState(true)
   const DisplayIcon = (iconName) => {
     switch (iconName.IconName) {
       case "Dashboard":
@@ -177,7 +177,7 @@ function Menus({ controlSideBar }) {
           }
 
 
-          const [activeClicked, setActiveClicked ] =  useState(true)
+         
 
           // if (item.icon === "Settings") {
           //   return (

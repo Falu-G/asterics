@@ -111,7 +111,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 850,
+  width: 950,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -801,7 +801,7 @@ function Templates() {
                   }}
                 >
                   <Box sx={style}>
-                    <Box sx={{ ...style, width: 850 }}>
+                    <Box sx={{ ...style, width: 950 }}>
                       <Typography
                         id="transition-modal-title"
                         variant="h6"
@@ -1198,6 +1198,7 @@ function Templates() {
                                 float: "right",
                                 padding: "10px 20px",
                                 color: "#fff",
+                                marginTop: "10px",
                                 backgroundColor: "#18A0FB",
                               }}
                               variant="primary"
@@ -1215,7 +1216,7 @@ function Templates() {
                                 aria-hidden="true"
                               />
                               <span className="visually">
-                                {addEmail ? "Loading..." : "Save Email"}
+                                {addEmail ? "Loading..." : "Save Email Template"}
                               </span>
                             </ReactBootStrap.Button>
                           </div>
