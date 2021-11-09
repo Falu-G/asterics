@@ -113,7 +113,65 @@ function Menus({ controlSideBar }) {
   const DisplayContent = ({ menuList }) => {
     return (
       <>
-        {menuList.map((item) => {
+        <div className="firstMenu">
+          {menuList.map((item) =>
+            item.icon === "Dashboard" ||
+            item.icon === "Subscriptions" ||
+            item.icon === "Assessment" ||
+            item.icon === "Message" ||
+            item.icon === "Schedule" ||
+            item.icon === "People" ||
+            item.icon === "MailOutline" ||
+            item.icon === "Send" ? (
+              <Link
+                className={
+                  menustate ? "menuItem activeMenu" : "menuItem closed"
+                }
+                to={item.to}
+              >
+                <DisplayIcon IconName={item.icon} />
+               
+                <span>{item.name}</span>
+              </Link>
+            ) : null
+          )}
+        </div>
+
+        <div className="secondMenu"></div>
+        <div className="thirdMenu">
+          {menuList.map((item) => {
+            if (item.icon === "Settings") {
+              return (
+                <Link
+                  className={menustate ? "menuItem" : "menuItem closed"}
+                  to={item.to}
+                >
+                  <Settings />
+                  
+                  <span>{item.name}</span>
+                </Link>
+              );
+            } else if (item.icon === "ExitToApp") {
+              return (
+                <Link
+                  className={menustate ? "menuItem" : "menuItem closed"}
+                  onClick={() => {
+                    localStorage.removeItem("user-info");
+                    history.push("/login");
+                  }}
+                >
+                  <ExitToApp />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            } else {
+              return null;
+            }
+          })}
+
+        </div>
+
+        {/* {menuList.map((item) => {
           if (item.icon === "Settings") {
             return (
               <>
@@ -179,64 +237,8 @@ function Menus({ controlSideBar }) {
 
          
 
-          // if (item.icon === "Settings") {
-          //   return (
-          //     <div className="thirdMenu">
-          //       <Link
-          //         className={menustate ? "menuItem" : "menuItem closed"}
-          //         to={item.to}
-          //       >
-          //         <DisplayIcon iconName={item.icon} />
-
-          //         <span>{item.name}</span>
-          //       </Link>
-          //     </div>
-          //   );
-
-          // } else if (item.icon === "ExitToApp") {
-          //   return (
-          //     <div className="thirdMenu">
-          //       <Link
-          //         className={menustate ? "menuItem" : "menuItem closed"}
-          //         onClick={() => {
-          //           localStorage.removeItem("user-info");
-          //           history.push("/login");
-          //         }}
-          //       >
-          //         <DisplayIcon iconName={item.icon} />
-          //         {"This is third"+console.log(item.icon)}
-          //         <span>{item.name}</span>
-          //       </Link>
-          //     </div>
-          //   );
-          // } else if (
-          //   item.icon === "Dashboard" ||
-          //   "Subscriptions" ||
-          //   "Assessment" ||
-          //   "Message" ||
-          //   "Schedule" ||
-          //   "People" ||
-          //   "MailOutline" ||
-          //   "Send"
-          // ) {
-          //   return (
-          //     <div className="firstMenu">
-          //       <Link
-          //         className={
-          //           menustate ? "menuItem activeMenu" : "menuItem closed"
-          //         }
-          //         to={item.to}
-          //       >
-          //         <DisplayIcon IconName={item.icon} />
-
-          //         <span>{item.name}</span>
-          //       </Link>
-          //     </div>
-          //   );
-          // } else {
-          //   return <div className="secondMenu">  {"This is third "+console.log(item.icon)}</div>;
-          // }
-        })}
+          
+        })} */}
       </>
     );
   };
@@ -279,90 +281,3 @@ function Menus({ controlSideBar }) {
 }
 
 export default Menus;
-
-//  {/*
-//           <div className="firstMenu">
-//           <Link
-//             className={menustate ? "menuItem activeMenu" : "menuItem closed"}
-//             to="/maindashboard"
-//           >
-//             <Dashboard />
-//             <span>Dashboard</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/customer"
-//           >
-//             <People />
-//             <span>Customer</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/sendsms"
-//           >
-//             <Send />
-//             <span>Send SMS</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/sendemail"
-//           >
-//             <MailOutline />
-//             <span>Send Email</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/schedule"
-//           >
-//             <Schedule />
-//             <span>Schedules</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/templates"
-//           >
-//             <Message />
-//             <span>Templates</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/subscription"
-//           >
-//             <Subscriptions />
-//             <span>Subscription</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             to="/report"
-//           >
-//             <Assessment />
-//             <span>Reports</span>
-//           </Link>
-//         </div>
-
-//         <div className="secondMenu"></div>
-
-//         <div className="thirdMenu">
-//           <Link className={menustate ? "menuItem" : "menuItem closed"}>
-//             <Settings />
-//             <span>Settings</span>
-//           </Link>
-
-//           <Link
-//             className={menustate ? "menuItem" : "menuItem closed"}
-//             onClick={() => {
-//               localStorage.removeItem("user-info");
-//               history.push("/login");
-//             }}
-//           >
-//             <ExitToApp />
-//             <span>LogOut</span>
-//           </Link>
-//         </div> */}
