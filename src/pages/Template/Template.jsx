@@ -1186,6 +1186,9 @@ function Templates() {
                       >
                         <div>
                           <QuillEditorFunc
+                          style = {{ 
+                            height: "700px",
+                          }}
                             settemplateObjstate={settemplateObjstate}
                             templateObjstate={templateObjstate}
                             setHtml={setHtml}

@@ -415,6 +415,10 @@ function NewSchedule({
                 placeholder={
                   messageType === "SMS" ? "PhoneNumber" : "Enter Email"
                 }
+                style = {{
+                  width: "866px",
+                  
+                }}
                 value={
                   messageType === "Email"
                     ? scheduleMessage.recieverAddress
@@ -435,6 +439,10 @@ function NewSchedule({
               <input
                 type="text"
                 name="title"
+                style = {{
+                  width: "866px",
+                  
+                }}
                 placeholder={"Title of the message"}
                 onChange={(event) =>
                   setScheduleMessage({
@@ -455,6 +463,9 @@ function NewSchedule({
             // />
 
             <ReactQuillEditor
+
+            className = "aldy"
+           
               html={html}
               setHtml={setHtml}
               setScheduleMessage={setScheduleMessage}
@@ -464,6 +475,10 @@ function NewSchedule({
             <textArea
               type="messages"
               name="name"
+              style = {{
+                width: "866px",
+                
+              }}
               onChange={(event) =>
                 setScheduleMessageSms({
                   ...scheduleMessageSms,
@@ -474,7 +489,7 @@ function NewSchedule({
             />
           )}
 
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "100%" ,  marginBottom: "10px",}}>
             <ReactBootStrap.Button
               className="sendEmailbtn"
               variant="primary"

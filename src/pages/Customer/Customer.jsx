@@ -404,7 +404,7 @@ const fetchoo = ()=>{
                       <div
                         style={{
                           height: 400,
-                          width: "100%",
+                          width: "90%",
                           marginTop: "20px",
                         }}
                       >
