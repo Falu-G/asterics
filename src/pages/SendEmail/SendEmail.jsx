@@ -191,6 +191,8 @@ function SendEmail() {
         }
       } catch (err) {
         console.log("Something terrible happened " + err.message);
+        setSendingMessage(false);
+        addToast(err.message, { appearance: "error" });
       }
 
 
