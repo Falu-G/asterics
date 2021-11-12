@@ -1,6 +1,10 @@
 import React from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
+// import 'react-quill/dist/quill.core.css';
+import 'react-quill/dist/quill.bubble.css';
+import "../../../node_modules/quill/dist/quill.snow.css";
+import "../../../node_modules/quill/dist/quill.core.css"
 import "./quillEditorFunc.css"
 
 const CustomHeart = () => <span>♥</span>;
@@ -101,6 +105,8 @@ function QuillEditorFunc({settemplateObjstate,templateObjstate,html, setHtml}) {
       handlers: {
         insertHeart: insertHeart,
       },
+
+      
     },
   };
 
@@ -131,6 +137,7 @@ function QuillEditorFunc({settemplateObjstate,templateObjstate,html, setHtml}) {
         placeholder={"New Beginning"}
         modules={modules}
         formats={formats}
+        theme = 'snow'
       />
     </div>
   );
