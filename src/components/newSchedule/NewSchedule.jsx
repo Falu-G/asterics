@@ -223,7 +223,8 @@ function NewSchedule({
         );
         console.log(scheduleMessage);
         let result = await fetch(
-          "https://asteric.herokuapp.com/mails/schedule",
+          "http://51.124.37.144:8081/mails/schedule",
+          // "https://asteric.herokuapp.com/mails/schedule",
           {
             method: "POST",
             headers: {
