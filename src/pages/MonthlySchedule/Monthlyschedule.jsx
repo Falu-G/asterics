@@ -5,7 +5,6 @@ import Menus from "../../components/menu/Menu";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import Modal from "react-modal";
 import NewSchedule from "../../components/newSchedule/NewSchedule";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import { CalendarToday } from "@material-ui/icons";
@@ -22,11 +21,25 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import parse from "html-react-parser";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
-//import htmlToDraft from 'html-to-draftjs';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 function Monthlyschedule() {
   let today = new Date();
   let month = today.getMonth() + 1;
@@ -39,7 +52,6 @@ function Monthlyschedule() {
 
   const { addToast } = useToasts();
   const [emailQueue, setEmailQueue] = useState([]);
-  // const [messageQueue, setMessageQueue] = useState([]);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -49,20 +61,12 @@ function Monthlyschedule() {
   const [open, setOpen] = React.useState(false);
   const [opensmsdialogue, setOpenopensmsdialogue] = React.useState(false);
   const [loading, setLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+
+  const [openNewSchedule, setOpenNewSchedule] = React.useState(false);
+  const handleOpenNewSchedule = () => setOpenNewSchedule(true);
+  const handleCloseNewSchedule = () => setOpenNewSchedule(false);
 
   const [smsQueue, setSmsQueue] = useState([]);
-  const customStyles = {
-    content: {
-      width: "80%",
-      height: "80%",
-      top: "50%",
-      left: "50%",
-      padding: "0",
-      overflow: "hidden",
-      transform: "translate(-50%, -50%)",
-    },
-  };
 
   const fetchBusiness = useCallback(async () => {
     fetch("https://asteric.herokuapp.com/mails", {
@@ -204,7 +208,7 @@ function Monthlyschedule() {
         setLoading(false);
       });
   };
-  //setDataRow(() => dataRow.filter((item) => item.id !== id));
+ 
   const showSideBar = () => setSideBar(!sidebar);
   const listOfTasks = ["Monthly Schedule", "Weekly Schedule", "Daily Schedule"];
 
@@ -245,21 +249,7 @@ function Monthlyschedule() {
       headerName: "Status",
       sortable: false,
       width: 160,
-      renderCell: ({ row }) => (
-        // <div
-        //   style={{
-        //     width: `100%`,
-        //     display: "flex",
-        //     alignItems: `center`,
-        //     justifyContent: "center",
-        //     color: "green"
-        //   }}
-        // >
-        //   {row.status}
-        // </div>
-
-        <ColoredStatus status={row.status} />
-      ),
+      renderCell: ({ row }) => <ColoredStatus status={row.status} />,
     },
 
     {
@@ -340,19 +330,7 @@ function Monthlyschedule() {
       width: 160,
       sortable: false,
       disableColumnFilter: true,
-      renderCell: ({ row }) => (
-        // <div
-        //   style={{
-        //     width: `100%`,
-        //     display: "flex",
-        //     alignItems: `center`,
-        //     justifyContent: "center",
-        //   }}
-        // >
-        //   {row.status}
-        // </div>
-        <ColoredStatus status={row.status} />
-      ),
+      renderCell: ({ row }) => <ColoredStatus status={row.status} />,
     },
 
     {
@@ -477,19 +455,33 @@ function Monthlyschedule() {
               ) : (
                 <>
                   <div className="scheduleDashboard">
-                    <Modal isOpen={openModal} style={customStyles}>
-                      <ToastProvider>
-                        <NewSchedule
-                          setOpenModal={() =>
-                            setOpenModal(() => (openModal ? false : true))
-                          }
-                          spinnerDisplay={setLoading}
-                          setSmsQueue={setSmsQueue}
-                          setTokenValid={setTokenValid}
-                          setEmailQueue={setEmailQueue}
-                          setSentEmailValue={setSentEmailValue}
-                        />
-                      </ToastProvider>
+                    <Modal
+                      open={openNewSchedule}
+                      onClose={handleCloseNewSchedule}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Schedule Your messages
+                        </Typography>
+
+                        <ToastProvider>
+                          <NewSchedule
+                            setOpenModal={handleOpenNewSchedule}
+                            spinnerDisplay={setLoading}
+                            setSmsQueue={setSmsQueue}
+                            setTokenValid={setTokenValid}
+                            closebut={handleCloseNewSchedule}
+                            setEmailQueue={setEmailQueue}
+                            setSentEmailValue={setSentEmailValue}
+                          />
+                        </ToastProvider>
+                      </Box>
                     </Modal>
 
                     {/**Email dialogue */}
@@ -573,10 +565,11 @@ function Monthlyschedule() {
                             backgroundColor: `#18A0FB`,
                             padding: `7px`,
                             width: "150px",
-                            marginLeft: "4px"
+                            marginLeft: "4px",
                           }}
-                          onClick={() =>
-                            setOpenModal(() => (openModal ? false : true))
+                          onClick={
+                            handleOpenNewSchedule
+                            // setOpenModal(() => (openModal ? false : true))
                           }
                         >
                           New Schedule

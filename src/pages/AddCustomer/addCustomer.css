@@ -5,15 +5,14 @@
 .addCustomerWrapper {
   top: 50px;
   height: calc(100vh - 50px);
-  padding: 40px;
+  
 }
 
 .addCustomerWrapperCont {
   margin: 0 auto;
-  width: 80%;
   height: 90%;
   display: flex;
-  padding: 20px;
+  
   align-items: flex-start;
   flex-direction: column;
 }

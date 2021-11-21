@@ -1,28 +1,14 @@
 import React, { useState } from "react";
 import "./addCustomer.css";
 import CloseIcon from "@material-ui/icons/Close";
-import Dashnav from "../../components/dashnav/Dashnav";
 import "react-calendar/dist/Calendar.css";
-//import { makeStyles } from "@material-ui/core/styles";
 import CustomerInfo from "../../classes/CustomerInfo";
 import SessionExpired from "../SessionExpired/SessionExpired";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import Avatar from "@mui/material/Avatar";
-// import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-// import Typography from "@mui/material/Typography";
-// import Container from "@mui/material/Container";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import Box from "@mui/material/Box";
-// import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
-// import Grid from "@mui/material/Grid";
-// import Button from "@mui/material/Button";
+
 function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
   const [sessionExpired, setSessionExpired] = useState(false);
 
@@ -33,8 +19,10 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
   });
   const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
   const [selectedAnniversaryDate, setselectedAnniversaryDate] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [addingUser, setAddingUser] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  // const [upperEmpty, setUpperEmpty] = useState(false);
   const { addToast } = useToasts();
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
@@ -62,96 +50,142 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
       });
   };
 
-  // const regFromCSV = async () => {
-  //   let result = await fetch(
-  //     "https://asteric.herokuapp.com/customer/register",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         Authorization: "Bearer " + token,
-  //       },
-  //       body: JSON.stringify(),
-  //     }
-  //   );
+  const checkEmptiness = ()=>{
+    if( (customerInfo.name.isEmpty()) || (customerInfo.lastName.isEmpty()) || (customerInfo.email.isEmpty()))
+      return false;
+      else {
+        return true
+      } 
+  
+  }
+  
 
-  //   result = await result.json();
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
-  //   if (result.status === 401) {
-  //     setSessionExpired(true);
-  //     setAddingUser(false);
-  //     return;
-  //   }
+  const FileUpload = () => {
+    if (selectedFile) {
+      return (
+        <div>
+          <h2>File Details:</h2>
 
-  //   fetchUser();
-  //   setAddingUser(false);
-  //   setOpenModal(false);
-  //   addToast("User added Successfully", { appearance: "success" });
-  //   console.log(`This is the ${JSON.stringify(result)}`);
-  //   console.log();
-  // };
+          <p>File Name: {selectedFile.name}</p>
+
+          <p>File Type: {selectedFile.type}</p>
+
+          <p>
+            Last Modified:{" "}
+            {selectedFile.lastModifiedDate.toDateString()}
+          </p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <br />
+        
+          <p style={{ marginRight: 20 }}>Upload a CSV file</p>
+        </div>
+      );
+    }
+  };
+
+
   const register = async (e) => {
     e.preventDefault();
     setAddingUser(true);
-    let customer = new CustomerInfo(
-      customerInfo.name,
-      customerInfo.lastName,
-      customerInfo.email
-    );
 
-    if (selectedBirthdayDate != null) {
-      //let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
-      const day = selectedBirthdayDate.getDate();
-      const month = selectedBirthdayDate.toLocaleString("default", {
-        month: "short",
-      });
-      customer.addDateOfBirth(day + "," + month);
-      //customer.addDateOfBirth(date);
-    }
+    if (selectedFile !== null) {
+      // "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
 
-    if (selectedAnniversaryDate != null) {
-      // let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
-      const day = selectedAnniversaryDate.getDate();
-      const month = selectedAnniversaryDate.toLocaleString("default", {
-        month: "short",
-      });
-      customer.addAnniversary(day + "," + month);
-      console.log(day + "," + month);
-      //console.log(datee);
-    }
+      let result = await fetch(
+        "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(selectedFile),
+        }
+      );
 
-    if (phoneNumber !== "") {
-      customer.addPhoneNumber(phoneNumber);
-    }
+      result = await result.json();
 
-    let result = await fetch(
-      "https://asteric.herokuapp.com/customer/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(customer),
+      if (result.status === 401) {
+        setSessionExpired(true);
+        setAddingUser(false);
+        return;
       }
-    );
 
-    result = await result.json();
-
-    if (result.status === 401) {
-      setSessionExpired(true);
+      fetchUser();
       setAddingUser(false);
-      return;
-    }
+      setOpenModal(false);
+      addToast("User added Successfully", { appearance: "success" });
+      console.log(`This is the ${JSON.stringify(result)}`);
+      console.log();
+    } else {
+      let customer = new CustomerInfo(
+        customerInfo.name,
+        customerInfo.lastName,
+        customerInfo.email
+      );
 
-    fetchUser();
-    setAddingUser(false);
-    setOpenModal(false);
-    addToast("User added Successfully", { appearance: "success" });
-    console.log(`This is the ${JSON.stringify(result)}`);
-    console.log(customer);
+      if (selectedBirthdayDate != null) {
+        //let date = dateFormat(selectedBirthdayDate, "dd/mm/yyyy");
+        const day = selectedBirthdayDate.getDate();
+        const month = selectedBirthdayDate.toLocaleString("default", {
+          month: "short",
+        });
+        customer.addDateOfBirth(day + "," + month);
+        //customer.addDateOfBirth(date);
+      }
+
+      if (selectedAnniversaryDate != null) {
+        // let datee = dateFormat(selectedAnniversaryDate, "dd/mm/yyyy");
+        const day = selectedAnniversaryDate.getDate();
+        const month = selectedAnniversaryDate.toLocaleString("default", {
+          month: "short",
+        });
+        customer.addAnniversary(day + "," + month);
+        console.log(day + "," + month);
+        //console.log(datee);
+      }
+
+      if (phoneNumber !== "") {
+        customer.addPhoneNumber(phoneNumber);
+      }
+
+      let result = await fetch(
+        "https://asteric.herokuapp.com/customer/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(customer),
+        }
+      );
+
+      result = await result.json();
+
+      if (result.status === 401) {
+        setSessionExpired(true);
+        setAddingUser(false);
+        return;
+      }
+
+      fetchUser();
+      setAddingUser(false);
+      setOpenModal(false);
+      addToast("User added Successfully", { appearance: "success" });
+      console.log(`This is the ${JSON.stringify(result)}`);
+      console.log(customer);
+    }
   };
 
   return (
@@ -171,7 +205,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
             }}
             onClick={setOpenModal}
           />
-          <Dashnav title="Add Customer" />
+          {/* <Dashnav title="Add Customer" /> */}
           <div className="addCustomerWrapper">
             <div className="addCustomerWrapperCont">
               <form className="formAddCustomer">
@@ -265,28 +299,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                   />
                 </div>
 
-                {/* <div className="submitcont">
-                  <ReactBootStrap.Button
-                    style={{
-                      float: "right",
-                    }}
-                    variant="primary"
-                    onClick={register}
-                    disabled={addingUser}
-                  >
-                    <ReactBootStrap.Spinner
-                      as="span"
-                      className={addingUser ? "visible" : "visually-hidden"}
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    <span className="visually">
-                      {addingUser ? "Loading..." : "Register"}
-                    </span>
-                  </ReactBootStrap.Button>
-                </div> */}
+                {}
               </form>
 
               <div className="horline"></div>
@@ -302,35 +315,19 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                     justifyContent: `space-between`,
                   }}
                 >
-                  <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5>
+                  {/* <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5> */}
+
+                  <FileUpload/>
                   <input
                     label="Upload CSV"
                     type="file"
                     name="upload"
                     accept=".csv"
+                    disabled = {checkEmptiness}
+                    onChange={onFileChange}
                   />
                 </div>
-                {/* <ReactBootStrap.Button
-                  style={{
-                    marginTop: 20,
-                    float: "right",
-                  }}
-                  variant="primary"
-                  onClick={"regFromCSV"}
-                  disabled={addingUser}
-                >
-                  <ReactBootStrap.Spinner
-                    as="span"
-                    className={addingUser ? "visible" : "visually-hidden"}
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually">
-                    {addingUser ? "Loading..." : "Register"}
-                  </span>
-                </ReactBootStrap.Button> */}
+                {}
               </div>
 
               <ReactBootStrap.Button
@@ -366,3 +363,80 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
 }
 
 export default AddCustomer;
+
+
+  // const regFromCSV = async () => {
+  //   let result = await fetch(
+  //     "https://asteric.herokuapp.com/customer/register",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //         Authorization: "Bearer " + token,
+  //       },
+  //       body: JSON.stringify(),
+  //     }
+  //   );
+
+  //   result = await result.json();
+
+  //   if (result.status === 401) {
+  //     setSessionExpired(true);
+  //     setAddingUser(false);
+  //     return;
+  //   }
+
+  //   fetchUser();
+  //   setAddingUser(false);
+  //   setOpenModal(false);
+  //   addToast("User added Successfully", { appearance: "success" });
+  //   console.log(`This is the ${JSON.stringify(result)}`);
+  //   console.log();
+  // };
+
+  /* <ReactBootStrap.Button
+                  style={{
+                    marginTop: 20,
+                    float: "right",
+                  }}
+                  variant="primary"
+                  onClick={"regFromCSV"}
+                  disabled={addingUser}
+                >
+                  <ReactBootStrap.Spinner
+                    as="span"
+                    className={addingUser ? "visible" : "visually-hidden"}
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually">
+                    {addingUser ? "Loading..." : "Register"}
+                  </span>
+                </ReactBootStrap.Button> */
+
+
+                /* <div className="submitcont">
+                  <ReactBootStrap.Button
+                    style={{
+                      float: "right",
+                    }}
+                    variant="primary"
+                    onClick={register}
+                    disabled={addingUser}
+                  >
+                    <ReactBootStrap.Spinner
+                      as="span"
+                      className={addingUser ? "visible" : "visually-hidden"}
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually">
+                      {addingUser ? "Loading..." : "Register"}
+                    </span>
+                  </ReactBootStrap.Button>
+                </div> */

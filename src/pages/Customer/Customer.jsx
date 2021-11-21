@@ -8,7 +8,8 @@ import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
-import Modal from "react-modal";
+// import Modal from "react-modal";
+import Modal from '@mui/material/Modal';
 import SessionExpired from "../SessionExpired/SessionExpired";
 import { useToasts } from "react-toast-notifications";
 import * as ReactBootStrap from "react-bootstrap";
@@ -20,6 +21,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import UpdateCustomer from "../../components/updateCustomer/UpdateCustomer";
 import Skeleton from "@mui/material/Skeleton";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,6 +34,18 @@ const useStyles = makeStyles(() => ({
     backgroundColor: "#18a0fb",
   },
 }));
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  height: "90%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function Customer() {
   const classes = useStyles();
@@ -45,17 +60,15 @@ function Customer() {
   const [loading, setLoading] = useState(false);
   const [showSkeleton, setSkeleton] = useState(true);
   const [user, setUser] = useState({});
-  const [openModalEmail, setOpenModalEmail] = useState(false);
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
   const { addToast } = useToasts();
 
-
-const fetchoo = ()=>{
-  setSkeleton(true)
-  console.log("fetchoo")
-  fetch("https://asteric.herokuapp.com/customer", {
+  const fetchoo = () => {
+    setSkeleton(true);
+    console.log("fetchoo");
+    fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -75,11 +88,11 @@ const fetchoo = ()=>{
       .catch((err) => {
         console.log("This is the error that was caught" + err);
       });
-}
+  };
 
   const fetchBusiness = useCallback(async () => {
-    setSkeleton(true)
-    console.log("This should reload")
+    setSkeleton(true);
+    console.log("This should reload");
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
@@ -102,14 +115,9 @@ const fetchoo = ()=>{
       });
   }, [token]);
 
-
-
-
-
   useEffect(() => {
     fetchBusiness();
   }, [fetchBusiness]);
- 
 
   const dataVertical = [
     {
@@ -118,13 +126,11 @@ const fetchoo = ()=>{
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 260,
-      renderCell: ({row}) => {
-        return (
-            <span>{row.firstname+" "+ row.lastname}</span>
-        );
+      renderCell: ({ row }) => {
+        return <span>{row.firstname + " " + row.lastname}</span>;
       },
-      },
-   
+    },
+
     {
       field: "email",
       headerName: "Email",
@@ -135,18 +141,14 @@ const fetchoo = ()=>{
       field: "phone",
       headerName: "Phone Number",
       width: 200,
-      renderCell: ({ row }) => {
-        
-      },
+      renderCell: ({ row }) => {},
     },
 
     {
       field: "birthday",
       headerName: "Birthday",
       width: 160,
-      renderCell: ({ row }) => {
-        
-      },
+      renderCell: ({ row }) => {},
     },
 
     {
@@ -268,20 +270,31 @@ const fetchoo = ()=>{
         setOpen(false);
       });
   };
-  const customStyles = {
-    content: {
-      width: "80%",
-      height: "80%",
-      top: "50%",
-      backgroundColor: "#f5f5f5",
-      left: "50%",
-      padding: "0",
-      overflow: "visible",
-      transform: "translate(-50%, -50%)",
-    },
-  };
+
+  // const customStyles = {
+  //   content: {
+  //     width: "80%",
+  //     height: "80%",
+  //     top: "50%",
+  //     backgroundColor: "#f5f5f5",
+  //     left: "50%",
+  //     padding: "0",
+  //     overflow: "visible",
+  //     transform: "translate(-50%, -50%)",
+  //   },
+  // };
 
   const [open, setOpen] = React.useState(false);
+
+  const [openAddCustomer, setOpenAddCustomer] = React.useState(false);
+
+  const handleClickOpenAddCustomer = () => {
+
+    setOpenAddCustomer(true);
+    console.log("You clicked openshit"+openAddCustomer)
+
+  }
+  const handleCloseAddCustomer = () => setOpenAddCustomer(false);
 
   const handleClickOpen = (id) => {
     setCustomerId(id);
@@ -336,10 +349,41 @@ const fetchoo = ()=>{
                     open={openUpdate}
                     handleClose={handleCloseUpdate}
                     user={user}
-                    fetchBusiness = {fetchoo}
+                    fetchBusiness={fetchoo}
                     setUser={setUser}
                   />
+
                   <Modal
+                    open={openAddCustomer}
+                    onClose={handleCloseAddCustomer}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Add Customers 
+                      </Typography>
+
+                      <AddCustomer
+                      tokenValid={tokenValid}
+                      setAllCustomers={setAllCustomers}
+                      setOpenModal={
+                        handleClickOpenAddCustomer
+                        // () =>
+                        // setOpenModalEmail(() => (openModalEmail ? false : true))
+                      }
+                    />
+
+                  
+                    </Box>
+                  </Modal>
+
+
+                  {/* <Modal
                     isOpen={openModalEmail}
                     style={customStyles}
                     contentLabel="Example Modal"
@@ -352,7 +396,7 @@ const fetchoo = ()=>{
                         setOpenModalEmail(() => (openModalEmail ? false : true))
                       }
                     />
-                  </Modal>
+                  </Modal> */}
 
                   <Dialog
                     open={open}
@@ -364,8 +408,8 @@ const fetchoo = ()=>{
                     <DialogTitle>{"Delete Customer?"}</DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-slide-description">
-                        This user would be deleted permanently.
-                        Do you want to continue?
+                        This user would be deleted permanently. Do you want to
+                        continue?
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -391,10 +435,12 @@ const fetchoo = ()=>{
                       <div>
                         <button
                           className="btnAddCustomer"
-                          onClick={() =>
-                            setOpenModalEmail(() =>
-                              openModalEmail ? false : true
-                            )
+                          onClick={
+                            handleClickOpenAddCustomer
+                            // () =>
+                            // setOpenModalEmail(() =>
+                            //   openModalEmail ? false : true
+                            // )
                           }
                         >
                           AddCustomer

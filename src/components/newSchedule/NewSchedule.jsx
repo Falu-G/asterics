@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Dashnav from "../dashnav/Dashnav";
 import "./newSchedule.css";
 import CloseIcon from "@material-ui/icons/Close";
 import { useToasts } from "react-toast-notifications";
@@ -41,6 +40,7 @@ function NewSchedule({
   setSentEmailValue,
   spinnerDisplay,
   setSmsQueue,
+  closebut
 }) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -346,12 +346,12 @@ function NewSchedule({
           position: "absolute",
           top: 5,
           cursor: "pointer",
-          color: "white",
+          color: "black",
           right: 10,
         }}
-        onClick={setOpenModal}
+        onClick={closebut}
       />
-      <Dashnav title="New Schedule" />
+    
       <div
         style={{
           height: `100%`,
