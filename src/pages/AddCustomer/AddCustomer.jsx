@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 
-function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
+function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton }) {
   const [sessionExpired, setSessionExpired] = useState(false);
 
   const [customerInfo, setCustomerInfo] = useState({
@@ -82,10 +82,8 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
       );
     } else {
       return (
-        <div>
-          <br />
-        
-          <p style={{ marginRight: 20 }}>Upload a CSV file</p>
+        <div style = {{height:`100%`}}>
+          <p style={{alignItems: 'center',display: 'flex',height:`100%`,marginRight:20 }}>Upload a CSV file</p>
         </div>
       );
     }
@@ -199,13 +197,15 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
           <CloseIcon
             style={{
               position: "absolute",
-              top: "5",
+              top: "-40",
               right: 10,
-              color: "white",
+              zIndex: "10",
+              color: "black",
+              cursor: "pointer",
             }}
-            onClick={setOpenModal}
+            onClick={closebutton}
           />
-          {/* <Dashnav title="Add Customer" /> */}
+        
           <div className="addCustomerWrapper">
             <div className="addCustomerWrapperCont">
               <form className="formAddCustomer">
@@ -312,7 +312,9 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                     display: `flex`,
                     alignItems: `center`,
                     textAlign: `center`,
-                    justifyContent: `space-between`,
+                   
+                    justifyContent: `center`,
+                    
                   }}
                 >
                   {/* <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5> */}
@@ -321,6 +323,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers }) {
                   <input
                     label="Upload CSV"
                     type="file"
+                    style = {{width:`200px`}}
                     name="upload"
                     accept=".csv"
                     disabled = {checkEmptiness}

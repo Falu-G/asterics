@@ -371,6 +371,7 @@ function Customer() {
                       <AddCustomer
                       tokenValid={tokenValid}
                       setAllCustomers={setAllCustomers}
+                      closebutton = {handleCloseAddCustomer}
                       setOpenModal={
                         handleClickOpenAddCustomer
                         // () =>
