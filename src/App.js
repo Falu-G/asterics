@@ -24,6 +24,7 @@ import Passwordsent from './pages/passwordSent/Passwordsent';
 import SessionExpired from './pages/SessionExpired/SessionExpired';
 import {MenuContext} from './components/MenuContext';
 import Report from './pages/Report/Report';
+import LatestHome from "./pages/LatestHome/LatestHome";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route path = "/home" component = {LatestHome} />
           <Route path = "/login" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
           <Route path = "/testpage" component = {Testpage} />

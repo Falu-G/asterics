@@ -1,10 +1,9 @@
 import "./home.css";
 import React from "react";
 import Navbar from "../../components/navbar/Navbar";
+// import LatestHome from "../LatestHome/LatestHome";
 
 function Home() {
-
-
   return (
     <div className="homeContainer">
       <div className="firstbox">

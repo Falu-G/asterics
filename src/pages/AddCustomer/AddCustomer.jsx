@@ -28,6 +28,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
 
+  const [formData, setFormData] = useState(null)
   const fetchUser = () => {
     fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
@@ -60,9 +61,17 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   }
   
 
-  const onFileChange = (event) => {
+  const onFileChange = (event) =>{
     setSelectedFile(event.target.files[0]);
-  };
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0])
+    reader.onload = (e)=>{
+      setFormData(e.target.result)
+  } 
+
+}
+
+  ;
 
   const FileUpload = () => {
     if (selectedFile) {
@@ -72,12 +81,12 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
           <p>File Name: {selectedFile.name}</p>
 
-          <p>File Type: {selectedFile.type}</p>
+          {/* <p>File Type: {selectedFile.type}</p>
 
           <p>
             Last Modified:{" "}
             {selectedFile.lastModifiedDate.toDateString()}
-          </p>
+          </p> */}
         </div>
       );
     } else {
@@ -95,35 +104,46 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
     setAddingUser(true);
 
     if (selectedFile !== null) {
-      // "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
 
-      let result = await fetch(
-        "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify(selectedFile),
+
+      try{
+
+        let result = await fetch(
+          "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+  
+        result = await result.json()
+  
+        if (result.status === 401) {
+          setSessionExpired(true);
+          setAddingUser(false);
+          return;
         }
-      );
-
-      result = await result.json();
-
-      if (result.status === 401) {
-        setSessionExpired(true);
+  
+        fetchUser();
         setAddingUser(false);
-        return;
-      }
+        setOpenModal(false);
+        closebutton()
+        addToast("User added Successfully", { appearance: "success" });
 
-      fetchUser();
-      setAddingUser(false);
-      setOpenModal(false);
-      addToast("User added Successfully", { appearance: "success" });
-      console.log(`This is the ${JSON.stringify(result)}`);
-      console.log();
+      }catch(err){
+        setAddingUser(false);
+        setOpenModal(false);
+        closebutton()
+        console.log("This is form Data "+formData)
+        addToast("Error occured when adding user", { appearance: "error" });
+      }
+     
+     
     } else {
       let customer = new CustomerInfo(
         customerInfo.name,
@@ -180,6 +200,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
       fetchUser();
       setAddingUser(false);
       setOpenModal(false);
+      closebutton()
       addToast("User added Successfully", { appearance: "success" });
       console.log(`This is the ${JSON.stringify(result)}`);
       console.log(customer);

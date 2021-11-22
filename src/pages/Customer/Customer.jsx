@@ -372,11 +372,9 @@ function Customer() {
                       tokenValid={tokenValid}
                       setAllCustomers={setAllCustomers}
                       closebutton = {handleCloseAddCustomer}
-                      setOpenModal={
-                        handleClickOpenAddCustomer
-                        // () =>
-                        // setOpenModalEmail(() => (openModalEmail ? false : true))
-                      }
+                      setOpenModal={handleClickOpenAddCustomer}
+
+                       
                     />
 
                   
