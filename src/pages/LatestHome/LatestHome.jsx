@@ -173,7 +173,7 @@ function LatestHome() {
       >
         <Grid container spacing={4} justifyContent="space-evenly">
           {footers.map((footer) => (
-            <Grid item xs={6} sm={3} key={footer.title}>
+            <Grid item xs={6} sm={12} key={footer.title}>
               <Typography variant="h4"  gutterBottom sx = {{color:"#00B5FF"}}>
                 {footer.title}
               </Typography>
