@@ -103,14 +103,14 @@ function LatestHome() {
         <Container sx={{ py: 2 , height: "700px"}} maxWidth="lg">
           {/* End hero unit */}
           <Grid
+          item
             container
           >
             <Grid
-              xs={12}
+             
               md={6}
               sm={12}
-              lg={6}
-              xl={6}
+             
      
               sx={{
                 display: "flex",
@@ -153,8 +153,7 @@ function LatestHome() {
             <Grid  xs={12}
               sm={12}
               md={6}
-              lg={6}
-              xl={6} sx={{ backgroundColor: "transparent", display:`flex`,alignItems: 'center',justifyContent: 'center'}}>
+              sx={{ backgroundColor: "transparent", display:`flex`,alignItems: 'center',justifyContent: 'center'}}>
               <img src="images/chat.png" alt="" />
             </Grid>
           </Grid>
@@ -171,9 +170,9 @@ function LatestHome() {
           py: [3, 6],
         }}
       >
-        <Grid container spacing={4} justifyContent="space-evenly">
+        <Grid container spacing={4} >
           {footers.map((footer) => (
-            <Grid item xs={6} sm={12} key={footer.title}>
+            <Grid item xs={6} md = {4} sm={12} key={footer.title}>
               <Typography variant="h4"  gutterBottom sx = {{color:"#00B5FF"}}>
                 {footer.title}
               </Typography>
