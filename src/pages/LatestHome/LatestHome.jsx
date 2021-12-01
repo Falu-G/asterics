@@ -1,11 +1,6 @@
 import React from "react";
-// import Navbar from "../../components/navbar/Navbar";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-// import CameraIcon from "@mui/icons-material/PhotoCamera";
-// import Card from "@mui/material/Card";
-// import CardActions from "@mui/material/CardActions";
-// import CardContent from "@mui/material/CardContent";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -70,6 +65,7 @@ function LatestHome() {
          
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
         
         }}>
           <Typography
@@ -78,7 +74,7 @@ function LatestHome() {
             noWrap
             sx={{
               fontWeight: "bold",
-              fontSize: 36,
+              fontSize: 26,
               flexWrap: 'wrap',
               flexGrow: 1
             }}
@@ -100,25 +96,22 @@ function LatestHome() {
       </AppBar>
 
       <main>
-        <Container sx={{ py: 2 , height: "700px"}} maxWidth="lg">
+        <Container sx={{ py: 2 }} maxWidth="lg">
           {/* End hero unit */}
           <Grid
           item
             container
+            spacing={2}
           >
             <Grid
              
               md={6}
               sm={12}
              
-     
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                //alignItems: "center",
-                justifyContent: "center",
-                height: `100%`,
-                
+                justifyContent: "center"
               }}
             >
               <div style = {{width: 400}}>
