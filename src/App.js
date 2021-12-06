@@ -33,8 +33,8 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path = "/home" component = {LatestHome} />
+          <Route exact path="/" component={LatestHome} />
+          <Route path = "/home" component = {Home} />
           <Route path = "/login" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
           <Route path = "/testpage" component = {Testpage} />

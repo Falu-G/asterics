@@ -15,7 +15,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://localhost:3000//">
         Asterix
       </Link>{" "}
       {new Date().getFullYear()}
@@ -23,12 +23,37 @@ function Copyright() {
     </Typography>
   );
 }
+// const Root = styled('div')(({ theme }) => ({
+//   padding: theme.spacing(1),
+//   [theme.breakpoints.down('md')]: {
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   [theme.breakpoints.up('md')]: {
+//     backgroundColor: theme.palette.primary.main,
+//   },
+//   [theme.breakpoints.up('lg')]: {
+//     backgroundColor: green[500],
+//   },
+// }));
+
+
+const styles = (theme) => ({
+  root: {
+    backgroundColor: 'blue',
+
+    // Match [0, md)
+    //       [0, 900px)
+    // [theme.breakpoints.down('md')]: {
+    //   backgroundColor: 'red',
+    // },
+  },
+});
 
 const theme = createTheme();
 
 function LatestHome() {
 
-
+ const stylee = styles();
 
   const footers = [
     {
@@ -59,6 +84,7 @@ function LatestHome() {
         elevation={0}
         color={"transparent"}
         maxWidth="lg"
+       
         
       >
         <Toolbar sx = {{ 
@@ -87,10 +113,10 @@ function LatestHome() {
 
 
          <ul className = 'menLate'>
-         <li>FAQ</li>
-           <li>Contact Us</li>
-           <li>Team</li>
-           <li>Login</li>
+         <li> <Link href="#" underline="none">FAQ</Link></li>
+           <li><Link href="#" underline="none">Contact Us</Link></li>
+           <li> <Link href="#" underline="none">Team</Link></li>
+           <li><Link href="http://localhost:3000/login" underline="none">Login</Link></li>
          </ul>
         </Toolbar>
       </AppBar>
