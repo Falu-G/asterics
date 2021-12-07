@@ -8,8 +8,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import  '../LatestHome/latestHome.css'
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { green } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
 
 function Copyright() {
   return (
@@ -23,38 +26,22 @@ function Copyright() {
     </Typography>
   );
 }
-// const Root = styled('div')(({ theme }) => ({
-//   padding: theme.spacing(1),
-//   [theme.breakpoints.down('md')]: {
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   [theme.breakpoints.up('md')]: {
-//     backgroundColor: theme.palette.primary.main,
-//   },
-//   [theme.breakpoints.up('lg')]: {
-//     backgroundColor: green[500],
-//   },
-// }));
 
 
-const styles = (theme) => ({
-  root: {
-    backgroundColor: 'blue',
 
-    // Match [0, md)
-    //       [0, 900px)
-    // [theme.breakpoints.down('md')]: {
-    //   backgroundColor: 'red',
-    // },
-  },
-});
+
+
+
 
 const theme = createTheme();
 
+
+
+
 function LatestHome() {
-
- const stylee = styles();
-
+  const tim = useTheme();
+  const matches = useMediaQuery(tim.breakpoints.up('md'));
+ 
   const footers = [
     {
       title: 'Send SMS with a fast and Reliable means',
@@ -72,13 +59,21 @@ function LatestHome() {
   ];
   
 
-
+const styling = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  backgroundColor:"red"
+}
 
   return (
     <ThemeProvider theme={theme}>
       {/* <Navbar /> */}
 
       <CssBaseline />
+
+
+      
       <AppBar
         position="relative"
         elevation={0}
@@ -122,25 +117,20 @@ function LatestHome() {
       </AppBar>
 
       <main>
-        <Container sx={{ py: 2 }} maxWidth="lg">
+        <Container sx={{ py: 2}} maxWidth="lg">
           {/* End hero unit */}
           <Grid
-          item
             container
-            spacing={2}
+           
+          
           >
             <Grid
-             
-              md={6}
+               lg = {6}
               sm={12}
-             
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center"
-              }}
+            item
+              sx={styling}
             >
-              <div style = {{width: 400}}>
+              
 
               <Typography
                 variant="h6"
@@ -157,25 +147,37 @@ function LatestHome() {
               <Typography
                 variant="p"
                 color="inherit"
+               
               >
                Get instant access to exciting tools to support your business that
             will bring you close to customers for you.
               </Typography>
 
-              <Button variant="contained" color ='warning' sx = {{mt:2}}>Read More</Button>
+              <Button variant="contained" color ='warning' sx = {{mt:2}} size = {'medium'}>Read More</Button>
 
-              </div>
+              
             
 
 
             </Grid>
-            <Grid  xs={12}
+
+
+
+
+            <Grid  
+           
               sm={12}
-              md={6}
-              sx={{ backgroundColor: "transparent", display:`flex`,alignItems: 'center',justifyContent: 'center'}}>
-              <img src="images/chat.png" alt="" />
+              lg = {6}
+             
+              sx={{ backgroundColor: "transparent", display:`flex`,alignItems: 'center',justifyContent: 'center'} }>
+             <img src="images/chat.png" alt="" />
             </Grid>
           </Grid>
+
+
+
+
+          
         </Container>
       </main>
       {/* Footer */}
