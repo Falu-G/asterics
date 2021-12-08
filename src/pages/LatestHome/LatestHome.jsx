@@ -175,7 +175,7 @@ function LatestHome() {
                 justifyContent: "center",
               }}
             >
-              <img src="images/chat.png" alt="" width = "100%"/>
+              <img src="images/chat.png" alt="" width = "100%" style = {{paddingTop:10}}/>
             </Grid>
           </Grid>
         </Container>
@@ -193,8 +193,8 @@ function LatestHome() {
         >
           <Grid container spacing={4}>
             {footers.map((footer) => (
-              <Grid item xs={6} md={4} sm={12} key={footer.title}>
-                <Typography variant="h4" gutterBottom sx={{ color: "#00B5FF" }}>
+              <Grid item  md={4} sm={12} key={footer.title}>
+                <Typography component = "h5" variant="h5" gutterBottom sx={{ color: "#00B5FF" }}>
                   {footer.title}
                 </Typography>
               </Grid>
