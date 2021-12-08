@@ -103,7 +103,7 @@ function LatestHome() {
               </Link>
             </li>
             <li>
-              <Link href="http://localhost:3000/login" underline="none">
+              <Link href="../Login/Login" underline="none">
                 Login
               </Link>
             </li>
