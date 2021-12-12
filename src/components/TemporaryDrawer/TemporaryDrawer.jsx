@@ -5,12 +5,36 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import QuizIcon from "@mui/icons-material/Quiz";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import LoginIcon from '@mui/icons-material/Login';
+import { useHistory } from 'react-router-dom';
+import Link from '@mui/material/Link';
+
+//const preventDefault = (event) => event.preventDefault();
+
+function Links({nameoflink, logMeIn}) {
+  return (
+    <Box
+      sx={{
+        typography: 'body1',
+        '& > :not(style) + :not(style)': {
+          ml: 2,
+        },
+      }}
+     
+    >
+   
+      <Link href={logMeIn} variant="body2">
+        {nameoflink}
+      </Link>
+    </Box>
+  );
+}
+
+
 export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     top: false,
@@ -18,6 +42,7 @@ export default function TemporaryDrawer() {
     bottom: false,
     right: false,
   });
+  const history = useHistory();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -56,9 +81,16 @@ export default function TemporaryDrawer() {
         {["FAQ", "Contact Us", "Team", "Login"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              <DisplayIcon icon={text} href="../../pages/Login/Login" />
+              <DisplayIcon icon={text} onClick = {()=> {
+history.push("/login")
+console.log("I am here")
+              } }/>
+
+              
             </ListItemIcon>
-            <ListItemText primary={text} />
+
+            <Links nameoflink = {text} logMeIn = "../Login/Login"/>
+           
           </ListItem>
         ))}
       </List>

@@ -52,8 +52,7 @@ function LatestHome() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Navbar /> */}
-
+  
       <CssBaseline />
 
       <AppBar
@@ -80,7 +79,7 @@ function LatestHome() {
               flexGrow: 1,
             }}
           >
-            AsteriX CRM
+            AsteriX
           </Typography>
 
 
@@ -146,7 +145,7 @@ function LatestHome() {
                     fontSize: 36,
                   }}
                 >
-                  AsteriX CRM
+                  AsteriX 
                 </Typography>
 
                 <Typography variant="p" color="inherit">
@@ -175,7 +174,7 @@ function LatestHome() {
                 justifyContent: "center",
               }}
             >
-              <img src="images/chat.png" alt="" width = "100%" style = {{paddingTop:10}}/>
+              <img src="images/chat.png" alt="" width = "100%" style = {{paddingTop:20}}/>
             </Grid>
           </Grid>
         </Container>
