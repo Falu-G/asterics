@@ -26,10 +26,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 // import Drawer from "@mui/material/Drawer";
 const tiers = [
   {
-    title: "Free",
-    price: "0",
+    title: "Standard",
+    price: "55",
     description: [
-      "10 users included",
+      "3 users included",
       "2 GB of storage",
       "Help center access",
       "Email support",
@@ -40,9 +40,9 @@ const tiers = [
   {
     title: "Pro",
     subheader: "Most popular",
-    price: "15",
+    price: "75",
     description: [
-      "20 users included",
+      "5 users included",
       "10 GB of storage",
       "Help center access",
       "Priority email support",
@@ -52,10 +52,10 @@ const tiers = [
   },
   {
     title: "Enterprise",
-    price: "30",
+    price: "90",
     description: [
-      "50 users included",
-      "30 GB of storage",
+      "10 users included",
+      "20 GB of storage",
       "Help center access",
       "Phone & email support",
     ],
@@ -335,13 +335,15 @@ function PricingContent() {
                   <ul>
                     {tier.description.map((line) => (
                       <Typography
-                        component="li"
-                        variant="subtitle1"
-                        align="center"
-                        key={line}
-                      >
-                        {line}
-                      </Typography>
+                      component="li"
+                      variant="subtitle1"
+                      align="center"
+                      key={line}
+                     
+                    >
+                      {line}
+                    </Typography>
+                    
                     ))}
                   </ul>
                 </CardContent>
