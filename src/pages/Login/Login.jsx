@@ -4,30 +4,16 @@ import "./login.css";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { makeStyles } from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-//import TextField from "@material-ui/core/TextField";
+import Input from '@mui/material/Input';
 import { useToasts } from "react-toast-notifications";
 import TextField from "@mui/material/TextField";
 import CssBaseline from '@mui/material/CssBaseline';
-// import Typography from '@mui/material/Typography';
-// import Avatar from '@mui/material/Avatar';
-// import Button from '@mui/material/Button';
 
-
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// // import Link from '@mui/material/Link';
-// import Grid from '@mui/material/Grid';
-// import Box from '@mui/material/Box';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import Container from '@mui/material/Container';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const useStyles = makeStyles(() => ({
@@ -254,56 +240,37 @@ function Login() {
               
             />
 
-            <FormControl className={classes.margin} variant="outlined">
-              <InputLabel
-                htmlFor="outlined-adornment-password"
-                style={{
-                  marginTop: 15,
-                }}
-              >
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                style={{
-                  marginTop: 15,
-                }}
-                type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-               
-              
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                fullWidth={true}
-                labelWidth={90}
-              />
-            </FormControl>
 
-            {/* <input
-              className="forminput"
-              onChange={(e) => setEmail(e.target.value)}
-              type="text"
-              name="username"
-              placeholder="Username"
-            />
-            <input
-              className="forminput"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              name="password"
-              placeholder="Password"
-            /> */}
+
+
+
+
+
+<FormControl  variant="standard">
+          
+          <Input
+            id="standard-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            placeholder="Password"
+            sx = {{
+              mt:4
+            }}
+            onChange={handleChange('password')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+          
 
             <div className="forminput-sipa">
               <Link
