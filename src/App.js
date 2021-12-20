@@ -25,7 +25,7 @@ import SessionExpired from './pages/SessionExpired/SessionExpired';
 import {MenuContext} from './components/MenuContext';
 import Report from './pages/Report/Report';
 import LatestHome from "./pages/LatestHome/LatestHome";
-
+import LaSignUp from "./pages/LaSignUp/LaSignUp";
 
 function App() {
   const [sidebar, setSideBar] = useState(true);
@@ -35,6 +35,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={LatestHome} />
           <Route path = "/home" component = {Home} />
+          <Route path = "/lasignup" component = {LaSignUp} />
           <Route path = "/login" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
           <Route path = "/testpage" component = {Testpage} />
