@@ -85,7 +85,11 @@ function LaSignUp() {
               variant="h2"
               gutterBottom
               component="div"
-              sx={{
+              sx={!matches?{
+                color: "white",
+                mt:6,
+                fontWeight: 500,
+              }:{
                 color: "white",
                 fontWeight: 700,
               }}
@@ -112,7 +116,7 @@ function LaSignUp() {
               sx={{
                 color: "white",
                 lineHeight: "1.5",
-                letterSpacing: "1.5px",
+                
                 
               }}
             >
