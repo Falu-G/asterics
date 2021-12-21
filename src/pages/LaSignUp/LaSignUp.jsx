@@ -42,7 +42,7 @@ function LaSignUp() {
         sx={
           matches
             ? { height: "100vh", overflow: "hidden" }
-            : { height: "100vh" }
+            : { height: "100vh"}
         }
       >
         <CssBaseline />
@@ -54,6 +54,7 @@ function LaSignUp() {
           position="relative"
           sx={{
             backgroundColor: "#18a0fb",
+            width: "100vw"
           }}
         >
           <Typography
