@@ -2,20 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Link from "@mui/material/Link";
 import "./login.css";
-import { BeatLoader } from "react-spinners";
-import { css } from "@emotion/react";
-import FormControl from "@material-ui/core/FormControl";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import { makeStyles } from "@material-ui/styles";
-import IconButton from "@material-ui/core/IconButton";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Input from "@mui/material/Input";
-import { useToasts } from "react-toast-notifications";
 import TextField from "@mui/material/TextField";
 import CssBaseline from "@mui/material/CssBaseline";
 import CircularProgress from "@mui/material/CircularProgress";
-import Avatar from "@mui/material/Avatar";
+
 import Button from "@mui/material/Button";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -23,7 +13,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -31,20 +21,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import CameraIcon from "@mui/icons-material/PhotoCamera";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  margin: {
-    marginTop: 5,
-  },
-  textField: {
-    width: "40ch",
-  },
-}));
 
 const theme = createTheme();
 
@@ -80,26 +57,11 @@ function Login() {
       setShowFeedback(false);
     }, 3000); //wait 2 seconds
   };
-  const [email, setEmail] = useState("");
-  //const [password, setPassword] = useState("");
-  const [showIcon, setShowIcon] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const [loginError, setLoginError] = useState(false);
-  const { addToast } = useToasts();
-  const classes = useStyles();
-  const [values, setValues] = useState({
-    password: "",
-    showPassword: false,
-  });
 
-  const override = css`
-    display: block;
-    margin: 0 auto;
-  `;
+
   const login = async (event) => {
-    setShowIcon(true);
     event.preventDefault();
     //console.warn(email, password);
 
