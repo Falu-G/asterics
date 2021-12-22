@@ -20,6 +20,24 @@ function LaSignUp() {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [phone, setValue] = useState();
   const [registering, setRegistering] = useState(false);
+  const [newUser, setNewUser] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    address: "",
+    city: "",
+    username: "",
+    state: "",
+    country: "",
+  });
+
+  const handleChange = (prop) => (event) => {
+    setNewUser({ ...newUser, [prop]: event.target.value });
+  };
+
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -149,38 +167,75 @@ function LaSignUp() {
               sx={{ mt: 1 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    id="standard-search"
-                    label="Company name"
-                    type="search"
-                    fullWidth
-                    variant="standard"
-                  />
-                </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="standard-search"
+                    id="standard-first-name"
                     label="Enter your first name"
-                    type="search"
+                    onChange={handleChange('firstname')}
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-last-name"
+                    label="Enter your last name"
+                    onChange={handleChange('lastname')}
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                </Grid>
+
+
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-address"
+                    label="Address"
+                    onChange={handleChange('address')}
+                    type="address"
                     fullWidth
                     variant="standard"
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="standard-search"
-                    label="Enter your last name"
-                    type="search"
+                    id="standard-city"
+                    label="City"
+                    type="text"
+                    onChange={handleChange('city')}
+                    fullWidth
+                    variant="standard"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-state"
+                    label="State"
+                    type="text"
+                    onChange={handleChange('state')}
+                    fullWidth
+                    variant="standard"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-country"
+                    label="Country"
+                    type="text"
+                    onChange={handleChange('country')}
                     fullWidth
                     variant="standard"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    id="standard-search"
+                    id="standard-email"
                     label="Enter your email address"
-                    type="search"
+                    type="email"
+                    onChange={handleChange('email')}
                     fullWidth
                     variant="standard"
                   />
@@ -201,18 +256,20 @@ function LaSignUp() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    id="standard-search"
+                    id="standard-username"
                     label="Username"
-                    type="search"
+                    type="text"
+                    onChange={handleChange('username')}
                     fullWidth
                     variant="standard"
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="standard-search"
+                    id="standard-password"
                     label="Enter your password"
-                    type="search"
+                    type="password"
+                    onChange={handleChange('password')}
                     fullWidth
                     variant="standard"
                   />
@@ -220,9 +277,10 @@ function LaSignUp() {
 
                 <Grid item xs={6}>
                   <TextField
-                    id="standard-search"
+                    id="standard-confirm-password"
                     label="Confirm your password"
-                    type="search"
+                    type="password"
+                    onChange={handleChange('confirmPassword')}
                     fullWidth
                     variant="standard"
                   />
