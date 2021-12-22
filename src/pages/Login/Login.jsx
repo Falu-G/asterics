@@ -21,7 +21,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-
+import Paper from '@mui/material/Paper';
 
 const theme = createTheme();
 
@@ -126,9 +126,6 @@ function Login() {
         maxWidth="xl"
         disableGutters
         sx={{
-          backgroundImage: `url(/images/graybg.png)`,
-          height: "100vh",
-          backgroundPosition: "center right",
           flexDirection: "column",
           backgroundRepeat: "no-repeat",
           display: "flex",
@@ -148,11 +145,15 @@ function Login() {
           </Toolbar>
         </AppBar>
         <Container component="main" maxWidth="xs">
-          <Box
+
+        <Paper elevation={3} />
+          <Paper
+            elevation={3}
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              padding: "2rem",
               mt: 3,
             }}
           >
@@ -234,7 +235,7 @@ function Login() {
                 </Grid>
               </Grid>
             </Box>
-          </Box>
+          </Paper>
         </Container>
 
         <Copyright sx={{ mt: 8, mb: 4 }} />
