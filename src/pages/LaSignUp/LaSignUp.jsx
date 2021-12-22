@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import Alert from "@mui/material/Alert";
@@ -17,15 +17,14 @@ import AlertTitle from "@mui/material/AlertTitle";
 
 const theme = createTheme();
 
-
 function LaSignUp() {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [phone, setValue] = useState();
   const [showFeedback, setShowFeedback] = React.useState(false);
   const [registering, setRegistering] = useState(false);
   const [uploadFeedback, setUploadFeedback] = React.useState({
-    message:"",
-    type:"",
+    message: "",
+    type: "",
   });
   const [newUser, setNewUser] = useState({
     firstname: "",
@@ -45,54 +44,58 @@ function LaSignUp() {
     setNewUser({ ...newUser, [prop]: event.target.value });
   };
 
-
-  const clearFeedback = ()=>{
-    setTimeout(function(){
+  const clearFeedback = () => {
+    setTimeout(function () {
       setShowFeedback(false);
-    }, 3000);//wait 2 seconds
-  }
-  
+    }, 3000); //wait 2 seconds
+  };
+
+  const moveToVerification = () => {
+    setTimeout(function () {
+      window.location.href = "/login";
+    }, 3500);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     newUser.phone = phone;
     console.log(newUser);
     setRegistering(true);
 
-    try{
-
-
-
+    try {
       let result = await fetch("https://asteric.herokuapp.com/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(newUser)
+        body: JSON.stringify(newUser),
       });
 
       result = await result.json();
-      if(result.responsecode === "200"){
+      if (result.responsecode === "200") {
         setRegistering(false);
-        setUploadFeedback({...uploadFeedback, message:result.message, type:"success"});
+        setUploadFeedback({
+          ...uploadFeedback,
+          message: result.message,
+          type: "success",
+        });
         setShowFeedback(true);
         clearFeedback();
-      }else{
+        moveToVerification();
+      } else {
         setRegistering(false);
-        setUploadFeedback({...uploadFeedback, message:result.message, type:"error"});
+        setUploadFeedback({
+          ...uploadFeedback,
+          message: result.message,
+          type: "error",
+        });
         setShowFeedback(true);
         clearFeedback();
       }
-
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-
-    
-
-    
-    // eslint-disable-next-line no-console
-   
   };
 
   return (
@@ -103,7 +106,7 @@ function LaSignUp() {
         sx={
           matches
             ? { height: "100vh", overflow: "hidden" }
-            : { height: "100vh"}
+            : { height: "100vh" }
         }
       >
         <CssBaseline />
@@ -115,7 +118,7 @@ function LaSignUp() {
           position="relative"
           sx={{
             backgroundColor: "#18a0fb",
-            width: "100vw"
+            width: "100vw",
           }}
         >
           <Typography
@@ -146,14 +149,18 @@ function LaSignUp() {
               variant="h2"
               gutterBottom
               component="div"
-              sx={!matches?{
-                color: "white",
-                mt:6,
-                fontWeight: 500,
-              }:{
-                color: "white",
-                fontWeight: 700,
-              }}
+              sx={
+                !matches
+                  ? {
+                      color: "white",
+                      mt: 6,
+                      fontWeight: 500,
+                    }
+                  : {
+                      color: "white",
+                      fontWeight: 700,
+                    }
+              }
             >
               Sign Up
             </Typography>
@@ -177,8 +184,6 @@ function LaSignUp() {
               sx={{
                 color: "white",
                 lineHeight: "1.5",
-                
-                
               }}
             >
               and manage your account with a single sign on
@@ -194,29 +199,26 @@ function LaSignUp() {
               flexDirection: "column",
             }}
           >
-
-            {
-              showFeedback ?
+            {showFeedback ? (
               <Grid
-              item
-              xs={12}
-              mt={2}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-
-<Alert severity= {uploadFeedback.type === "success" ? "success" : "error"}>
-              <AlertTitle>{uploadFeedback.message}</AlertTitle>
-            </Alert>
-
-
-            </Grid>
-              :
-              null
-            }
+                item
+                xs={12}
+                mt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Alert
+                  severity={
+                    uploadFeedback.type === "success" ? "success" : "error"
+                  }
+                >
+                  <AlertTitle>{uploadFeedback.message}</AlertTitle>
+                </Alert>
+              </Grid>
+            ) : null}
             <Typography
               component="h1"
               variant="h5"
@@ -237,8 +239,8 @@ function LaSignUp() {
                   <TextField
                     id="standard-first-name"
                     label="Enter your first name"
-                    onChange={handleChange('firstname')}
-                    value = {newUser.firstname}
+                    onChange={handleChange("firstname")}
+                    value={newUser.firstname}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -250,19 +252,18 @@ function LaSignUp() {
                     id="standard-last-name"
                     label="Enter your last name"
                     value={newUser.lastname}
-                    onChange={handleChange('lastname')}
+                    onChange={handleChange("lastname")}
                     type="text"
                     fullWidth
                     variant="standard"
                   />
                 </Grid>
 
-
                 <Grid item xs={6}>
                   <TextField
                     id="standard-address"
                     label="Address"
-                    onChange={handleChange('address')}
+                    onChange={handleChange("address")}
                     value={newUser.address}
                     type="address"
                     fullWidth
@@ -274,8 +275,8 @@ function LaSignUp() {
                     id="standard-city"
                     label="City"
                     type="text"
-                    value = {newUser.city}
-                    onChange={handleChange('city')}
+                    value={newUser.city}
+                    onChange={handleChange("city")}
                     fullWidth
                     variant="standard"
                   />
@@ -286,7 +287,7 @@ function LaSignUp() {
                     label="State"
                     type="text"
                     value={newUser.state}
-                    onChange={handleChange('state')}
+                    onChange={handleChange("state")}
                     fullWidth
                     variant="standard"
                   />
@@ -295,9 +296,9 @@ function LaSignUp() {
                   <TextField
                     id="standard-country"
                     label="Country"
-                    value = {newUser.country}
+                    value={newUser.country}
                     type="text"
-                    onChange={handleChange('country')}
+                    onChange={handleChange("country")}
                     fullWidth
                     variant="standard"
                   />
@@ -308,13 +309,12 @@ function LaSignUp() {
                     label="Enter your email address"
                     type="email"
                     value={newUser.email}
-                    onChange={handleChange('email')}
+                    onChange={handleChange("email")}
                     fullWidth
                     variant="standard"
                   />
                 </Grid>
-                <Grid item xs={12} mt = {2}>
-                 
+                <Grid item xs={12} mt={2}>
                   <PhoneInput
                     placeholder="Enter phone number"
                     onChange={setValue}
@@ -322,10 +322,7 @@ function LaSignUp() {
                     value={phone}
                     className="layerMargin"
                     defaultCountry="NG"
-                    
                   />
-
-                  
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -333,7 +330,7 @@ function LaSignUp() {
                     label="Username"
                     type="text"
                     value={newUser.username}
-                    onChange={handleChange('username')}
+                    onChange={handleChange("username")}
                     fullWidth
                     variant="standard"
                   />
@@ -344,7 +341,7 @@ function LaSignUp() {
                     label="Enter your password"
                     type="password"
                     value={newUser.password}
-                    onChange={handleChange('password')}
+                    onChange={handleChange("password")}
                     fullWidth
                     variant="standard"
                   />
@@ -356,7 +353,7 @@ function LaSignUp() {
                     label="Confirm your password"
                     type="password"
                     value={newUser.confirmPassword}
-                    onChange={handleChange('confirmPassword')}
+                    onChange={handleChange("confirmPassword")}
                     fullWidth
                     variant="standard"
                   />
@@ -372,8 +369,10 @@ function LaSignUp() {
                     display: "flex",
                   }}
                 >
-                  <Button variant="contained" onClick={handleSubmit}>Sign Up</Button>
-                  {registering ? <CircularProgress sx ={{ml : 4 }}/> : null}
+                  <Button variant="contained" onClick={handleSubmit}>
+                    Sign Up
+                  </Button>
+                  {registering ? <CircularProgress sx={{ ml: 4 }} /> : null}
                 </Grid>
               </Grid>
             </Box>

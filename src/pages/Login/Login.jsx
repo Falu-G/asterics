@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Link from "@mui/material/Link";
 import "./login.css";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/react";
@@ -9,12 +10,28 @@ import { makeStyles } from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Input from '@mui/material/Input';
+import Input from "@mui/material/Input";
 import { useToasts } from "react-toast-notifications";
 import TextField from "@mui/material/TextField";
-import CssBaseline from '@mui/material/CssBaseline';
+import CssBaseline from "@mui/material/CssBaseline";
+import CircularProgress from "@mui/material/CircularProgress";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
 
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import CameraIcon from "@mui/icons-material/PhotoCamera";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,26 +46,40 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const theme = createTheme();
 
-
-// const theme = createTheme();
-
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        AsteriX
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 function Login() {
   let history = useHistory();
+  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [loginin, setLoginin] = useState(false);
+  const [uploadFeedback, setUploadFeedback] = React.useState({
+    message: "",
+    type: "",
+  });
+
+  const clearFeedback = () => {
+    setTimeout(function () {
+      setShowFeedback(false);
+    }, 3000); //wait 2 seconds
+  };
   const [email, setEmail] = useState("");
   //const [password, setPassword] = useState("");
   const [showIcon, setShowIcon] = useState(false);
@@ -67,12 +98,20 @@ function Login() {
     display: block;
     margin: 0 auto;
   `;
-  const login = async (e) => {
+  const login = async (event) => {
     setShowIcon(true);
-    e.preventDefault();
+    event.preventDefault();
     //console.warn(email, password);
 
-    let item = { email, password: values.password };
+    const data = new FormData(event.currentTarget);
+    // eslint-disable-next-line no-console
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
+
+    setLoginin(true);
+    let item = { email: data.get("email"), password: data.get("password") };
 
     console.log(item);
     try {
@@ -90,232 +129,154 @@ function Login() {
 
       result = await result.json();
 
-      console.log(`This is the ${JSON.stringify(result)}`);
+      console.log(result);
       if (result.status === "success") {
         console.log(result);
-        setShowIcon(false);
+        setLoginin(false);
         localStorage.setItem("user-info", JSON.stringify(result));
         history.push("/maindashboard");
       } else {
-        setErrorMessage(result.message);
-        setLoginError(true);
-        setShowIcon(false);
+        setLoginin(false);
+        setShowFeedback(true);
+        setUploadFeedback({...uploadFeedback, message: result.message, type: "error"});
+        console.log(result.message);
+        clearFeedback();
       }
     } catch (e) {
-      setLoginError(true);
-      setShowIcon(false);
-      addToast(e.message, { appearance: "error" });
+      setLoginin(false);
+      setShowFeedback(true);
+      setUploadFeedback(e.message)
+      setUploadFeedback({...uploadFeedback, message: e.message, type: "error"});
+      clearFeedback();
     }
   };
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   useEffect(() => {}, []);
 
-
-
-
-
   return (
 
-  //   <ThemeProvider theme={theme}>
-  //   <Container component="main" maxWidth="xs">
-  //     <CssBaseline />
-  //     <Box
-  //       sx={{
-  //         marginTop: 8,
-  //         display: 'flex',
-  //         flexDirection: 'column',
-  //         alignItems: 'center',
-  //       }}
-  //     >
-  //       <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-  //         <LockOutlinedIcon />
-  //       </Avatar>
-  //       <Typography component="h1" variant="h5">
-  //         Sign in
-  //       </Typography>
-  //       <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
-  //         <TextField
-  //           margin="normal"
-  //           required
-  //           fullWidth
-  //           id="email"
-  //           label="Email Address"
-  //           name="email"
-  //           autoComplete="email"
-  //           autoFocus
-  //         />
-  //         <TextField
-  //           margin="normal"
-  //           required
-  //           fullWidth
-  //           name="password"
-  //           label="Password"
-  //           type="password"
-  //           id="password"
-  //           autoComplete="current-password"
-  //         />
-  //         <FormControlLabel
-  //           control={<Checkbox value="remember" color="primary" />}
-  //           label="Remember me"
-  //         />
-  //         <Button
-  //           type="submit"
-  //           fullWidth
-  //           variant="contained"
-  //           sx={{ mt: 3, mb: 2 }}
-  //         >
-  //           Sign In
-  //         </Button>
-  //         <Grid container>
-  //           <Grid item xs>
-  //             <Link href="#" variant="body2">
-  //               Forgot password?
-  //             </Link>
-  //           </Grid>
-  //           <Grid item>
-  //             <Link href="#" variant="body2">
-  //               {"Don't have an account? Sign Up"}
-  //             </Link>
-  //           </Grid>
-  //         </Grid>
-  //       </Box>
-  //     </Box>
-  //     <Copyright sx={{ mt: 8, mb: 4 }} />
-  //   </Container>
-  // </ThemeProvider>
 
-
-
-
-
-
-
-
-
-
-
-    <div className="LoginContainer">
-        <CssBaseline />
-      <div className="LoginContainerfirstbox">
-        <Link to="/">
-          <span>AsteriX</span>
-        </Link>
-        <div className="LoginImg">
-          <img src="images/loginimg.png" alt="Login" />
-          {/* <span>Login to your account</span> */}
-          <p>Manage your customer's easily with Asteric</p>
-        </div>
-      </div>
-      <div
-        style={{
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container
+        container
+        maxWidth="xl"
+        disableGutters
+        sx={{
           backgroundImage: `url(/images/graybg.png)`,
+          height: "100vh",
+          backgroundPosition: "center right",
+          flexDirection: "column",
           backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          display: "flex",
+          alignItems: "center",
         }}
-        className="LoginContainersecondbox"
       >
-        <div className="LoginContainersecondboxform">
-          <h2>Login</h2>
-
-          <form className="formHouse">
-            <TextField
-              label="Enter your email address"
-              className={classes.margin}
-              onChange={(e) => setEmail(e.target.value)}
-              variant='standard'
-              margin = "dense"
-              
-            />
-
-
-
-
-
-
-
-<FormControl  variant="standard">
-          
-          <Input
-            id="standard-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            placeholder="Password"
-            sx = {{
-              mt:4
+        <AppBar
+          position="relative"
+          elevation={0}
+          sx={{ backgroundColor: "transparent" }}
+        >
+          <Toolbar>
+            <Typography variant="h6" color="primary.main" noWrap>
+              AsteriX
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mt: 3,
             }}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
+          >
+            {showFeedback ? (
+              <Grid
+                item
+                xs={12}
+                mt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Alert
+                  severity={
+                    uploadFeedback.type === "success" ? "success" : "error"
+                  }
                 >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-          
+                  
+                  <AlertTitle>{uploadFeedback.message}</AlertTitle>
+                </Alert>
+              </Grid>
+            ) : null}
 
-            <div className="forminput-sipa">
-              <Link
-                style={{
-                  textDecoration: `none`,
-                }}
-                to="/resetpassword"
+            <Typography component="h1" variant="h5">
+              Login in
+            </Typography>
+            <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                variant="standard"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                variant="standard"
+                autoComplete="current-password"
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                <span>Forgot password</span>
-              </Link>
+                Sign In
+              </Button>
 
-              <Link
-                style={{
-                  textDecoration: `none`,
-                }}
-                to="/signup"
-              >
-                <span>Sign Up</span>
-              </Link>
-            </div>
+              {loginin ? <div style={{display:"flex", justifyContent: "center"}}>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <button className="submitbut" onClick={login}>
-                Login
-              </button>
-              <BeatLoader loading={showIcon} color={"#18A0FB"} css={override} />
-            </div>
-          </form>
+                <CircularProgress  />
+              </div> : null}
+              <Grid container>
+                <Grid item xs>
+                  <Link href="../resetPassword/ResetPassword" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="../LaSignUp/LaSignUp" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Container>
 
-          {loginError ? (
-            <>
-              <div className="errorLogin">
-                <h3>{errorMessage} </h3>
-              </div>
-            </>
-          ) : null}
-        </div>
-      </div>
-    </div>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
   );
 }
 
