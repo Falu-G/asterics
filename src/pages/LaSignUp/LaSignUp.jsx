@@ -41,15 +41,14 @@ function LaSignUp() {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
+
+    newUser.phone = phone;
+    console.log(newUser);
 
     setRegistering(true);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+   
   };
 
   return (
@@ -172,6 +171,7 @@ function LaSignUp() {
                     id="standard-first-name"
                     label="Enter your first name"
                     onChange={handleChange('firstname')}
+                    value = {newUser.firstname}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -182,6 +182,7 @@ function LaSignUp() {
                   <TextField
                     id="standard-last-name"
                     label="Enter your last name"
+                    value={newUser.lastname}
                     onChange={handleChange('lastname')}
                     type="text"
                     fullWidth
@@ -195,6 +196,7 @@ function LaSignUp() {
                     id="standard-address"
                     label="Address"
                     onChange={handleChange('address')}
+                    value={newUser.address}
                     type="address"
                     fullWidth
                     variant="standard"
@@ -205,6 +207,7 @@ function LaSignUp() {
                     id="standard-city"
                     label="City"
                     type="text"
+                    value = {newUser.city}
                     onChange={handleChange('city')}
                     fullWidth
                     variant="standard"
@@ -215,6 +218,7 @@ function LaSignUp() {
                     id="standard-state"
                     label="State"
                     type="text"
+                    value={newUser.state}
                     onChange={handleChange('state')}
                     fullWidth
                     variant="standard"
@@ -224,6 +228,7 @@ function LaSignUp() {
                   <TextField
                     id="standard-country"
                     label="Country"
+                    value = {newUser.country}
                     type="text"
                     onChange={handleChange('country')}
                     fullWidth
@@ -235,6 +240,7 @@ function LaSignUp() {
                     id="standard-email"
                     label="Enter your email address"
                     type="email"
+                    value={newUser.email}
                     onChange={handleChange('email')}
                     fullWidth
                     variant="standard"
@@ -259,6 +265,7 @@ function LaSignUp() {
                     id="standard-username"
                     label="Username"
                     type="text"
+                    value={newUser.username}
                     onChange={handleChange('username')}
                     fullWidth
                     variant="standard"
@@ -269,6 +276,7 @@ function LaSignUp() {
                     id="standard-password"
                     label="Enter your password"
                     type="password"
+                    value={newUser.password}
                     onChange={handleChange('password')}
                     fullWidth
                     variant="standard"
@@ -280,6 +288,7 @@ function LaSignUp() {
                     id="standard-confirm-password"
                     label="Confirm your password"
                     type="password"
+                    value={newUser.confirmPassword}
                     onChange={handleChange('confirmPassword')}
                     fullWidth
                     variant="standard"
@@ -296,7 +305,7 @@ function LaSignUp() {
                     display: "flex",
                   }}
                 >
-                  <Button variant="contained">Sign Up</Button>
+                  <Button variant="contained" onClick={handleSubmit}>Sign Up</Button>
                   {registering ? <CircularProgress sx ={{ml : 4 }}/> : null}
                 </Grid>
               </Grid>
