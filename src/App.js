@@ -34,7 +34,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={LatestHome} />
-          <Route path = "/home" component = {Home} />
+          <Route path = "/home" component = {Home}/>
           <Route path = "/lasignup" component = {LaSignUp} />
           <Route path = "/login" component = {()=><ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <Login/> </ToastProvider>} />
           <Route path = "/addCustomer" component = {AddCustomer} />
