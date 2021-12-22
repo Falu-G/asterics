@@ -132,6 +132,7 @@ function Login() {
           flexDirection: "column",
           backgroundRepeat: "no-repeat",
           display: "flex",
+          overflow: "hidden",
           alignItems: "center",
         }}
       >
@@ -141,7 +142,7 @@ function Login() {
           sx={{ backgroundColor: "transparent" }}
         >
           <Toolbar>
-            <Typography variant="h6" color="primary.main" noWrap>
+            <Typography variant="h5" color="primary.main" noWrap>
               AsteriX
             </Typography>
           </Toolbar>
