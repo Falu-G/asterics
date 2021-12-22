@@ -12,6 +12,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from '@mui/material/CircularProgress';
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const theme = createTheme();
 
@@ -19,7 +21,12 @@ const theme = createTheme();
 function LaSignUp() {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [phone, setValue] = useState();
+  const [showFeedback, setShowFeedback] = React.useState(false);
   const [registering, setRegistering] = useState(false);
+  const [uploadFeedback, setUploadFeedback] = React.useState({
+    message:"",
+    type:"",
+  });
   const [newUser, setNewUser] = useState({
     firstname: "",
     lastname: "",
@@ -38,15 +45,52 @@ function LaSignUp() {
     setNewUser({ ...newUser, [prop]: event.target.value });
   };
 
+
+  const clearFeedback = ()=>{
+    setTimeout(function(){
+      setShowFeedback(false);
+    }, 3000);//wait 2 seconds
+  }
   
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-
     newUser.phone = phone;
     console.log(newUser);
-
     setRegistering(true);
+
+    try{
+
+
+
+      let result = await fetch("https://asteric.herokuapp.com/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(newUser)
+      });
+
+      result = await result.json();
+      if(result.responsecode === "200"){
+        setRegistering(false);
+        setUploadFeedback({...uploadFeedback, message:result.message, type:"success"});
+        setShowFeedback(true);
+        clearFeedback();
+      }else{
+        setRegistering(false);
+        setUploadFeedback({...uploadFeedback, message:result.message, type:"error"});
+        setShowFeedback(true);
+        clearFeedback();
+      }
+
+    }catch(err){
+      console.log(err);
+    }
+
+    
+
+    
     // eslint-disable-next-line no-console
    
   };
@@ -150,6 +194,29 @@ function LaSignUp() {
               flexDirection: "column",
             }}
           >
+
+            {
+              showFeedback ?
+              <Grid
+              item
+              xs={12}
+              mt={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+
+<Alert severity= {uploadFeedback.type === "success" ? "success" : "error"}>
+              <AlertTitle>{uploadFeedback.message}</AlertTitle>
+            </Alert>
+
+
+            </Grid>
+              :
+              null
+            }
             <Typography
               component="h1"
               variant="h5"
