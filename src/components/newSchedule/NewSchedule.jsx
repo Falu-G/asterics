@@ -222,6 +222,11 @@ function NewSchedule({
             scheduleMessage.schedule_date
         );
         console.log(scheduleMessage);
+
+
+
+
+        // if(schedule_date )
         let result = await fetch(
          
            "https://asteric.herokuapp.com/mails/schedule",
@@ -398,6 +403,7 @@ function NewSchedule({
                 <DateTimePicker
                   label="Date&Time picker"
                   value={value}
+                  minDateTime={new Date()}
                   onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
