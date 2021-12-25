@@ -139,10 +139,11 @@ function Login() {
           sx={{ backgroundColor: "transparent" }}
         >
           <Toolbar>
-            <Typography variant="h5" color="primary.main" noWrap>
-              AsteriX
-            </Typography>
+           
+            <Link href="/" variant ="h5" underline="hover">AsteriX</Link>
           </Toolbar>
+
+          
         </AppBar>
         <Container component="main" maxWidth="xs">
 
@@ -224,12 +225,12 @@ function Login() {
               </div> : null}
               <Grid container>
                 <Grid item xs>
-                  <Link href="../resetPassword/ResetPassword" variant="body2">
+                  <Link href="/resetpassword" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="../LaSignUp/LaSignUp" variant="body2">
+                  <Link href="/lasignup" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

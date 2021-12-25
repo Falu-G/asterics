@@ -135,6 +135,8 @@ function LaSignUp() {
             AsteriX
           </Typography>
 
+        
+
           <Box
             sx={{
               width: "100%",

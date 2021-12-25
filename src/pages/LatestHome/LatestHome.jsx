@@ -96,13 +96,12 @@ function LatestHome() {
               </Link>
             </li>
             <li>
-              {" "}
               <Link href="#" underline="none">
                 Team
               </Link>
             </li>
             <li>
-              <Link href="../Login/Login" underline="none">
+              <Link href="/login" underline="none">
                 Login
               </Link>
             </li>
