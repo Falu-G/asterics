@@ -73,24 +73,24 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
   ;
 
-  const FileUpload = () => {
-    if (selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
+  // const FileUpload = () => {
+  //   if (selectedFile) {
+  //     return (
+  //       <div>
+  //         <h2>File Details:</h2>
 
-          <p>File Name: {selectedFile.name}</p>
+  //         <p>File Name: {selectedFile.name}</p>
 
-        </div>
-      );
-    } else {
-      return (
-        <div style = {{height:`100%`}}>
-          <p style={{alignItems: 'center',display: 'flex',height:`100%`,marginRight:20 }}>Upload a CSV file</p>
-        </div>
-      );
-    }
-  };
+  //       </div>
+  //     );
+  //   } else {
+  //     return (
+  //       <div style = {{height:`100%`}}>
+  //         <p style={{alignItems: 'center',display: 'flex',height:`100%`,marginRight:20 }}>Upload a CSV file</p>
+  //       </div>
+  //     );
+  //   }
+  // };
 
 
   const register = async (e) => {
