@@ -81,12 +81,6 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
           <p>File Name: {selectedFile.name}</p>
 
-          {/* <p>File Type: {selectedFile.type}</p>
-
-          <p>
-            Last Modified:{" "}
-            {selectedFile.lastModifiedDate.toDateString()}
-          </p> */}
         </div>
       );
     } else {
@@ -340,7 +334,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
                 >
                   {/* <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5> */}
 
-                  <FileUpload/>
+                  
                   <input
                     label="Upload CSV"
                     type="file"
