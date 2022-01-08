@@ -161,7 +161,7 @@ function Dashboard() {
                     <h4>Succesful Messages</h4>
                     <h1>{sentEmailValue.length}</h1>
                   </div>
-                  <div className="box box4 card">
+                  <div className="box box4 card" id = "butid">
                     <Link
                       to="/customer"
                       style={{
@@ -169,7 +169,7 @@ function Dashboard() {
                         color: "#fff",
                       }}
                     >
-                      <span>Create Customer</span>
+                      <span>New Customers</span>
                     </Link>
                   </div>
                   <div className="box box5 ">

@@ -449,7 +449,6 @@ function Customer() {
                       <div
                         style={{
                           height: 400,
-                          width: "90%",
                           marginTop: "20px",
                         }}
                       >

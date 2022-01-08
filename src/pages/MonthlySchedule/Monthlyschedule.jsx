@@ -50,6 +50,8 @@ function Monthlyschedule() {
 
   console.log(today);
 
+
+  //const baseUrl = "http://20.107.4.58:8081/"
   const { addToast } = useToasts();
   const [emailQueue, setEmailQueue] = useState([]);
   const loggedInUser = localStorage.getItem("user-info");
@@ -356,7 +358,7 @@ function Monthlyschedule() {
 
   useEffect(() => {
     Promise.all([
-      fetch("https://asteric.herokuapp.com/mails", {
+      fetch("http://20.107.4.58:8081/mails", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -364,7 +366,7 @@ function Monthlyschedule() {
           Authorization: "Bearer " + token,
         },
       }),
-      fetch("https://asteric.herokuapp.com/vonageSms/", {
+      fetch("http://20.107.4.58:8081/vonageSms/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

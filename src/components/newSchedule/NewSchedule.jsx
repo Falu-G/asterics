@@ -168,7 +168,7 @@ function NewSchedule({
   const fetchBusiness = async () => {
     spinnerDisplay(true);
     Promise.all([
-      fetch("https://asteric.herokuapp.com/mails", {
+      fetch("http://20.107.4.58:8081/mails", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -176,7 +176,7 @@ function NewSchedule({
           Authorization: "Bearer " + token,
         },
       }),
-      fetch("https://asteric.herokuapp.com/vonageSms/", {
+      fetch("http://20.107.4.58:8081/vonageSms/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -229,7 +229,7 @@ function NewSchedule({
         // if(schedule_date )
         let result = await fetch(
          
-           "https://asteric.herokuapp.com/mails/schedule",
+           "http://20.107.4.58:8081/mails/schedule",
           {
             method: "POST",
             headers: {
@@ -271,7 +271,7 @@ function NewSchedule({
             scheduleMessageSms.schedule_date
         );
         let result = await fetch(
-          "https://asteric.herokuapp.com/vonageSms/schedule",
+          "http://20.107.4.58:8081/vonageSms/schedule",
           {
             method: "POST",
             headers: {
@@ -309,7 +309,7 @@ function NewSchedule({
     handleOpen();
     setLoading(true);
     try {
-      let result = await fetch("https://asteric.herokuapp.com/customer", {
+      let result = await fetch("http://20.107.4.58:8081/customer", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
