@@ -8,6 +8,11 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+//import { CSVReader } from 'react-papaparse'
+import fs from "fs"
+import Papa from "papaparse";
+const csv = require('csvtojson')
+
 
 function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton }) {
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -63,11 +68,33 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
   const onFileChange = (event) =>{
     setSelectedFile(event.target.files[0]);
+
+    
     let reader = new FileReader();
     reader.readAsDataURL(event.target.files[0])
     reader.onload = (e)=>{
       setFormData(e.target.result)
   } 
+
+}
+
+
+
+const onFileChangeLatest = (event) =>{
+  setSelectedFile(event.target.files[0]);
+
+  if (event.target.files[0]) {
+    Papa.parse(event.target.files[0], {
+      complete: function(results) {
+        console.log("Finished:", results.data);
+      }})
+
+  }
+  let reader = new FileReader();
+  reader.readAsDataURL(event.target.files[0])
+  reader.onload = (e)=>{
+    setFormData(e.target.result)
+} 
 
 }
 
@@ -91,6 +118,35 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   //     );
   //   }
   // };
+
+
+
+
+
+//const csvFilePath='<path to csv file>'
+
+
+
+
+const collectFile = (event)=>{
+  const csvFilePath = event.target.files[0].mozFullPath
+ 
+  
+csv()
+.fromFile(csvFilePath)
+.then((jsonObj)=>{
+    console.log(jsonObj);
+    /**
+     * [
+     * 	{a:"1", b:"2", c:"3"},
+     * 	{a:"4", b:"5". c:"6"}
+     * ]
+     */ 
+})
+}
+
+
+
 
 
   const register = async (e) => {
@@ -200,6 +256,23 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
       console.log(customer);
     }
   };
+
+
+ const handleOnDrop = (data) => {
+    console.log('---------------------------')
+    console.log(data)
+    console.log('---------------------------')
+  }
+
+  const handleOnError = (err, file, inputElem, reason) => {
+    console.log(err)
+  }
+
+  const handleOnRemoveFile = (data) => {
+    console.log('---------------------------')
+    console.log(data)
+    console.log('---------------------------')
+  }
 
   return (
     <>
@@ -332,6 +405,16 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
                     
                   }}
                 >
+
+{/* <CSVReader
+        onDrop={handleOnDrop}
+        onError={handleOnError}
+        noClick
+        addRemoveButton
+        onRemoveFile={handleOnRemoveFile}
+      >
+        <span>Drop CSV file here to upload.</span>
+      </CSVReader> */}
                   {/* <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5> */}
 
                   
@@ -342,9 +425,11 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
                     name="upload"
                     accept=".csv"
                     disabled = {checkEmptiness}
-                    onChange={onFileChange}
+                    onChange={collectFile}
                   />
                 </div>
+
+      
                 {}
               </div>
 

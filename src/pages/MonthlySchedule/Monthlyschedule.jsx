@@ -71,7 +71,7 @@ function Monthlyschedule() {
   const [smsQueue, setSmsQueue] = useState([]);
 
   const fetchBusiness = useCallback(async () => {
-    fetch("https://asteric.herokuapp.com/mails", {
+    fetch("http://20.107.4.58:8081/mails", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -145,7 +145,7 @@ function Monthlyschedule() {
   };
   const handledeleteSms = (id) => {
     setLoading(true);
-    fetch(`https://asteric.herokuapp.com/vonageSms/${id}`, {
+    fetch(`http://20.107.4.58:8081/vonageSms/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -177,7 +177,7 @@ function Monthlyschedule() {
 
   const handledelete = (id) => {
     setLoading(true);
-    fetch(`https://asteric.herokuapp.com/mails/${id}`, {
+    fetch(`http://20.107.4.58:8081/mails/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
