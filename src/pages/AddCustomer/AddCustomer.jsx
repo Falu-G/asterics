@@ -9,9 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 //import { CSVReader } from 'react-papaparse'
-import fs from "fs"
 import Papa from "papaparse";
-const csv = require('csvtojson')
+// const csv = require('csvtojson')
 
 
 function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton }) {
@@ -66,17 +65,17 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   }
   
 
-  const onFileChange = (event) =>{
-    setSelectedFile(event.target.files[0]);
+//   const onFileChange = (event) =>{
+//     setSelectedFile(event.target.files[0]);
 
     
-    let reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0])
-    reader.onload = (e)=>{
-      setFormData(e.target.result)
-  } 
+//     let reader = new FileReader();
+//     reader.readAsDataURL(event.target.files[0])
+//     reader.onload = (e)=>{
+//       setFormData(e.target.result)
+//   } 
 
-}
+// }
 
 
 
@@ -128,22 +127,22 @@ const onFileChangeLatest = (event) =>{
 
 
 
-const collectFile = (event)=>{
-  const csvFilePath = event.target.files[0].mozFullPath
+// const collectFile = (event)=>{
+//   const csvFilePath = event.target.files[0].mozFullPath
  
   
-csv()
-.fromFile(csvFilePath)
-.then((jsonObj)=>{
-    console.log(jsonObj);
-    /**
-     * [
-     * 	{a:"1", b:"2", c:"3"},
-     * 	{a:"4", b:"5". c:"6"}
-     * ]
-     */ 
-})
-}
+// csv()
+// .fromFile(csvFilePath)
+// .then((jsonObj)=>{
+//     console.log(jsonObj);
+//     /**
+//      * [
+//      * 	{a:"1", b:"2", c:"3"},
+//      * 	{a:"4", b:"5". c:"6"}
+//      * ]
+//      */ 
+// })
+// }
 
 
 
@@ -258,21 +257,21 @@ csv()
   };
 
 
- const handleOnDrop = (data) => {
-    console.log('---------------------------')
-    console.log(data)
-    console.log('---------------------------')
-  }
+//  const handleOnDrop = (data) => {
+//     console.log('---------------------------')
+//     console.log(data)
+//     console.log('---------------------------')
+//   }
 
-  const handleOnError = (err, file, inputElem, reason) => {
-    console.log(err)
-  }
+//   const handleOnError = (err, file, inputElem, reason) => {
+//     console.log(err)
+//   }
 
-  const handleOnRemoveFile = (data) => {
-    console.log('---------------------------')
-    console.log(data)
-    console.log('---------------------------')
-  }
+//   const handleOnRemoveFile = (data) => {
+//     console.log('---------------------------')
+//     console.log(data)
+//     console.log('---------------------------')
+//   }
 
   return (
     <>
@@ -425,7 +424,7 @@ csv()
                     name="upload"
                     accept=".csv"
                     disabled = {checkEmptiness}
-                    onChange={collectFile}
+                    onChange={onFileChangeLatest}
                   />
                 </div>
 
