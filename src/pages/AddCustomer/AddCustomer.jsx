@@ -8,8 +8,10 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import axios from 'axios';
 //import { CSVReader } from 'react-papaparse'
-import Papa from "papaparse";
+// import Papa from "papaparse";
+
 // const csv = require('csvtojson')
 
 
@@ -34,7 +36,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
   const [formData, setFormData] = useState(null)
   const fetchUser = () => {
-    fetch("https://asteric.herokuapp.com/customer", {
+    fetch("http://20.107.4.58:8087/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -79,23 +81,23 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
 
 
-const onFileChangeLatest = (event) =>{
-  setSelectedFile(event.target.files[0]);
+// const onFileChangeLatest = (event) =>{
+//   setSelectedFile(event.target.files[0]);
 
-  if (event.target.files[0]) {
-    Papa.parse(event.target.files[0], {
-      complete: function(results) {
-        console.log("Finished:", results.data);
-      }})
+//   if (event.target.files[0]) {
+//     Papa.parse(event.target.files[0], {
+//       complete: function(results) {
+//         console.log("Finished:", results.data);
+//       }})
 
-  }
-  let reader = new FileReader();
-  reader.readAsDataURL(event.target.files[0])
-  reader.onload = (e)=>{
-    setFormData(e.target.result)
-} 
+//   }
+//   let reader = new FileReader();
+//   reader.readAsDataURL(event.target.files[0])
+//   reader.onload = (e)=>{
+//     setFormData(e.target.result)
+// } 
 
-}
+// }
 
   ;
 
@@ -155,42 +157,72 @@ const onFileChangeLatest = (event) =>{
     if (selectedFile !== null) {
 
 
-      try{
 
-        let result = await fetch(
-          "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: "Bearer " + token,
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-  
-        result = await result.json()
-  
-        if (result.status === 401) {
-          setSessionExpired(true);
+      const myurl = "http://20.107.4.58:8087/bulkCustomerCSVUpload"
+
+
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        axios({
+          method: "post",
+          url: myurl,
+          data: formData,
+          headers: config.headers,
+        })
+          .then(function (response) {
+            //handle success
+          fetchUser();
           setAddingUser(false);
-          return;
-        }
-  
-        fetchUser();
-        setAddingUser(false);
-        setOpenModal(false);
-        closebutton()
-        addToast("User added Successfully", { appearance: "success" });
+          setOpenModal(false);
+          closebutton()
+          addToast("User added Successfully", { appearance: "success" });
+          console.log(response);
+          })
+          .catch(function (response) {
+            setAddingUser(false);
+            setOpenModal(false);
+            closebutton()
+            console.log("This is form Data "+formData)
+            addToast("Error occured when adding user", { appearance: "error" });
+            console.log(response);
+          });
 
-      }catch(err){
-        setAddingUser(false);
-        setOpenModal(false);
-        closebutton()
-        console.log("This is form Data "+formData)
-        addToast("Error occured when adding user", { appearance: "error" });
-      }
+      //   let result = await fetch(
+      //     "http://20.107.4.58:8087/bulkCustomerCSVUpload",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         Accept: "application/json",
+      //         Authorization: "Bearer " + token,
+      //       },
+      //       body: JSON.stringify(formData),
+      //     }
+      //   );
+  
+      //   result = await result.json()
+  
+      //   if (result.status === 401) {
+      //     setSessionExpired(true);
+      //     setAddingUser(false);
+      //     return;
+      //   }
+      //   fetchUser();
+      //   setAddingUser(false);
+      //   setOpenModal(false);
+      //   closebutton()
+      //   addToast("User added Successfully", { appearance: "success" });
+
+      // }catch(err){
+      //   setAddingUser(false);
+      //   setOpenModal(false);
+      //   closebutton()
+      //   console.log("This is form Data "+formData)
+      //   addToast("Error occured when adding user", { appearance: "error" });
+      // }
      
      
     } else {
@@ -226,7 +258,7 @@ const onFileChangeLatest = (event) =>{
       }
 
       let result = await fetch(
-        "https://asteric.herokuapp.com/customer/register",
+        "http://20.107.4.58:8087/customer/register",
         {
           method: "POST",
           headers: {
@@ -256,7 +288,18 @@ const onFileChangeLatest = (event) =>{
     }
   };
 
-
+  const parseCSV = (event)=>{
+    setSelectedFile(event.target.files[0]);
+    const formData = new FormData();
+    formData.append("csvFile", event.target.files[0]);
+    setFormData(formData)
+    console.log(formData);
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
+  }
 //  const handleOnDrop = (data) => {
 //     console.log('---------------------------')
 //     console.log(data)
@@ -424,8 +467,9 @@ const onFileChangeLatest = (event) =>{
                     name="upload"
                     accept=".csv"
                     disabled = {checkEmptiness}
-                    onChange={onFileChangeLatest}
+                    onChange={parseCSV}
                   />
+                  
                 </div>
 
       

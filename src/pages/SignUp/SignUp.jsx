@@ -36,7 +36,7 @@ function SignUp() {
     let user = new User(firstname,username,lastname,address,email,password,confirmPassword,phone,city,state,country);
 
     try {
-      let result = await fetch("https://asteric.herokuapp.com/users/register", {
+      let result = await fetch("http://20.107.4.58:8087/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
