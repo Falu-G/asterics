@@ -54,17 +54,17 @@ const MenusList = [
     name: "Templates",
   },
 
-  {
-    to: "subscription",
-    icon: "Subscriptions",
-    name: "Subscription",
-  },
+  // {
+  //   to: "subscription",
+  //   icon: "Subscriptions",
+  //   name: "Subscription",
+  // },
 
-  {
-    to: "report",
-    icon: "Assessment",
-    name: "Reports",
-  },
+  // {
+  //   to: "report",
+  //   icon: "Assessment",
+  //   name: "Reports",
+  // },
 
   {
     to: "sett",
@@ -170,75 +170,6 @@ function Menus({ controlSideBar }) {
           })}
 
         </div>
-
-        {/* {menuList.map((item) => {
-          if (item.icon === "Settings") {
-            return (
-              <>
-                <Link
-                  className={menustate ? "menuItem" : "menuItem closed"}
-                  to={item.to}
-                >
-                  <Settings />
-                  {console.log(item.icon)}
-                  <span>{item.name}</span>
-                </Link>
-              </>
-            );
-          } else if (item.icon === "ExitToApp") {
-            return (
-              <div className="thirdMenu">
-                <Link
-                  className={menustate ? "menuItem" : "menuItem closed"}
-                  onClick={() => {
-                    localStorage.removeItem("user-info");
-                    history.push("/login");
-                  }}
-                >
-                  <ExitToApp />
-                  <span>{item.name}</span>
-                </Link>
-              </div>
-            );
-          } else if (
-            item.icon === "Dashboard" ||
-            "Subscriptions" ||
-            "Assessment" ||
-            "Message" ||
-            "Schedule" ||
-            "People" ||
-            "MailOutline" ||
-            "Send"
-          ) {
-            return (
-              <>
-                <div className="firstMenu">
-                  <Link
-                    className={
-                      menustate ? "menuItem activeMenu" : "menuItem closed"
-                    }
-                    to={item.to}
-                  >
-                    <DisplayIcon IconName={item.icon} />
-
-                    <span>{item.name}</span>
-                  </Link>
-                </div>
-              </>
-            );
-          } else {
-            return (
-              <>
-                <div className="secondMenu"></div>;
-              </>
-            );
-          }
-
-
-         
-
-          
-        })} */}
       </>
     );
   };

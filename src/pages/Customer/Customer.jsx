@@ -68,7 +68,7 @@ function Customer() {
   const fetchoo = () => {
     setSkeleton(true);
     console.log("fetchoo");
-    fetch("https://asteric.herokuapp.com/customer", {
+    fetch("http://20.107.4.58:8087/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +93,7 @@ function Customer() {
   const fetchBusiness = useCallback(async () => {
     setSkeleton(true);
     console.log("This should reload");
-    fetch("https://asteric.herokuapp.com/customer", {
+    fetch("http://20.107.4.58:8087/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -231,7 +231,7 @@ function Customer() {
 
   const finaldelete = (id) => {
     setLoading(true);
-    fetch(`https://asteric.herokuapp.com/customer/${id}`, {
+    fetch(`http://20.107.4.58:8087/customer/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -380,22 +380,6 @@ function Customer() {
                   
                     </Box>
                   </Modal>
-
-
-                  {/* <Modal
-                    isOpen={openModalEmail}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                  >
-                    <AddCustomer
-                      openModal={openModalEmail}
-                      tokenValid={tokenValid}
-                      setAllCustomers={setAllCustomers}
-                      setOpenModal={() =>
-                        setOpenModalEmail(() => (openModalEmail ? false : true))
-                      }
-                    />
-                  </Modal> */}
 
                   <Dialog
                     open={open}

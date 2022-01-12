@@ -36,7 +36,7 @@ function Dashboard() {
 
 
     Promise.all([
-      fetch("https://asteric.herokuapp.com/mails", {
+      fetch("http://20.107.4.58:8087/mails", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +44,7 @@ function Dashboard() {
           Authorization: "Bearer " + token,
         },
       }),
-      fetch("https://asteric.herokuapp.com/vonageSms/", {
+      fetch("http://20.107.4.58:8087/vonageSms/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

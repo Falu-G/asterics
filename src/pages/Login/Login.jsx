@@ -78,7 +78,7 @@ function Login() {
     console.log(item);
     try {
       let result = await fetch(
-        "https://asteric.herokuapp.com/users/authenticate",
+        "http://20.107.4.58:8087/users/authenticate",
         {
           method: "POST",
           headers: {
