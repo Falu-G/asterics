@@ -423,6 +423,7 @@ function SendEmail() {
                   <ReactQuillEditor
                   setHtml = {setHtml}
                   html = {html}
+                  
                   emailContent = {emailContent}
                   setEmailContent = {setEmailContent}/>
                       {/* <TextEditor sizeOfMessageBox = {937} editorState = {editorState} onEditorStateChange = {onEditorStateChange}/> */}
