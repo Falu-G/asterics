@@ -14,6 +14,37 @@ function insertHeart() {
   this.quill.setSelection(cursorPosition + 1);
 }
 
+
+
+function insertImage(){
+  const input = document.createElement("input");
+  input.setAttribute("type", "file");
+  input.click();
+
+  input.onchange = function(){
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    
+    fetch("https://api.cloudinary.com/v1_1/asteric/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const range = this.quill.getSelection();
+        this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+        this.quill.setSelection(range.index + 1);
+      })
+      .catch(err =>{
+        console.log(err.message);
+        const range = this.quill.getSelection();
+        this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+        this.quill.setSelection(range.index + 1);
+      })
+  };
+}
 /*
  * Custom toolbar component including the custom heart button and dropdowns
  */
@@ -102,14 +133,63 @@ function ReactQuillEditor({html, setHtml,setEmailContent,emailContent,setSchedul
     
   };
 
+  const imageHandler = () => {
+
+    console.log("imageHandler")
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.click();
+
+    input.onchange = {insertImage}
+    
+    // function(){
+    //   const file = input.files[0];
+    //   const formData = new FormData();
+    //   formData.append("image", file);
+
+    //   fetch("https://api.cloudinary.com/v1_1/asteric/image/upload", {
+    //     method: "POST",
+    //     body: formData,
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       const range = this.quill.getSelection();
+    //       this.quill.insertEmbed(range.index, "image", data.url);
+    //       this.quill.setSelection(range.index + 1);
+    //     });
+    // };
+    } 
+    
+  //   => {
+  //     const file = input.files[0];
+  //     const formData = new FormData();
+  //     formData.append("image", file);
+
+  //     fetch("https://api.cloudinary.com/v1_1/asteric/image/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         const range = this.quill.quillEditor.getSelection();
+  //         this.quill.quillEditor.insertEmbed(range.index, "image", data.url);
+  //         this.quill.quillEditor.setSelection(range.index + 1);
+  //       });
+  //   };
+  // };
+
   const modules = {
     toolbar: {
       container: "#toolbar",
       handlers: {
         insertHeart: insertHeart,
+        image:imageHandler,
       },
     },
   };
+
+
+  
 
   const formats = [
     "header",

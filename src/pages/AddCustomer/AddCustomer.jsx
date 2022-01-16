@@ -35,6 +35,8 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   const token = userObj.message[0].token;
 
   const [formData, setFormData] = useState(null)
+
+  
   const fetchUser = () => {
     fetch("http://20.107.4.58:8087/customer", {
       method: "GET",
