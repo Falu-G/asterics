@@ -19,6 +19,8 @@ import { Checkbox } from "../../components/Checkbox";
 // import { EditorState,  convertToRaw } from "draft-js";
 // import draftToHtml from 'draftjs-to-html';
 import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor";
+
+import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
 //import htmlToDraft from "html-to-draftjs";
 
 //import TagFafcesIcon from '@mui/icons-material/TagFaces';
@@ -419,13 +421,15 @@ function SendEmail() {
                     />
 
 
-                  
-                  <ReactQuillEditor
+                  <ReactQuillEditorClass/>
+
+
+                  {/* <ReactQuillEditor
                   setHtml = {setHtml}
                   html = {html}
                   
                   emailContent = {emailContent}
-                  setEmailContent = {setEmailContent}/>
+                  setEmailContent = {setEmailContent}/> */}
                       {/* <TextEditor sizeOfMessageBox = {937} editorState = {editorState} onEditorStateChange = {onEditorStateChange}/> */}
                       {/* <QuillEditorFunc
                             settemplateObjstate={settemplateObjstate}

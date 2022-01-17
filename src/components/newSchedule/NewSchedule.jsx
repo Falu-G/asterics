@@ -404,6 +404,7 @@ function NewSchedule({
                   label="Date&Time picker"
                   value={value}
                   minDateTime={new Date()}
+                  variant = "standard"
                   onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />

@@ -9,14 +9,19 @@ import "./ReactQuillEditor.css";
 const CustomHeart = () => <span>♥</span>;
 
 function insertHeart() {
+  const Quilly = this.quill;
   const cursorPosition = this.quill.getSelection().index;
-  this.quill.insertText(cursorPosition, "♥");
-  this.quill.setSelection(cursorPosition + 1);
+  Quilly.insertText(cursorPosition, "♥");
+  Quilly.setSelection(cursorPosition + 1);
+  Quilly.insertEmbed(cursorPosition, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+  Quilly.setSelection(cursorPosition + 1);
 }
 
 
 
 function insertImage(){
+
+  const Quilly = this.quill;
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.click();
@@ -26,23 +31,25 @@ function insertImage(){
     const formData = new FormData();
     formData.append("image", file);
 
-    
-    fetch("https://api.cloudinary.com/v1_1/asteric/image/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const range = this.quill.getSelection();
-        this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
-        this.quill.setSelection(range.index + 1);
-      })
-      .catch(err =>{
-        console.log(err.message);
-        const range = this.quill.getSelection();
-        this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
-        this.quill.setSelection(range.index + 1);
-      })
+    const cursorPosition = Quilly.getSelection().index;
+    Quilly.insertText(cursorPosition, "♥");
+    Quilly.setSelection(cursorPosition + 1);
+    // fetch("https://api.cloudinary.com/v1_1/asteric/image/upload", {
+    //   method: "POST",
+    //   body: formData,
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     const range = this.quill.getSelection();
+    //     this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+    //     this.quill.setSelection(range.index + 1);
+    //   })
+    //   .catch(err =>{
+    //     console.log(err.message);
+    //     const range = this.quill.getSelection();
+    //     this.quill.insertEmbed(range.index, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+    //     this.quill.setSelection(range.index + 1);
+    //   })
   };
 }
 /*
