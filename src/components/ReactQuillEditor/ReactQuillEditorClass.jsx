@@ -3,29 +3,25 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ES6
 import "./ReactQuillEditor.css";
 
-
-
-
-
 const CustomHeart = () => <span>♥</span>;
 
 function insertHeart() {
-
-  const Quilly = this.quill
+  console.log(this);
+  const Quilly = this.quill;
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.click();
 
-
-  input.onchange = function(){
+  input.onchange = function () {
     const cursorPosition = Quilly.getSelection().index;
     Quilly.insertText(cursorPosition, "♥");
-    Quilly.insertEmbed(cursorPosition, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+    Quilly.insertEmbed(
+      cursorPosition,
+      "image",
+      "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg"
+    );
     Quilly.setSelection(cursorPosition + 1);
-  }
-
-
- 
+  };
 }
 
 /*
@@ -55,12 +51,31 @@ const CustomToolbar = () => (
     <select className="ql-color" />
     <select className="ql-background" />
     <button className="ql-clean" />
+
+    <button className="ql-bold" />
+    <button className="ql-italic" />
+    <button className="ql-image" />
+    <button className="ql-underline" />
+    <button className="ql-strike" />
+    <button className="ql-link" />
+    <button className="ql-script" value="sub" />
+    <button className="ql-script" value="super" />
+    <button className="ql-indent" value="-1" />
+    <button className="ql-indent" value="+1" />
+    <button className="ql-list" value="ordered" />
+    <button className="ql-list" value="bullet" />
+    <button className="ql-direction" value="rtl" />
+    <button className="ql-direction" value="ltr" />
+    <button className="ql-code-block" />
+    <button className="ql-blockquote" />
+    <button className="ql-formula" />
+    <button className="ql-header" value="1" />
+
     <button className="ql-insertHeart">
       <CustomHeart />
     </button>
   </div>
 );
-
 
 // Add sizes to whitelist and register them
 const Size = Quill.import("formats/size");
@@ -75,27 +90,22 @@ Font.whitelist = [
   "courier-new",
   "georgia",
   "helvetica",
-  "lucida"
+  "lucida",
 ];
 Quill.register(Font, true);
 
-
 class Editor extends React.Component {
-
-
-    state = { editorHtml: "" };
-
-  handleChange = html => {
+  state = { editorHtml: "" };
+  handleChange = (html) => {
     this.setState({ editorHtml: html });
   };
-
   static modules = {
     toolbar: {
       container: "#toolbar",
       handlers: {
-        insertHeart: insertHeart
-      }
-    }
+        insertHeart: insertHeart,
+      },
+    },
   };
 
   static formats = [
@@ -112,21 +122,16 @@ class Editor extends React.Component {
     "indent",
     "link",
     "image",
-    "color"
+    "color",
   ];
-
-
 
   sendData = () => {
     this.props.sendData(this.state.editorHtml);
-}
+  };
   render() {
     return (
       <div className="text-editor">
         <CustomToolbar />
-
-
-        {console.log(this.state.editorHtml)}
         <ReactQuill
           value={this.state.editorHtml}
           onChange={this.handleChange}
@@ -137,9 +142,6 @@ class Editor extends React.Component {
       </div>
     );
   }
-
-
 }
 
-
-export default Editor
+export default Editor;

@@ -10,10 +10,9 @@ const CustomHeart = () => <span>♥</span>;
 
 function insertHeart() {
   const Quilly = this.quill;
-  const cursorPosition = this.quill.getSelection().index;
+  const cursorPosition = Quilly.getSelection().index;
   Quilly.insertText(cursorPosition, "♥");
-  Quilly.setSelection(cursorPosition + 1);
-  Quilly.insertEmbed(cursorPosition, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
+  //Quilly.insertEmbed(cursorPosition, "image", "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg");
   Quilly.setSelection(cursorPosition + 1);
 }
 
@@ -127,15 +126,15 @@ function ReactQuillEditor({html, setHtml,setEmailContent,emailContent,setSchedul
     //this.setState({ editorHtml: html });
     setHtml(html);
 
-    if(emailContent){
-      setEmailContent({...emailContent,messageBody:html})
-      console.warn(emailContent.messageBody)
-    }
+    // if(emailContent){
+    //   setEmailContent({...emailContent,messageBody:html})
+    //   console.warn(emailContent.messageBody)
+    // }
     
-    if(scheduleMessage){
-      setScheduleMessage({...scheduleMessage,messageBody:html})
-      console.log(scheduleMessage.messageBody)
-    }
+    // if(scheduleMessage){
+    //   setScheduleMessage({...scheduleMessage,messageBody:html})
+    //   console.log(scheduleMessage.messageBody)
+    // }
     
     
   };

@@ -51,6 +51,13 @@ function SendEmail() {
   const showSideBar = () => setSideBar(!sidebar);
   const { addToast } = useToasts();
 
+
+
+
+  const handleChange = (e) => { 
+console.log("Yea man")
+  }
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -428,8 +435,7 @@ function SendEmail() {
 
                   <ReactQuillEditorClass
                   //sendData = {}
-                  setHtml = {setHtml}
-                  html = {html}
+                   
                   
                   emailContent = {emailContent}
                   setEmailContent = {setEmailContent}
