@@ -47,3 +47,12 @@
 .ql-size span[data-value="large"]::before {
   font-size: 20px !important;
 }
+
+
+.ql-snow .ql-editor img {
+  
+}
+
+.ql-editor{
+width: 934px;
+}

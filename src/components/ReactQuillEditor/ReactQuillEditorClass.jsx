@@ -1,5 +1,4 @@
 import React from "react";
-import { render } from "react-dom";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ES6
 import "./ReactQuillEditor.css";
@@ -16,6 +15,7 @@ function insertHeart() {
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.click();
+
 
   input.onchange = function(){
     const cursorPosition = Quilly.getSelection().index;
@@ -115,10 +115,18 @@ class Editor extends React.Component {
     "color"
   ];
 
+
+
+  sendData = () => {
+    this.props.sendData(this.state.editorHtml);
+}
   render() {
     return (
       <div className="text-editor">
         <CustomToolbar />
+
+
+        {console.log(this.state.editorHtml)}
         <ReactQuill
           value={this.state.editorHtml}
           onChange={this.handleChange}

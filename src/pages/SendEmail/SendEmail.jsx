@@ -143,6 +143,11 @@ function SendEmail() {
     }
   };
 
+
+ const callbackFunction = (childData) => {
+    this.setState({message: childData})
+}
+
   const [html, setHtml] = useState("");
   const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
@@ -421,7 +426,14 @@ function SendEmail() {
                     />
 
 
-                  <ReactQuillEditorClass/>
+                  <ReactQuillEditorClass
+                  //sendData = {}
+                  setHtml = {setHtml}
+                  html = {html}
+                  
+                  emailContent = {emailContent}
+                  setEmailContent = {setEmailContent}
+                  />
 
 
                   {/* <ReactQuillEditor
