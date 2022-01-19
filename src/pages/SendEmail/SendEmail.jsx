@@ -153,14 +153,19 @@ function SendEmail() {
   const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
   };
+
+
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
     setEmailContent({...emailContent, messageBody: html});
 
+    console.log(html)
     if (isBlank(emailContent.messageBody)) {
       alert("Message can not be empty");
-     
+      setLoading(false);
+      setSendingMessage(false);
+      console.log("Na body"+emailContent.messageBody);
     }else{
 
       try {
