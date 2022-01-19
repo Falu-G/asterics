@@ -98,6 +98,7 @@ class Editor extends React.Component {
   state = { editorHtml: "" };
   handleChange = (html) => {
     this.setState({ editorHtml: html });
+    this.props.setHtml(html);
   };
   static modules = {
     toolbar: {

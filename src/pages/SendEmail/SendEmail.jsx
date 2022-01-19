@@ -18,7 +18,7 @@ import { Checkbox } from "../../components/Checkbox";
 // import TextEditor from "../../components/TextEditor/TextEditor";
 // import { EditorState,  convertToRaw } from "draft-js";
 // import draftToHtml from 'draftjs-to-html';
-import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor";
+//import ReactQuillEditor from "../../components/ReactQuillEditor/ReactQuillEditor";
 
 import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
 //import htmlToDraft from "html-to-draftjs";
@@ -51,12 +51,6 @@ function SendEmail() {
   const showSideBar = () => setSideBar(!sidebar);
   const { addToast } = useToasts();
 
-
-
-
-  const handleChange = (e) => { 
-console.log("Yea man")
-  }
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -151,9 +145,9 @@ console.log("Yea man")
   };
 
 
- const callbackFunction = (childData) => {
-    this.setState({message: childData})
-}
+//  const callbackFunction = (childData) => {
+//     this.setState({message: childData})
+// }
 
   const [html, setHtml] = useState("");
   const isBlank = (str) => {
@@ -432,9 +426,11 @@ console.log("Yea man")
                       placeholder="Message Title"
                     />
 
+                    {console.log(html)}
 
                   <ReactQuillEditorClass
                   //sendData = {}
+                  setHtml = {setHtml}
                    
                   
                   emailContent = {emailContent}
