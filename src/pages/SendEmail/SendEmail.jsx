@@ -158,10 +158,11 @@ function SendEmail() {
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
-    setEmailContent({...emailContent, messageBody: html});
 
-    console.log(html)
-    if (isBlank(emailContent.messageBody)) {
+    // setEmailContent({...emailContent, messageBody: html});
+
+    console.log("This is html"+html)
+    if (isBlank(html)) {
       alert("Message can not be empty");
       setLoading(false);
       setSendingMessage(false);
@@ -176,7 +177,11 @@ function SendEmail() {
             Accept: "application/json",
             Authorization: "Bearer " + token,
           },
-          body: JSON.stringify(emailContent),
+          body: JSON.stringify({
+            recieverAddress: emailContent.recieverAddress,
+            messageBody: html,
+            messageSubject: emailContent.messageSubject,
+          }),
         });
   
         result = await result.json();
@@ -432,15 +437,6 @@ function SendEmail() {
                     />
 
                     {console.log(html)}
-
-                    {
-                       setEmailContent({
-                        ...emailContent,
-                        messageBody: html,
-                      })
-
-                     
-                    }
 
                   <ReactQuillEditorClass
                   //sendData = {}
