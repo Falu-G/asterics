@@ -433,6 +433,15 @@ function SendEmail() {
 
                     {console.log(html)}
 
+                    {
+                       setEmailContent({
+                        ...emailContent,
+                        messageBody: html,
+                      })
+
+                     
+                    }
+
                   <ReactQuillEditorClass
                   //sendData = {}
                   setHtml = {setHtml}
