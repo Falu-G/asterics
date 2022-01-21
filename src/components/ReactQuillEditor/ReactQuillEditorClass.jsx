@@ -2,25 +2,44 @@ import React from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ES6
 import "./ReactQuillEditor.css";
+import axios from 'axios';
 
 const CustomHeart = () => <span>♥</span>;
 
 function insertHeart() {
-  console.log(this);
+  
   const Quilly = this.quill;
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.click();
 
-  input.onchange = function () {
+  input.onchange = function (event) {
     const cursorPosition = Quilly.getSelection().index;
-    Quilly.insertText(cursorPosition, "♥");
-    Quilly.insertEmbed(
-      cursorPosition,
-      "image",
-      "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg"
-    );
-    Quilly.setSelection(cursorPosition + 1);
+    const config = {     
+      headers: { 'content-type': 'multipart/form-data' }
+  }
+    const formdata = new FormData();
+    formdata.append("file",event.target.files[0])
+    //formdata.append("upload_preset","rtoxhzjk")
+
+   
+    console.log(formdata.file)
+    
+    axios.post("https://api.cloudinary.com/v1_1/asteric/image/upload",formdata,config)
+    .then(response => console.log(response))
+    .then(data => {
+      Quilly.insertEmbed(
+        cursorPosition,
+        "image",
+        "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg"
+      );
+      Quilly.setSelection(cursorPosition + 1);
+      console.log(data)
+    })
+    .catch(err => {
+      console.log("Error shele",err.message)
+    })
+
   };
 }
 
