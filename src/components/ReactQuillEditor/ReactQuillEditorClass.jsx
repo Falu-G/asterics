@@ -1,19 +1,32 @@
-import React from "react";
+import React from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ES6
 import "./ReactQuillEditor.css";
 import axios from 'axios';
+// import Box from '@mui/material/Box';
+// import LinearProgress from '@mui/material/LinearProgress';
 
-const CustomHeart = () => <span>♥</span>;
 
-function insertHeart() {
-  
+// function LinearIndeterminate() {
+
+
+//   return (
+//     <Box sx={{ width: '100%' }}>
+//       <LinearProgress />
+//     </Box>
+//   );
+// }
+const CustomHeart = () => <i class="fas fa-image"></i>
+
+function insertImage() {
+ 
   const Quilly = this.quill;
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.click();
 
   input.onchange = function (event) {
+    
     const cursorPosition = Quilly.getSelection().index;
     const config = {     
       headers: { 'content-type': 'multipart/form-data' }
@@ -21,10 +34,9 @@ function insertHeart() {
     const formdata = new FormData();
     formdata.append("file",event.target.files[0])
     formdata.append("upload_preset","rtoxhzjk")
-    for (var value of formdata.values()) {
-      console.log(value); 
-   }
+
     
+   
     axios.post("https://api.cloudinary.com/v1_1/asteric/image/upload",formdata,config)
     .then(response => response)
     .then(data => {
@@ -70,11 +82,12 @@ const CustomToolbar = () => (
     <select className="ql-color" />
     <select className="ql-background" />
     <button className="ql-clean" />
-
     <button className="ql-bold" />
     <button className="ql-italic" />
-    <button className="ql-image" />
     <button className="ql-underline" />
+    <button className="ql-insertImage">
+      <CustomHeart />
+    </button>
     <button className="ql-strike" />
     <button className="ql-link" />
     <button className="ql-script" value="sub" />
@@ -90,9 +103,7 @@ const CustomToolbar = () => (
     <button className="ql-formula" />
     <button className="ql-header" value="1" />
 
-    <button className="ql-insertHeart">
-      <CustomHeart />
-    </button>
+    
   </div>
 );
 
@@ -123,7 +134,7 @@ class Editor extends React.Component {
     toolbar: {
       container: "#toolbar",
       handlers: {
-        insertHeart: insertHeart,
+        insertImage: insertImage,
       },
     },
   };

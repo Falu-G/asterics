@@ -168,12 +168,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
             "content-type": "multipart/form-data",
           },
         };
-        axios({
-          method: "post",
-          url: myurl,
-          data: formData,
-          headers: config.headers,
-        })
+        axios.post( myurl, formData,config )
           .then(function (response) {
             //handle success
           fetchUser();
@@ -294,8 +289,10 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
     setSelectedFile(event.target.files[0]);
     const formData = new FormData();
     formData.append("csvFile", event.target.files[0]);
+
+    console.log(formData.get("csvFile"))
     setFormData(formData)
-    console.log(formData);
+    
     // const config = {
     //   headers: {
     //     "content-type": "multipart/form-data",
@@ -450,17 +447,6 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
                   }}
                 >
 
-{/* <CSVReader
-        onDrop={handleOnDrop}
-        onError={handleOnError}
-        noClick
-        addRemoveButton
-        onRemoveFile={handleOnRemoveFile}
-      >
-        <span>Drop CSV file here to upload.</span>
-      </CSVReader> */}
-                  {/* <h5 style={{ marginRight: 20 }}>Upload a CSV file</h5> */}
-
                   
                   <input
                     label="Upload CSV"
@@ -512,79 +498,3 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
 export default AddCustomer;
 
-
-  // const regFromCSV = async () => {
-  //   let result = await fetch(
-  //     "https://asteric.herokuapp.com/customer/register",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         Authorization: "Bearer " + token,
-  //       },
-  //       body: JSON.stringify(),
-  //     }
-  //   );
-
-  //   result = await result.json();
-
-  //   if (result.status === 401) {
-  //     setSessionExpired(true);
-  //     setAddingUser(false);
-  //     return;
-  //   }
-
-  //   fetchUser();
-  //   setAddingUser(false);
-  //   setOpenModal(false);
-  //   addToast("User added Successfully", { appearance: "success" });
-  //   console.log(`This is the ${JSON.stringify(result)}`);
-  //   console.log();
-  // };
-
-  /* <ReactBootStrap.Button
-                  style={{
-                    marginTop: 20,
-                    float: "right",
-                  }}
-                  variant="primary"
-                  onClick={"regFromCSV"}
-                  disabled={addingUser}
-                >
-                  <ReactBootStrap.Spinner
-                    as="span"
-                    className={addingUser ? "visible" : "visually-hidden"}
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually">
-                    {addingUser ? "Loading..." : "Register"}
-                  </span>
-                </ReactBootStrap.Button> */
-
-
-                /* <div className="submitcont">
-                  <ReactBootStrap.Button
-                    style={{
-                      float: "right",
-                    }}
-                    variant="primary"
-                    onClick={register}
-                    disabled={addingUser}
-                  >
-                    <ReactBootStrap.Spinner
-                      as="span"
-                      className={addingUser ? "visible" : "visually-hidden"}
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    <span className="visually">
-                      {addingUser ? "Loading..." : "Register"}
-                    </span>
-                  </ReactBootStrap.Button>
-                </div> */

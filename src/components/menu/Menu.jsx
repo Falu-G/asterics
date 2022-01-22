@@ -175,7 +175,7 @@ function Menus({ controlSideBar }) {
   };
 
   let menustate = value.sidebar;
-  console.log("This is coming from menus " + value.sidebar);
+ 
   return (
     <div className="menuContainer">
       <div className="menuContainerDesc">
