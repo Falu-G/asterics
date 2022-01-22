@@ -26,12 +26,12 @@ function insertHeart() {
    }
     
     axios.post("https://api.cloudinary.com/v1_1/asteric/image/upload",formdata,config)
-    .then(response => console.log(response))
+    .then(response => response)
     .then(data => {
       Quilly.insertEmbed(
         cursorPosition,
         "image",
-        "https://cdn.pixabay.com/photo/2022/01/05/22/31/woman-6918210_960_720.jpg"
+        data.data.secure_url,
       );
       Quilly.setSelection(cursorPosition + 1);
       console.log(data)

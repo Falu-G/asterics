@@ -188,12 +188,13 @@ function SendEmail() {
         if (result.status === 200) {
           console.log(result.message);
           setSendingMessage(false);
+          setHtml("")
           setEmailContent({
             recieverAddress: "",
-          messageBody: "",
+          messageBody: html,
           messageSubject: "",
           })   
-          setHtml("")
+          
           addToast("Saved Successfully", { appearance: "success" });
         } else {
           console.log(result.message);
