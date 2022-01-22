@@ -51,7 +51,7 @@ function Monthlyschedule() {
   console.log(today);
 
 
-  //const baseUrl = "http://20.107.4.58:8087/"
+  //const baseUrl = "https://asteric.herokuapp.com/"
   const { addToast } = useToasts();
   const [emailQueue, setEmailQueue] = useState([]);
   const loggedInUser = localStorage.getItem("user-info");
@@ -71,7 +71,7 @@ function Monthlyschedule() {
   const [smsQueue, setSmsQueue] = useState([]);
 
   const fetchBusiness = useCallback(async () => {
-    fetch("http://20.107.4.58:8087/mails", {
+    fetch("https://asteric.herokuapp.com/mails", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -145,7 +145,7 @@ function Monthlyschedule() {
   };
   const handledeleteSms = (id) => {
     setLoading(true);
-    fetch(`http://20.107.4.58:8087/vonageSms/${id}`, {
+    fetch(`https://asteric.herokuapp.com/vonageSms/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -177,7 +177,7 @@ function Monthlyschedule() {
 
   const handledelete = (id) => {
     setLoading(true);
-    fetch(`http://20.107.4.58:8087/mails/${id}`, {
+    fetch(`https://asteric.herokuapp.com/mails/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -358,7 +358,7 @@ function Monthlyschedule() {
 
   useEffect(() => {
     Promise.all([
-      fetch("http://20.107.4.58:8087/mails", {
+      fetch("https://asteric.herokuapp.com/mails", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -366,7 +366,7 @@ function Monthlyschedule() {
           Authorization: "Bearer " + token,
         },
       }),
-      fetch("http://20.107.4.58:8087/vonageSms/", {
+      fetch("https://asteric.herokuapp.com/vonageSms/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -20,10 +20,10 @@ function insertHeart() {
   }
     const formdata = new FormData();
     formdata.append("file",event.target.files[0])
-    //formdata.append("upload_preset","rtoxhzjk")
-
-   
-    console.log(formdata.file)
+    formdata.append("upload_preset","rtoxhzjk")
+    for (var value of formdata.values()) {
+      console.log(value); 
+   }
     
     axios.post("https://api.cloudinary.com/v1_1/asteric/image/upload",formdata,config)
     .then(response => console.log(response))

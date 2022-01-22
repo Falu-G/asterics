@@ -63,7 +63,7 @@ function LaSignUp() {
     setRegistering(true);
 
     try {
-      let result = await fetch("http://20.107.4.58:8087/users/register", {
+      let result = await fetch("https://asteric.herokuapp.com/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

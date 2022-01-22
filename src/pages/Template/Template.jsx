@@ -212,7 +212,7 @@ function Templates() {
   const deleteFromArray = (id) => {
     setLoading(true);
     //setOpenModalEmail(false);
-    fetch(`http://20.107.4.58:8087/messageTemplate/${id}`, {
+    fetch(`https://asteric.herokuapp.com/messageTemplate/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -252,7 +252,7 @@ function Templates() {
   //const letterReducer = (letter) => letter.substring(0, 50);
   //const letterReducerToSixty = (letter) => letter.substring(0, 60);
   const fetchBusinesses = useCallback(() => {
-    fetch("http://20.107.4.58:8087/messageTemplate", {
+    fetch("https://asteric.herokuapp.com/messageTemplate", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -298,7 +298,7 @@ function Templates() {
 
     console.log(sendEmail);
     try {
-      let result = await fetch("http://20.107.4.58:8087/mails/send", {
+      let result = await fetch("https://asteric.herokuapp.com/mails/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -330,7 +330,7 @@ function Templates() {
     console.log("SMS is meant to be sent");
     console.log(sendSms);
     try {
-      let result = await fetch("http://20.107.4.58:8087/vonageSms/send", {
+      let result = await fetch("https://asteric.herokuapp.com/vonageSms/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -377,7 +377,7 @@ function Templates() {
     } else {
       setAddEmail(true);
       let result = await fetch(
-        "http://20.107.4.58:8087/messageTemplate/register",
+        "https://asteric.herokuapp.com/messageTemplate/register",
         {
           method: "POST",
           headers: {
@@ -424,7 +424,7 @@ function Templates() {
 
   const handleSelectCustomers = async () => {
     try {
-      let result = await fetch("http://20.107.4.58:8087/customer", {
+      let result = await fetch("https://asteric.herokuapp.com/customer", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

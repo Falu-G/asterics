@@ -38,7 +38,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
   
   const fetchUser = () => {
-    fetch("http://20.107.4.58:8087/customer", {
+    fetch("https://asteric.herokuapp.com/customer", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -160,7 +160,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
 
 
-      const myurl = "http://20.107.4.58:8087/bulkCustomerCSVUpload"
+      const myurl = "https://asteric.herokuapp.com/bulkCustomerCSVUpload"
 
 
         const config = {
@@ -193,7 +193,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
           });
 
       //   let result = await fetch(
-      //     "http://20.107.4.58:8087/bulkCustomerCSVUpload",
+      //     "https://asteric.herokuapp.com/bulkCustomerCSVUpload",
       //     {
       //       method: "POST",
       //       headers: {
@@ -260,7 +260,7 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
       }
 
       let result = await fetch(
-        "http://20.107.4.58:8087/customer/register",
+        "https://asteric.herokuapp.com/customer/register",
         {
           method: "POST",
           headers: {
