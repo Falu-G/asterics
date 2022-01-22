@@ -160,12 +160,13 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
 
 
 
-      const myurl = "https://asteric.herokuapp.com/bulkCustomerCSVUpload"
+      const myurl = "https://asteric.herokuapp.com/customer/bulkCustomerCSVUpload"
 
 
         const config = {
           headers: {
             "content-type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
           },
         };
         axios.post( myurl, formData,config )
@@ -288,9 +289,8 @@ function AddCustomer({ setOpenModal, setTokenValid, setAllCustomers,closebutton 
   const parseCSV = (event)=>{
     setSelectedFile(event.target.files[0]);
     const formData = new FormData();
-    formData.append("csvFile", event.target.files[0]);
-
-    console.log(formData.get("csvFile"))
+    formData.append("uploadfile", event.target.files[0]);
+    console.log(formData.get("uploadfile"))
     setFormData(formData)
     
     // const config = {
