@@ -20,7 +20,7 @@ import Stack from "@mui/material/Stack";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import CssBaseline from "@mui/material/CssBaseline";
-import ReactQuillEditor from "../ReactQuillEditor/ReactQuillEditor";
+import ReactQuillEditorClass from "../ReactQuillEditor/ReactQuillEditorClass";
 
 const style = {
   position: "absolute",
@@ -40,7 +40,7 @@ function NewSchedule({
   setSentEmailValue,
   spinnerDisplay,
   setSmsQueue,
-  closebut
+  closebut,
 }) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -49,6 +49,10 @@ function NewSchedule({
 
   today = `${yyyy}-${mm}-${dd}`;
   //console.log("This is todays date " + today);
+
+  const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
+  };
 
   const data = React.useMemo(
     () => [
@@ -214,22 +218,27 @@ function NewSchedule({
     if (messageType === "Email") {
       try {
         setScheduleMessage({ ...scheduleMessage, schedule_date: value });
-        setScheduleMessage({ ...scheduleMessage, messageBody: html });
+        
         console.log(
           "This is the date selected in email " +
             value +
             " but the date is" +
             scheduleMessage.schedule_date
         );
+
+        if(isBlank(html)){
+          alert("Please type the message you would like to schedule")
+          setSendingMessage(false);
+          
+          setOpenModal(false);
+         
+          return
+        }
         console.log(scheduleMessage);
-
-
-
 
         // if(schedule_date )
         let result = await fetch(
-         
-           "https://asteric.herokuapp.com/mails/schedule",
+          "https://asteric.herokuapp.com/mails/schedule",
           {
             method: "POST",
             headers: {
@@ -237,7 +246,13 @@ function NewSchedule({
               Accept: "application/json",
               Authorization: "Bearer " + token,
             },
-            body: JSON.stringify(scheduleMessage),
+            body: JSON.stringify({
+              recieverAddress: scheduleMessage.recieverAddress,
+              messageBody: html,
+              messageSubject: scheduleMessage.messageSubject,
+              schedule_date: scheduleMessage.schedule_date,
+              scheduleType: "Daily",
+            }),
           }
         );
 
@@ -356,7 +371,7 @@ function NewSchedule({
         }}
         onClick={closebut}
       />
-    
+
       <div
         style={{
           height: `100%`,
@@ -404,13 +419,12 @@ function NewSchedule({
                   label="Date&Time picker"
                   value={value}
                   minDateTime={new Date()}
-                  variant = "standard"
+                  variant="standard"
                   onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Stack>
             </LocalizationProvider>
-  
           </div>
         </div>
 
@@ -423,9 +437,8 @@ function NewSchedule({
                 placeholder={
                   messageType === "SMS" ? "PhoneNumber" : "Enter Email"
                 }
-                style = {{
+                style={{
                   width: "866px",
-                  
                 }}
                 value={
                   messageType === "Email"
@@ -447,9 +460,8 @@ function NewSchedule({
               <input
                 type="text"
                 name="title"
-                style = {{
+                style={{
                   width: "866px",
-                  
                 }}
                 placeholder={"Title of the message"}
                 onChange={(event) =>
@@ -464,28 +476,24 @@ function NewSchedule({
           </div>
 
           {messageType === "Email" ? (
-            // <TextEditor
-            //   sizeOfMessageBox={"832px"}
-            //   editorState={editorState}
-            //   onEditorStateChange={onEditorStateChange}
-            // />
-
-            <ReactQuillEditor
-
-            className = "aldy"
            
-              html={html}
-              setHtml={setHtml}
-              setScheduleMessage={setScheduleMessage}
-              scheduleMessage={scheduleMessage}
-            />
+
+          
+
+              <ReactQuillEditorClass
+                //sendData = {}
+                setHtml={setHtml}
+
+                // emailContent = {emailContent}
+                // setEmailContent = {setEmailContent}
+              />
+        
           ) : (
             <textArea
               type="messages"
               name="name"
-              style = {{
-                width: "866px",
-                
+              style={{
+                width: "936px",
               }}
               onChange={(event) =>
                 setScheduleMessageSms({
@@ -497,7 +505,7 @@ function NewSchedule({
             />
           )}
 
-          <div style={{ width: "100%" ,  marginBottom: "10px",}}>
+          <div style={{ width: "100%", marginBottom: "10px" }}>
             <ReactBootStrap.Button
               className="sendEmailbtn"
               variant="primary"
