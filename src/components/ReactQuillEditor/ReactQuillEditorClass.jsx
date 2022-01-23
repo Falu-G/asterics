@@ -163,9 +163,7 @@ class Editor extends React.Component {
     "color",
   ];
 
-  // sendData = () => {
-  //   this.props.sendData(this.state.editorHtml);
-  // };
+
   render() {
     return (
       <div className="text-editor">

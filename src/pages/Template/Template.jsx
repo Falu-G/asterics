@@ -32,13 +32,12 @@ import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
 //import TextEditor from "../../components/TextEditor/TextEditor";
 import ReactQuill, { Quill } from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
-
+import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
 // import { EditorState, convertToRaw } from "draft-js";
 // import draftToHtml from "draftjs-to-html";
 //import htmlToDraft from "html-to-draftjs";
 import ReactHtmlParser from "react-html-parser";
-import QuillEditorFunc from "../../components/QuillEditorFunc/QuillEditorFunc";
-import "../../components/ReactQuillEditor/ReactQuillEditor.css"
+
 
 
 
@@ -1185,15 +1184,7 @@ function Templates() {
                         }}
                       >
                         <div>
-                          <QuillEditorFunc
-                          style = {{ 
-                            height: "700px",
-                          }}
-                            settemplateObjstate={settemplateObjstate}
-                            templateObjstate={templateObjstate}
-                            setHtml={setHtml}
-                            html={html}
-                          />
+                         <ReactQuillEditorClass/>
 
                           <div>
                             <ReactBootStrap.Button
