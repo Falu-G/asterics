@@ -3,6 +3,8 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ES6
 import "./ReactQuillEditor.css";
 import axios from 'axios';
+import ImageResize from 'quill-image-resize-module-react';
+
 // import Box from '@mui/material/Box';
 // import LinearProgress from '@mui/material/LinearProgress';
 
@@ -123,7 +125,7 @@ Font.whitelist = [
   "lucida",
 ];
 Quill.register(Font, true);
-
+Quill.register('modules/imageResize', ImageResize);
 class Editor extends React.Component {
   state = { editorHtml: "" };
   handleChange = (html) => {
@@ -137,6 +139,11 @@ class Editor extends React.Component {
         insertImage: insertImage,
       },
     },
+
+    imageResize: {
+      parchment: Quill.import('parchment'),
+      modules: ['Resize', 'DisplaySize']
+   }
   };
 
   static formats = [
