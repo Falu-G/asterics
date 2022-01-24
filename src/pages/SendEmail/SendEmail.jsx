@@ -100,7 +100,8 @@ function SendEmail() {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    // rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -111,7 +112,7 @@ function SendEmail() {
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  //const pagerow = rows.slice(0, 10);
   const { pageIndex } = state;
 
   const handleSelectCustomers = async () => {
