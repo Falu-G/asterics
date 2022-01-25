@@ -105,8 +105,8 @@ function SendEmail() {
     prepareRow,
     nextPage,
     previousPage,
-    canNextPage,
     canPreviousPage,
+    canNextPage,
     state,
     pageOptions,
     selectedFlatRows,
@@ -115,6 +115,8 @@ function SendEmail() {
   //const pagerow = rows.slice(0, 10);
   const { pageIndex } = state;
 
+  console.log("page is "+page.length)
+  console.log(nextPage)
   const handleSelectCustomers = async () => {
     handleOpen();
     setLoading(true);
@@ -220,6 +222,11 @@ function SendEmail() {
 
 
   };
+
+
+
+
+
 
   const confirmSelection = () => {
     let promises = selectedFlatRows.map((row) => row.original.email);
@@ -357,7 +364,7 @@ function SendEmail() {
                                 }}
                               >
                                 <Button
-                                  disabled={!canNextPage}
+                                  disabled={!canPreviousPage}
                                   onClick={() => previousPage()}
                                   variant="contained"
                                 >
@@ -367,11 +374,11 @@ function SendEmail() {
                                 <span>
                                   Page{" "}
                                   <strong>
-                                    {pageIndex + 1} of {pageOptions.length}
+                                   {pageIndex + 1} of {pageOptions.length}
                                   </strong>
                                 </span>
                                 <Button
-                                  disabled={!canPreviousPage}
+                                  disabled={!canNextPage}
                                   onClick={() => nextPage()}
                                   variant="contained"
                                 >

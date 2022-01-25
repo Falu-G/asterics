@@ -92,7 +92,7 @@ function Sendsms() {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -103,7 +103,7 @@ function Sendsms() {
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  
 
   const { addToast } = useToasts();
   const { sidebar, setSideBar } = useContext(MenuContext);
@@ -388,7 +388,7 @@ function Sendsms() {
                                 }}
                               >
                                 <Button
-                                  disabled={!canNextPage}
+                                  disabled={!canPreviousPage}
                                   onClick={() => previousPage()}
                                   variant="contained"
                                 >
@@ -402,7 +402,7 @@ function Sendsms() {
                                   </strong>
                                 </span>
                                 <Button
-                                  disabled={!canPreviousPage}
+                                  disabled={!canNextPage}
                                   onClick={() => nextPage()}
                                   variant="contained"
                                 >

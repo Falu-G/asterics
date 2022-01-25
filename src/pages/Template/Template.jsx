@@ -29,13 +29,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Checkbox } from "../../components/Checkbox";
 import ShowUpEmailPro from "../ShowUpEmail/ShowUpEmailPro";
-//import TextEditor from "../../components/TextEditor/TextEditor";
 import ReactQuill, { Quill } from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
 import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
-// import { EditorState, convertToRaw } from "draft-js";
-// import draftToHtml from "draftjs-to-html";
-//import htmlToDraft from "html-to-draftjs";
 import ReactHtmlParser from "react-html-parser";
 
 
@@ -185,6 +181,7 @@ function Templates() {
 
   const [openEmailNested, setOpenEmailNested] = useState(false);
 
+  console.log("setHtml", setHtml);
   const handleOpenEmailNested = () => {
     setOpenEmailNested(true);
   };
@@ -362,11 +359,6 @@ function Templates() {
   const handleSetTemplate = async () => {
     console.log(`Message ` + templateObjstate.message);
 
-    // settemplateObjstate({
-    //   ...templateObjstate,
-    //   message: draftToHtml(convertToRaw(editorStateEmpty.getCurrentContent())),
-    // });
-
     settemplateObjstate({
       ...templateObjstate,
       message: html,
@@ -511,7 +503,7 @@ function Templates() {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -522,9 +514,11 @@ function Templates() {
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+ 
   const { pageIndex } = state;
 
+
+  console.log("Page size is ", page.length)
   const phoneNumberHandler = async () => {
     let promises = await selectedFlatRows.map((row) => row.original);
     Promise.all(promises).then(function (results) {
@@ -573,17 +567,7 @@ function Templates() {
     });
   };
 
-  // const [editorStateEmpty, setEditorStateEmpty] = useState(
-  //   EditorState.createEmpty()
-  // );
 
-  // const onEditorStateChangeEmpty = (editorState) => {
-  //   setEditorStateEmpty(editorState);
-  //   settemplateObjstate({
-  //     ...templateObjstate,
-  //     message: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-  //   });
-  // };
 
   const formats = [
     "header",
@@ -1110,7 +1094,7 @@ function Templates() {
                             }}
                           >
                             <Button
-                              disabled={!canNextPage}
+                              disabled={!canPreviousPage}
                               onClick={() => previousPage()}
                               variant="contained"
                             >
@@ -1124,7 +1108,7 @@ function Templates() {
                               </strong>
                             </span>
                             <Button
-                              disabled={!canPreviousPage}
+                              disabled={!canNextPage}
                               onClick={() => nextPage()}
                               variant="contained"
                             >
