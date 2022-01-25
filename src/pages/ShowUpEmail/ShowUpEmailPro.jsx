@@ -74,7 +74,7 @@ function ShowUpEmailPro({
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -85,7 +85,7 @@ function ShowUpEmailPro({
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  // const page = rows.slice(0, 10);
   const { pageIndex } = state;
 
   const confirmSelection = async () => {
@@ -204,7 +204,7 @@ function ShowUpEmailPro({
                         }}
                       >
                         <Button
-                          disabled={!canNextPage}
+                          disabled={!canPreviousPage}
                           onClick={() => previousPage()}
                           variant="contained"
                         >
@@ -218,7 +218,7 @@ function ShowUpEmailPro({
                           </strong>
                         </span>
                         <Button
-                          disabled={!canPreviousPage}
+                          disabled={!canNextPage}
                           onClick={() => nextPage()}
                           variant="contained"
                         >
