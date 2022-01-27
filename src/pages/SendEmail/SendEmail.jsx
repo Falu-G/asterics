@@ -449,6 +449,7 @@ function SendEmail() {
 
                   <ReactQuillEditorClass
                   //sendData = {}
+                  value={html}
                   setHtml = {setHtml}
                    
                   
