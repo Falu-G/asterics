@@ -18,6 +18,9 @@ import ImageResize from 'quill-image-resize-module-react';
 //     </Box>
 //   );
 // }
+
+
+
 const CustomHeart = () => <i class="fas fa-image"></i>
 
 function insertImage() {
@@ -129,7 +132,7 @@ Quill.register('modules/imageResize', ImageResize);
 class Editor extends React.Component {
   state = { editorHtml: "" };
   handleChange = (html) => {
-    this.setState({ editorHtml: html });
+   this.setState({ editorHtml: html });
     this.props.setHtml(html);
   };
   static modules = {
@@ -169,6 +172,7 @@ class Editor extends React.Component {
       <div className="text-editor">
         <CustomToolbar />
         <ReactQuill
+          // value = {this.state.editorHtml}
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
           modules={Editor.modules}

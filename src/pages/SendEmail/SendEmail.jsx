@@ -158,6 +158,10 @@ function SendEmail() {
   };
 
 
+
+
+
+
   const handleSend = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
@@ -446,12 +450,12 @@ function SendEmail() {
                     />
 
                     {console.log(html)}
+                    
+                    {/* <p>{html}</p> */}
 
                   <ReactQuillEditorClass
                   //sendData = {}
-                  value={html}
                   setHtml = {setHtml}
-                   
                   
                   emailContent = {emailContent}
                   setEmailContent = {setEmailContent}
