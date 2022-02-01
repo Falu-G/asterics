@@ -40,8 +40,6 @@ function insertImage() {
     formdata.append("file",event.target.files[0])
     formdata.append("upload_preset","rtoxhzjk")
 
-    
-   
     axios.post("https://api.cloudinary.com/v1_1/asteric/image/upload",formdata,config)
     .then(response => response)
     .then(data => {
@@ -131,10 +129,16 @@ Quill.register(Font, true);
 Quill.register('modules/imageResize', ImageResize);
 class Editor extends React.Component {
   state = { editorHtml: "" };
+
+
   handleChange = (html) => {
    this.setState({ editorHtml: html });
-    this.props.setHtml(html);
+   this.props.setHtml(html);
   };
+
+  handleClear = ()=>{
+    this.setState({ editorHtml: "" });
+  }
   static modules = {
     toolbar: {
       container: "#toolbar",
@@ -172,11 +176,12 @@ class Editor extends React.Component {
       <div className="text-editor">
         <CustomToolbar />
         <ReactQuill
-          // value = {this.state.editorHtml}
-          onChange={this.handleChange}
+          defaultValue={this.props.edihtml}
+          onChange= {this.handleChange}
           placeholder={this.props.placeholder}
           modules={Editor.modules}
           formats={Editor.formats}
+          
         />
       </div>
     );

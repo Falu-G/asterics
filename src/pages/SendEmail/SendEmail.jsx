@@ -253,9 +253,6 @@ function SendEmail() {
   // };
 
 
- 
-
-
   return (
     <>
       {invalidToken ? (
@@ -451,12 +448,12 @@ function SendEmail() {
 
                     {console.log(html)}
                     
-                    {/* <p>{html}</p> */}
+                    <p>{html}</p>
 
                   <ReactQuillEditorClass
-                  //sendData = {}
+                 
                   setHtml = {setHtml}
-                  
+                  edihtml = {html}
                   emailContent = {emailContent}
                   setEmailContent = {setEmailContent}
                   />
