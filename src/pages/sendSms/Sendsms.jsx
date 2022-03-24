@@ -193,7 +193,8 @@ function Sendsms() {
       } else if (result.responsecode === "200") {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({lreceiver: "", message: "" });
+        setSendMessage({...sendMessage,message:"",receiver: ""});
+        
         addToast("Messge sent Successfully", {
           appearance: "success",
           autoDismiss: true,
@@ -284,7 +285,7 @@ function Sendsms() {
                       />
                     </div>
 
-                    <textArea
+                    <textarea
                       style={{
                         width: "937px",
                       }}
