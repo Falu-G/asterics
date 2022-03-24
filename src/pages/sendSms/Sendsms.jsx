@@ -103,8 +103,6 @@ function Sendsms() {
     selectedFlatRows,
   } = tableInstance;
 
-  
-
   const { addToast } = useToasts();
   const { sidebar, setSideBar } = useContext(MenuContext);
   const [invalidToken, setInvalidToken] = useState(false);
@@ -119,9 +117,8 @@ function Sendsms() {
   // const [messageReport, setMessageReport] = useState("");
 
   const [sendMessage, setSendMessage] = useState({
-    sender: "Asterics",
-    receiver: "",
     message: "",
+    receiver: "",
   });
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -164,33 +161,47 @@ function Sendsms() {
     console.log(sendMessage);
     console.log(token);
 
+    const newNumb = sendMessage.receiver.map((item) => {
+      if (item.charAt(0) === "0") {
+        return "234" + item.substring(1);
+      } else if (item.charAt(0) === "+") {
+        return item.slice(1);
+      } else {
+        return item;
+      }
+    });
+
     try {
-      let result = await fetch("https://asteric.herokuapp.com/vonageSms/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(sendMessage),
-      });
+      let result = await fetch(
+        "https://asteric.herokuapp.com/textifySms/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ ...sendMessage, receiver: newNumb }),
+        }
+      );
 
       result = await result.json();
       if (result.message === "Invalid Token") {
         setLoading(false);
         setInvalidToken(true);
         console.log(result.message);
-      } else if (result.status === 200) {
+      } else if (result.responsecode === "200") {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        addToast("Saved Successfully", {
+        setSendMessage({lreceiver: "", message: "" });
+        addToast("Messge sent Successfully", {
           appearance: "success",
           autoDismiss: true,
         });
       } else {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({ ...sendMessage, receiver: "", message: "" });
+        setSendMessage({ receiver: "", message: "" });
         addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
