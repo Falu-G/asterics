@@ -1,0 +1,136 @@
+.textFieldProp {
+ width: 100%;
+
+}
+
+.formContainer{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:100vh;
+    position: relative;
+}
+
+
+.formContainer-title{
+    position: absolute;
+    top:40px;
+    left:50px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 42px;
+    text-align: left;
+    height: 42px;
+    color: #18a0fb;
+
+}
+.signUpForm{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    
+}
+
+.signUpForm h3{
+/* width: 299px; */
+height: 42px;
+font-style: normal;
+font-weight: bold;
+font-size: 36px;
+line-height: 42px;
+color: #000000;
+margin-bottom:0px;
+}
+
+.firstSignUp span{
+    margin-top: 30px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 84px;
+    color: #FFFFFF;
+   
+}
+
+.firstSignUp h4{
+font-family: Roboto;
+font-style: normal;
+font-weight: bold;
+font-size: 30px;
+line-height: 42px;
+margin-top: 20px;
+color: #FFFFFF;
+}
+
+.firstSignUp p{
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 21px;
+color: #FFFFFF;
+}
+
+.firstSignUpContainer,.secondSignUp{
+    flex:1;
+  
+}
+
+.firstSignUp{
+    height:450px;
+    width:700px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.firstfield{
+    display:flex;
+    width: 100%;
+    
+}
+
+.secondfield{
+    display:flex;
+}
+
+.firstfieldin{
+    flex:1;
+}
+
+.secondfieldin{
+flex:1;
+}
+
+
+    .PhoneInputInput {
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        padding-left: 10px;
+        border-bottom: 2px solid grey;
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        outline: none;
+        
+    }
+
+
+
+
+.Regbtn{
+border: none;
+width: 190px;
+height: 46px;
+font-size: 20px;
+margin-right: 10px;
+color: #FFFFFF;
+background: #18A0FB;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 4px;
+}
+

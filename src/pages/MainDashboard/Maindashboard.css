@@ -1,0 +1,22 @@
+.maindashboardContainer{
+display: flex;
+
+}
+.maindashboardContainerMenu{
+  width: 200px;
+}
+
+.maindashboardContainerMenuClosed{
+    width:60px;
+    background-color:#fff;
+}
+
+.maindashboardContainerDashboard{
+    flex: 5;
+    width: 100%;
+    background-color: #f5f5f5;
+}
+
+.maindashboardContainerDashboardClosed{
+    width:calc(100vw - 50px);
+}

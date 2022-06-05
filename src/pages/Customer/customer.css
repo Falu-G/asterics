@@ -1,0 +1,36 @@
+.customerContainer{
+    height:100vh;
+    display: flex; 
+    position: relative;
+    
+}
+
+.customerWrapper{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.btnAddCustomer{
+    background-color: #18a0fb;
+    padding: 10px;
+    border:none;
+    float: right;
+    color: white;
+    border-radius:4px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+
+
+.userdelete{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle{
+    color: white;
+}

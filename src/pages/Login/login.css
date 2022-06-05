@@ -1,0 +1,133 @@
+.LoginContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+
+}
+
+.LoginContainerfirstbox {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.LoginContainersecondbox {
+  flex: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.LoginContainerfirstbox span {
+  font-size: 36px;
+  font-weight: 700;
+  color: #18a0fb;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.LoginImg {
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
+.LoginImg img {
+  width: 252px;
+  height: 153px;
+  object-fit: cover;
+}
+
+.LoginImg span {
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
+}
+
+.LoginImg p  {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-top: 70px;
+  color: #6f6f6f !important;
+}
+
+.LoginContainersecondboxform {
+  padding: 10px;
+  display: flex;
+ 
+  flex-direction: column;
+  width: 50%;
+}
+
+.formHouse {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.formHouse span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #18a0fb;
+}
+
+.forminput {
+  margin-top: 20px;
+  width: 300px;
+  height: 40px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  padding: 5px;
+  outline: none;
+  border-radius: 8px;
+}
+
+.submitbut {
+  width: 153px;
+  height: 40px;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 5px;
+  background: #18a0fb;
+}
+
+.LoginContainersecondboxform h2 {
+  font-family: "Open Sans", sans-serif;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 75px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.forminput-sipa {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,157 @@
+.smsContainer{
+    position:relative;
+}
+
+.ScheduleWrapper{
+    top: 50px;
+    height:calc(100vh - 50px);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.scheduleform{
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule{
+    display: flex;
+    flex-direction: row;
+}
+
+.Schedulecontaining{
+    width: 90%;
+    background-color:#000000;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.schedule-radio{
+    display: flex;
+    flex-direction: row;
+  
+}
+
+
+
+textarea{
+width: 832px;
+height: 279px;
+background: #FFFFFF;
+margin-top: 10px;
+outline: none;
+padding: 10px;
+border: 1px solid #878686;
+box-sizing: border-box;
+border-radius: 8px;
+}
+
+.scheduleform{
+    margin-top:20px;
+}
+
+.phone{
+width: 936px;
+height: 54px;
+padding: 10px;
+background: #FFFFFF;
+outline: none;
+border: 3px solid #F8F5F5;
+box-sizing: border-box;
+border-radius: 8px;
+}
+
+.sendbtn{
+border: none;
+width: 190px;
+height: 46px;
+float: right;
+font-size: 20px;
+margin-top:20px;
+color: #FFFFFF;
+background: #18A0FB;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 4px;
+}
+
+.modalInput{
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalFirstInput{
+    display: flex;
+    
+}
+
+.mf_input{
+    flex: 2;
+    }
+    
+.ms_input{
+flex: 1.5;
+display: flex;
+margin-left: 10px;
+
+}
+
+
+.mf_input input{
+width: 100%;
+height: 54px;
+padding: 10px;
+background: #FFFFFF;
+outline: none;
+border: 3px solid #F8F5F5;
+box-sizing: border-box;
+border-radius: 8px;
+}
+
+.modalContainer{
+    position: relative;
+    height: fit-content;
+}
+
+.spinning{
+    position: absolute;
+    top: 100px;
+    left: 300px;
+    transform: "translate(-50%, -50%)",
+}
+
+
+ /* Table design css */
+
+ table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  table tr:hover {background-color: #ddd;}
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #18a0fb;
+    color: white;
+  }
+
+  table tr{
+    text-align: center;  
+  }
+
