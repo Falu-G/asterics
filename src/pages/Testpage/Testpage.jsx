@@ -5,7 +5,7 @@ import "./testpage.css"
 function Testpage() {
     const [sidebar, setSideBar] = useState(false);
     const showSideBar = () => setSideBar(!sidebar);
-    
+
     return (
         <div className="testContainer">
 
@@ -22,10 +22,6 @@ function Testpage() {
                 }} className="dashboardContainer">
                     <NavigationComponent title="Template" />
                     <div className="scheduleDashboard">
-
-
-
-                    
                     </div>
 
 
