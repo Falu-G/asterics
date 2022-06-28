@@ -366,7 +366,10 @@ function Monthlyschedule() {
           Authorization: "Bearer " + token,
         },
       }),
-      fetch("https://asteric.herokuapp.com/vonageSms/", {
+      fetch(
+        // "https://asteric.herokuapp.com/vonageSms/"
+        "https://asteric.herokuapp.com/bbnSms/schedule",
+         {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

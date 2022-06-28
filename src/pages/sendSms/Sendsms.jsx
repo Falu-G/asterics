@@ -173,7 +173,8 @@ function Sendsms() {
 
     try {
       let result = await fetch(
-        "https://asteric.herokuapp.com/textifySms/send",
+        // "https://asteric.herokuapp.com/textifySms/send",
+        "https://asteric.herokuapp.com/bbnSms/send",
         {
           method: "POST",
           headers: {
