@@ -176,7 +176,7 @@ class Editor extends React.Component {
       <div className="text-editor">
         <CustomToolbar />
         <ReactQuill
-          defaultValue={this.props.edihtml}
+          // value={this.props.edihtml}
           onChange= {this.handleChange}
           placeholder={this.props.placeholder}
           modules={Editor.modules}

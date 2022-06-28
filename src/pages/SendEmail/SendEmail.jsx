@@ -448,7 +448,7 @@ function SendEmail() {
 
                     {console.log(html)}
                     
-                    <p>{html}</p>
+                    {/* <p>{html}</p> */}
 
                   <ReactQuillEditorClass
                  
