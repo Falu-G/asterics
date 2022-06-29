@@ -116,9 +116,14 @@ function Sendsms() {
   const { pageIndex } = state;
   // const [messageReport, setMessageReport] = useState("");
 
+  // const [sendMessage, setSendMessage] = useState({
+  //   message: "",
+  //   receiver: "",
+  // });
+
   const [sendMessage, setSendMessage] = useState({
     message: "",
-    receiver: "",
+    receiver: [],
   });
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -171,6 +176,7 @@ function Sendsms() {
       }
     });
 
+    console.log(newNumb)
     try {
       let result = await fetch(
         // "https://asteric.herokuapp.com/textifySms/send",
@@ -194,7 +200,8 @@ function Sendsms() {
       } else if (result.responsecode === "200") {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({...sendMessage,message:"",receiver: ""});
+        setSendMessage({...sendMessage,message:"",receiver: []});
+        // setSendMessage({...sendMessage,message:"",receiver: ""});
         
         addToast("Messge sent Successfully", {
           appearance: "success",
@@ -203,7 +210,8 @@ function Sendsms() {
       } else {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({ receiver: "", message: "" });
+        // setSendMessage({ receiver: "", message: "" });
+        setSendMessage({ receiver: [], message: "" });
         addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
@@ -212,9 +220,10 @@ function Sendsms() {
   };
 
   const phoneNumberHandler = () =>
-    selectedFlatRows.map((row) => {
+    selectedFlatRows.map(() => {
       let promises = selectedFlatRows.map((row) => row.original.phone);
       Promise.all(promises).then(function (results) {
+        console.log(results)
         setSendMessage({ ...sendMessage, receiver: results });
         console.log(sendMessage.recieverAddress);
       });
