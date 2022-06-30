@@ -139,7 +139,7 @@ function NewSchedule({
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
     // receiver: "",
-    receiver: [],
+    numbers: [],
     message: "",
     schedule_date: "",
     scheduleType: "Daily",
@@ -353,7 +353,7 @@ function NewSchedule({
   const phoneNumberHandler = () => {
     let promises = selectedFlatRows.map((row) => row.original.phone);
     Promise.all(promises).then(function (results) {
-      setScheduleMessageSms({ ...scheduleMessageSms, receiver: results });
+      setScheduleMessageSms({ ...scheduleMessageSms, numbers: results });
     });
     handleClose();
     return null;
@@ -393,7 +393,7 @@ function NewSchedule({
                   setScheduleMessageSms({
                     ...scheduleMessageSms,
                     // receiver: "",
-                    receiver: [],
+                    numbers: [],
                   });
                 }}
               >
@@ -445,7 +445,7 @@ function NewSchedule({
                 value={
                   messageType === "Email"
                     ? scheduleMessage.recieverAddress
-                    : scheduleMessageSms.receiver
+                    : scheduleMessageSms.numbers
                 }
               />
 

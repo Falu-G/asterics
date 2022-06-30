@@ -123,7 +123,8 @@ function Sendsms() {
 
   const [sendMessage, setSendMessage] = useState({
     message: "",
-    receiver: [],
+    // receiver: [],
+    numbers: [],
   });
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -165,8 +166,8 @@ function Sendsms() {
     setSendingMessage(true);
     console.log(sendMessage);
     console.log(token);
-
-    const newNumb = sendMessage.receiver.map((item) => {
+    console.log("Sending started")
+    const newNumb = sendMessage.numbers.map((item) => {
       if (item.charAt(0) === "0") {
         return "234" + item.substring(1);
       } else if (item.charAt(0) === "+") {
@@ -176,7 +177,17 @@ function Sendsms() {
       }
     });
 
-    console.log(newNumb)
+    // const newNumb = sendMessage.receiver.map((item) => {
+    //   if (item.charAt(0) === "0") {
+    //     return "234" + item.substring(1);
+    //   } else if (item.charAt(0) === "+") {
+    //     return item.slice(1);
+    //   } else {
+    //     return item;
+    //   }
+    // });
+
+    console.log("umbbbb"+newNumb)
     try {
       let result = await fetch(
         // "https://asteric.herokuapp.com/textifySms/send",
@@ -188,19 +199,23 @@ function Sendsms() {
             Accept: "application/json",
             Authorization: "Bearer " + token,
           },
-          body: JSON.stringify({ ...sendMessage, receiver: newNumb }),
+          // body: JSON.stringify({ ...sendMessage, receiver: newNumb }),
+          body: JSON.stringify({ ...sendMessage, numbers: newNumb }),
         }
       );
 
-      result = await result.json();
+      result = await result;
+      console.log(result);
       if (result.message === "Invalid Token") {
         setLoading(false);
         setInvalidToken(true);
         console.log(result.message);
+        console.log("Expired Token");
       } else if (result.responsecode === "200") {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({...sendMessage,message:"",receiver: []});
+        setSendMessage({...sendMessage,message:"", numbers: []});
+        // setSendMessage({...sendMessage,message:"",receiver: []});
         // setSendMessage({...sendMessage,message:"",receiver: ""});
         
         addToast("Messge sent Successfully", {
@@ -209,9 +224,11 @@ function Sendsms() {
         });
       } else {
         // setMessageReport(result.message);
+        console.log("Triggered here");
         setSendingMessage(false);
         // setSendMessage({ receiver: "", message: "" });
-        setSendMessage({ receiver: [], message: "" });
+        // setSendMessage({ receiver: [], message: "" });
+        setSendMessage({message:"", numbers: []});
         addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
@@ -224,7 +241,9 @@ function Sendsms() {
       let promises = selectedFlatRows.map((row) => row.original.phone);
       Promise.all(promises).then(function (results) {
         console.log(results)
-        setSendMessage({ ...sendMessage, receiver: results });
+        //setSendMessage({ ...sendMessage, receiver: results });
+
+        setSendMessage({ ...sendMessage, numbers: results });
         console.log(sendMessage.recieverAddress);
       });
 
@@ -277,11 +296,13 @@ function Sendsms() {
                         name="phone"
                         placeholder="Phone Number"
                         disabled
-                        value={sendMessage.receiver}
+                        // value={sendMessage.receiver}
+                        value={sendMessage.numbers}
                         onChange={(e) =>
                           setSendMessage({
                             ...sendMessage,
-                            receiver: e.target.value,
+                            // receiver: e.target.value,
+                            numbers: e.target.value,
                           })
                         }
                       />
