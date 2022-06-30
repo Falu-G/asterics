@@ -367,8 +367,8 @@ function Monthlyschedule() {
         },
       }),
       fetch(
-        // "https://asteric.herokuapp.com/vonageSms/"
-        "https://asteric.herokuapp.com/bbnSms/schedule",
+        "https://asteric.herokuapp.com/vonageSms/",
+        // "https://asteric.herokuapp.com/bbnSms/schedule",
          {
         method: "GET",
         headers: {

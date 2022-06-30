@@ -138,8 +138,8 @@ function NewSchedule({
   });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
-    sender: "Asterics",
-    receiver: "",
+    // receiver: "",
+    receiver: [],
     message: "",
     schedule_date: "",
     scheduleType: "Daily",
@@ -286,7 +286,8 @@ function NewSchedule({
             scheduleMessageSms.schedule_date
         );
         let result = await fetch(
-          "https://asteric.herokuapp.com/vonageSms/schedule",
+          // "https://asteric.herokuapp.com/vonageSms/schedule",
+          "https://asteric.herokuapp.com/bbnSms/schedule",
           {
             method: "POST",
             headers: {
@@ -391,7 +392,8 @@ function NewSchedule({
                   setMessageType("SMS");
                   setScheduleMessageSms({
                     ...scheduleMessageSms,
-                    receiver: "",
+                    // receiver: "",
+                    receiver: [],
                   });
                 }}
               >
