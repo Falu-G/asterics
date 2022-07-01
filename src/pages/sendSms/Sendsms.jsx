@@ -123,8 +123,8 @@ function Sendsms() {
 
   const [sendMessage, setSendMessage] = useState({
     message: "",
-    // receiver: [],
-    numbers: [],
+    receiver: [],
+    // numbers: [],
   });
 
   const loggedInUser = localStorage.getItem("user-info");
@@ -167,7 +167,7 @@ function Sendsms() {
     console.log(sendMessage);
     console.log(token);
     console.log("Sending started")
-    const newNumb = sendMessage.numbers.map((item) => {
+    const newNumb = sendMessage.receiver.map((item) => {
       if (item.charAt(0) === "0") {
         return "234" + item.substring(1);
       } else if (item.charAt(0) === "+") {
@@ -199,8 +199,8 @@ function Sendsms() {
             Accept: "application/json",
             Authorization: "Bearer " + token,
           },
-          // body: JSON.stringify({ ...sendMessage, receiver: newNumb }),
-          body: JSON.stringify({ ...sendMessage, numbers: newNumb }),
+          body: JSON.stringify({ ...sendMessage, receiver: newNumb }),
+          // body: JSON.stringify({ ...sendMessage, numbers: newNumb }),
         }
       );
 
@@ -208,14 +208,13 @@ function Sendsms() {
       console.log(result);
       if (result.message === "Invalid Token") {
         setLoading(false);
-        setInvalidToken(true);
-        console.log(result.message);
+        setInvalidToken(true);        console.log(result.message);
         console.log("Expired Token");
-      } else if (result.responsecode === "200") {
+      } else if (result.status === 200) {
         // setMessageReport(result.message);
         setSendingMessage(false);
-        setSendMessage({...sendMessage,message:"", numbers: []});
-        // setSendMessage({...sendMessage,message:"",receiver: []});
+        // setSendMessage({...sendMessage,message:"", numbers: []});
+        setSendMessage({...sendMessage,message:"",receiver: []});
         // setSendMessage({...sendMessage,message:"",receiver: ""});
         
         addToast("Messge sent Successfully", {
@@ -227,8 +226,8 @@ function Sendsms() {
         console.log("Triggered here");
         setSendingMessage(false);
         // setSendMessage({ receiver: "", message: "" });
-        // setSendMessage({ receiver: [], message: "" });
-        setSendMessage({message:"", numbers: []});
+        setSendMessage({ receiver: [], message: "" });
+        // setSendMessage({message:"", numbers: []});
         addToast(result.message, { appearance: "error", autoDismiss: true });
       }
     } catch (err) {
@@ -241,9 +240,9 @@ function Sendsms() {
       let promises = selectedFlatRows.map((row) => row.original.phone);
       Promise.all(promises).then(function (results) {
         console.log(results)
-        //setSendMessage({ ...sendMessage, receiver: results });
+        setSendMessage({ ...sendMessage, receiver: results });
 
-        setSendMessage({ ...sendMessage, numbers: results });
+        // setSendMessage({ ...sendMessage, numbers: results });
         console.log(sendMessage.recieverAddress);
       });
 
@@ -296,13 +295,13 @@ function Sendsms() {
                         name="phone"
                         placeholder="Phone Number"
                         disabled
-                        // value={sendMessage.receiver}
-                        value={sendMessage.numbers}
+                        value={sendMessage.receiver}
+                        // value={sendMessage.numbers}
                         onChange={(e) =>
                           setSendMessage({
                             ...sendMessage,
-                            // receiver: e.target.value,
-                            numbers: e.target.value,
+                            receiver: e.target.value,
+                            // numbers: e.target.value,
                           })
                         }
                       />

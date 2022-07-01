@@ -138,7 +138,7 @@ function NewSchedule({
   });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
-    // receiver: "",
+    // receiver: [],
     numbers: [],
     message: "",
     schedule_date: "",
@@ -300,7 +300,7 @@ function NewSchedule({
         );
 
         result = await result.json();
-        if (result.responsecode === 200) {
+        if (result.responsecode === "200") {
           console.log("finaly in 200" + result.message);
           setSendingMessage(false);
           addToast(result.message, { appearance: "success" });
@@ -354,6 +354,7 @@ function NewSchedule({
     let promises = selectedFlatRows.map((row) => row.original.phone);
     Promise.all(promises).then(function (results) {
       setScheduleMessageSms({ ...scheduleMessageSms, numbers: results });
+      // setScheduleMessageSms({ ...scheduleMessageSms, receiver: results });
     });
     handleClose();
     return null;
@@ -392,7 +393,7 @@ function NewSchedule({
                   setMessageType("SMS");
                   setScheduleMessageSms({
                     ...scheduleMessageSms,
-                    // receiver: "",
+                    // receiver: [],
                     numbers: [],
                   });
                 }}
