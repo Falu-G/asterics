@@ -26,6 +26,7 @@ import {MenuContext} from './components/MenuContext';
 import Report from './pages/Report/Report';
 import LatestHome from "./pages/LatestHome/LatestHome";
 import LaSignUp from "./pages/LaSignUp/LaSignUp";
+import AutoSender from "./pages/AutoSender/AutoSender";
 
 function App() {
   const [sidebar, setSideBar] = useState(true);
@@ -52,6 +53,7 @@ function App() {
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />
           <Route path = "/subscription" component = {Subscription} />
+          <Route path = "/automaticsend" component = {AutoSender} />
           <Route path = "/report" component = {Report} />
           
 

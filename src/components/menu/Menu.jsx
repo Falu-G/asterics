@@ -67,7 +67,7 @@ const MenusList = [
   // },
 
   {
-    to: "sett",
+    to: "subscription",
     icon: "Settings",
     name: "Settings",
   },
