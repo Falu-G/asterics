@@ -60,7 +60,7 @@ function AutoSender(
     []
   );
 
-  //let schedule = new ScheduleEmail();
+
   const [allCustomers, setAllCustomers] = useState(data);
   const columns = React.useMemo(
     () => [
@@ -76,46 +76,7 @@ function AutoSender(
     []
   );
 
-  const tableInstance = useTable(
-    { columns, data: allCustomers },
-    usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => {
-        return [
-          {
-            id: "name",
-            Header: ({ getToggleAllRowsSelectedProps }) => (
-              <Checkbox {...getToggleAllRowsSelectedProps()} />
-            ),
 
-            Cell: ({ row }) => {
-              return <Checkbox {...row.getToggleRowSelectedProps()} />;
-            },
-          },
-          ...columns,
-        ];
-      });
-    }
-  );
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    state,
-    pageOptions,
-    selectedFlatRows,
-  } = tableInstance;
-
-  const page = rows.slice(0, 10);
-  const { pageIndex } = state;
   const [messageType, setMessageType] = useState("SMS");
   const [scheduleMessage, setScheduleMessage] = useState({
     recieverAddress: "",
@@ -145,20 +106,9 @@ function AutoSender(
 
   const [birthdayUser, setBirthdayUser] = useState({
     message: "Hello welcome to asteric CRM, just doing a test",
-    receivers: [{}],
+    receivers: [],
     schedule: "Birthday",
   });
-
-  //   const [value, setValue] = React.useState(new Date());
-
-  //   const handleChange = (newValue) => {
-  //     setValue(newValue);
-  //     if (messageType === "SMS") {
-  //       setScheduleMessageSms({ ...scheduleMessageSms, schedule_date: value });
-  //     } else {
-  //       setScheduleMessage({ ...scheduleMessage, schedule_date: value });
-  //     }
-  //   };
 
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
@@ -308,35 +258,7 @@ function AutoSender(
     }
   };
 
-  //   const handleSelectCustomers = async () => {
-  //     handleOpen();
-  //     setLoading(true);
-  //     try {
-  //       let result = await fetch("https://asteric.herokuapp.com/customer", {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //           Authorization: "Bearer " + token,
-  //         },
-  //       });
-  //       result = await result.json();
-
-  //       if (result.message === "Invalid Token") {
-  //         setLoading(false);
-  //         setInvalidToken(true);
-  //         console.log(result.message);
-  //       } else {
-  //         setAllCustomers(result);
-  //         setLoading(false);
-  //         console.log("Numbers of customers " + allCustomers.length);
-  //       }
-  //     } catch (e) {
-  //       setLoading(false);
-  //       console.log("Error In catch " + e.message);
-  //     }
-  //   };
-
+ 
   //   const phoneNumberHandler = () => {
   //     let promises = selectedFlatRows.map((row) => row.original.phone);
   //     Promise.all(promises).then(function (results) {
@@ -348,35 +270,42 @@ function AutoSender(
   //   };
 
   const userSelected = (option) => {
-
-
-
-
-
-
-    setSelected(`${option.firstname} ${option.lastname}`);
-    let promises = selectedFlatRows.map((row) => row.original);
-    Promise.all(promises).then(function (results) {
-      //   setScheduleMessageSms({ ...scheduleMessageSms, numbers: results });
-      setUserInfo({
-        email: results.email,
-        phone: results.phone,
-        firstname: results.firstname,
-        lastname: results.lastname,
-        birthday: results.birthday,
-        anniversary: results.anniversary,
+  
+        setUserInfo({
+        email: option.email,
+        phone: option.phone,
+        firstname: option.firstname,
+        lastname: option.lastname,
+        birthday: option.birthday,
+        anniversary: option.anniversary,
       });
 
-      setBirthdayUser({
+          setBirthdayUser({
         ...birthdayUser,
         receivers: [userInfo],
       });
 
-      console.log("User is selected");
-      console.log(birthdayUser);
-      console.log(birthdayUser.receivers[0]);
-      // setScheduleMessageSms({ ...scheduleMessageSms, receiver: results });
-    });
+      
+
+     
+    // Promise.all(option).then(function (option) {
+    //   setUserInfo({
+    //     email: option.email,
+    //     phone: option.phone,
+    //     firstname: option.firstname,
+    //     lastname: option.lastname,
+    //     birthday: option.birthday,
+    //     anniversary: option.anniversary,
+    //   });
+  
+    //   setBirthdayUser({
+    //     ...birthdayUser,
+    //     receivers: [userInfo],
+    //   });
+    // })
+
+   
+
     handleClose();
     return null;
   };
@@ -409,7 +338,7 @@ function AutoSender(
 
   useEffect(() => {
     fetchCustomer();
-  }, [fetchCustomer]);
+  }, [fetchCustomer,birthdayUser]);
 
   return (
     <div className="ns-Container">
@@ -473,37 +402,54 @@ function AutoSender(
             <form className="ns-Scheduler-input">
               <div className="ns-Scheduler-house">
                 <div>
-                  <DropdownUsers
-                    options={allCustomers}
-                    selected={selected}
-                    setSelected={setSelected}
-                    isActive={isActive}
-                    setIsActive={setIsActive}
-                  />
-                  {/* <input
-                    type={messageType === "SMS" ? "text" : "email"}
-                    name={messageType === "SMS" ? "sms" : "email"}
-                    placeholder={
-                      messageType === "SMS" ? "PhoneNumber" : "Enter Email"
-                    }
-                    style={{
-                      width: "866px",
-                    }}
-                    value={
-                      messageType === "Email"
-                        ? scheduleMessage.recieverAddress
-                        : scheduleMessageSms.numbers
-                    }
-                  />
+               
 
-                  <img
-                    style={{
-                      cursor: `pointer`,
-                    }}
-                    // onClick={handleSelectCustomers}
-                    src="/images/contact.png"
-                    alt="contact"
-                  /> */}
+
+
+<div className="dropdownx">
+      <div className="dropdownx-btn" onClick={() => setIsActive(!isActive)}>
+        {selected}
+        <span className="fas fa-caret-down"></span>
+      </div>
+      {isActive && (
+        <div className="dropdownx-content">
+          {allCustomers.map((customer, index) => (
+            <div
+              key={index}
+              className="dropdownx-item"
+              onClick={() => {
+                setSelected(`${customer.firstname} ${customer.lastname}`);
+                setIsActive(false);
+                userSelected(customer);
+              }}
+            >
+              {`${customer.firstname} ${customer.lastname}`}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
                 {messageType === "Email" ? (
                   <input
@@ -694,8 +640,10 @@ function AutoSender(
               //       </Box>
               //     </Fade>
               //   </Modal>
-
-              <div>SMS</div>
+              
+              <div>
+                {console.log(birthdayUser)}
+                SMS</div>
             ) : (
               <>
                 {/* <ShowUpEmail
