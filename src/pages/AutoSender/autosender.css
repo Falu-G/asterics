@@ -1,0 +1,95 @@
+.ns-Container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  .ns-Scheduler {
+    width: 932px;
+    margin: 0 auto;
+    display: flex;
+    margin-top:10px;
+    justify-content: space-between;
+    flex-direction: row;
+  
+    
+  }
+  
+  .ns-Scheduler-input {
+    margin-top: 20px;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .ns-Scheduler-house {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .ns-Scheduler-house img{
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  }
+  .ns-Scheduler-house textarea {
+    width: 100%;
+    height: 100px;
+  }
+  .ns-Scheduler-house input {
+    width: 936px !important;
+    height: 46px;
+    margin-top: 10px;
+    padding-left: 10px;
+    outline: none;
+    background: #f1f1f1;
+    border: 1px solid #cacaca;
+    box-sizing: border-box;
+  }
+  
+  .ns-scheduler-submit {
+    border-radius: 5px;
+    margin-top: 10px;
+    float: right;
+    background: #a9aeb1;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    padding: 10px;
+  }
+  
+  .ns-Scheduler-container{
+      justify-content: space-between;
+      align-items: center;
+      display: flex;
+     
+      
+  }
+  
+  .ns-messagetab {
+    justify-content: center;
+    width: 150px;
+    margin-left: 10px;
+    align-items: center;
+    display: flex;
+  }
+  
+  .ns-messagetab button {
+      padding:0 10px;
+      border: none;
+      border-radius: 5px;
+  }
+  
+  .ns-active{
+      background: #18A0FB;
+      color: #fff;
+  }
+  
+  .ql-editor{
+    height: 200px !important;
+  }
+  

@@ -1,0 +1,43 @@
+.dropdownx{
+    width:400px;
+    user-select: none;
+    position: relative;
+}
+
+.dropdownx .dropdownx-btn{
+    padding: 10px;
+    background: #fcfcfc;
+    font-weight: bold;
+    box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.05);
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdownx .dropdownx-content{
+    position: absolute;
+    top: 110%;
+    padding : 15px;
+    height: 150px;
+    background: #fff;
+    overflow-y: scroll;
+    font-weight: bold;
+    box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.05);
+    color: #333;
+    width: 400px;
+    z-index: 10;
+
+}
+
+.dropdownx .dropdownx-content .dropdownx-item{
+    padding:10px;
+    cursor:pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdownx .dropdownx-content .dropdownx-item:hover{
+    background: #f1f1f1;
+}
+
+

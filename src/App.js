@@ -53,7 +53,7 @@ function App() {
           <Route path = "/passwordsent" component = {Passwordsent} />
           <Route path = "/sessionexpired" component = {SessionExpired} />
           <Route path = "/subscription" component = {Subscription} />
-          <Route path = "/automaticsend" component = {AutoSender} />
+          <Route path = "/automaticsend" component = {()=> <ToastProvider autoDismissTimeout = {3000} autoDismiss = {true}> <AutoSender/> </ToastProvider>} />
           <Route path = "/report" component = {Report} />
           
 
