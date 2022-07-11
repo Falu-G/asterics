@@ -54,6 +54,12 @@ const MenusList = [
     name: "Templates",
   },
 
+  {
+    to: "automaticsend",
+    icon: "Message",
+    name: "Birthday or Anniversary",
+  },
+
   // {
   //   to: "subscription",
   //   icon: "Subscriptions",
