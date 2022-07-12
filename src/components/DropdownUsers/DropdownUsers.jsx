@@ -1,10 +1,11 @@
-import React, { useState } from "react";
 import "./dropdownuser.css";
+
 function DropdownUsers({ options, setIsActive,isActive,selected,setSelected}) {
   
-  // const options = ["Rue","Vue","Javascript"]
   return (
-    <div className="dropdownx">
+    <div className="dropdownx" style = {{
+      width: "250px",
+    }}>
       <div className="dropdownx-btn" onClick={() => setIsActive(!isActive)}>
         {selected}
         <span className="fas fa-caret-down"></span>
@@ -16,11 +17,11 @@ function DropdownUsers({ options, setIsActive,isActive,selected,setSelected}) {
               key={index}
               className="dropdownx-item"
               onClick={() => {
-                setSelected(`${option.firstname} ${option.lastname}`);
+                setSelected(option);
                 setIsActive(false);
               }}
             >
-              {`${option.firstname} ${option.lastname}`}
+              {`${option}`}
             </div>
           ))}
         </div>

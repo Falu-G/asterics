@@ -582,7 +582,7 @@ function Monthlyschedule() {
                       </div>
                     </div>
                     <div style={{ marginTop: 25 }}>
-                      <h3>MessagesQueue</h3>
+                      <h3>SMS Queue</h3>
                       <div className="messagesQueueTable">
                         <div style={{ height: 400, width: "70%" }}>
                           <DataGrid

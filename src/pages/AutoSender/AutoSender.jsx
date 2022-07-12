@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 import "./autosender.css";
 import { useToasts } from "react-toast-notifications";
 import * as ReactBootStrap from "react-bootstrap";
@@ -11,16 +11,14 @@ import { useTable, usePagination, useRowSelect } from "react-table";
 import Button from "@mui/material/Button";
 import { Checkbox } from "../../components/Checkbox";
 import Skeleton from "@mui/material/Skeleton";
-import ShowUpEmail from "../../pages/ShowUpEmail/ShowUpEmail";
+import ShowUpEmailAutomaticSender from "../../pages/ShowUpEmail/ShowUpEmailAutomaticSender";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import CssBaseline from "@mui/material/CssBaseline";
+
 import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import DropdownUsers from "../../components/DropdownUsers/DropdownUsers";
 import Menus from "../../components/menu/Menu";
 import { MenuContext } from "../../components/MenuContext";
 import NavigationComponent from "../../components/navigationComponent/NavigationComponent";
+
 const style = {
   position: "absolute",
   width: 700,
@@ -130,23 +128,37 @@ function AutoSender(
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
   const [messageType, setMessageType] = useState("SMS");
-  const [scheduleMessage, setScheduleMessage] = useState({
-    recieverAddress: "",
-    messageBody: "",
-    messageSubject: "",
-    schedule_date: "",
-    scheduleType: "Daily",
-  });
+  // const [scheduleMessage, setScheduleMessage] = useState({
+  //   recieverAddress: "",
+  //   messageBody: "",
+  //   messageSubject: "",
+  //   schedule_date: "",
+  //   scheduleType: "Daily",
+  // });
 
+  const [scheduleMessage, setScheduleMessage] = useState({
+    messageBody: "Good night",
+    messageSubject: "Testing now",
+    receivers: [
+      {
+        email: "sfalugba@gmail.com",
+        phone: "2348107530562",
+        firstname: "Segun",
+        lastname: "David",
+        birthday: "15,May",
+        anniversary: "19, May",
+      },
+    ],
+    schedule: "Birthday",
+  });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
     message: "",
     receivers: [],
     schedule: "Birthday",
-  })
+  });
 
-
-  const [value, setValue] = React.useState(new Date());
+  const [value,] = React.useState(new Date());
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -159,7 +171,7 @@ function AutoSender(
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [html, setHtml] = useState("");
+  const [html, setHtml] = useState(scheduleMessage.messageBody);
   const fetchBusiness = async () => {
     spinnerDisplay(true);
     Promise.all([
@@ -237,12 +249,10 @@ function AutoSender(
               Accept: "application/json",
               Authorization: "Bearer " + token,
             },
+
             body: JSON.stringify({
-              recieverAddress: scheduleMessage.recieverAddress,
+              ...scheduleMessage,
               messageBody: html,
-              messageSubject: scheduleMessage.messageSubject,
-              schedule_date: scheduleMessage.schedule_date,
-              scheduleType: "Daily",
             }),
           }
         );
@@ -251,6 +261,7 @@ function AutoSender(
         if (result.status === 200) {
           console.log(result.message);
           setSendingMessage(false);
+          setHtml("");
           addToast("Saved Successfully", { appearance: "success" });
           setOpenModal(false);
           fetchBusiness();
@@ -267,11 +278,9 @@ function AutoSender(
       }
     } else {
       try {
-        console.log(scheduleMessageSms.messageBody)
+        console.log(scheduleMessageSms.messageBody);
 
-      
         let result = await fetch(
-          // "https://asteric.herokuapp.com/vonageSms/schedule",
           "https://asteric.herokuapp.com/bbnSms/autosSheduleSms",
           {
             method: "POST",
@@ -286,9 +295,8 @@ function AutoSender(
 
         result = await result.json();
         if (result.responsecode === "200") {
-          console.log("finaly in 200" + result.message);
           setSendingMessage(false);
-          setScheduleMessageSms({...scheduleMessageSms,message:""})
+          setScheduleMessageSms({ ...scheduleMessageSms, message: "" });
           addToast(result.message, { appearance: "success" });
           setOpenModal(false);
           fetchBusiness();
@@ -336,9 +344,9 @@ function AutoSender(
     }
   };
 
-  const phoneNumberHandler = () => {
+  const selectCustomersForSms = () => {
     let promises = selectedFlatRows.map((row) => row.original);
-    
+
     Promise.all(promises).then(function (results) {
       const newArr = results.map(({ createdDate, _id, ...rest }) => {
         return rest;
@@ -354,6 +362,22 @@ function AutoSender(
     return null;
   };
 
+  const [isActive, setIsActive] = useState(false);
+  const [selected,setSelected] = useState("Select Celebration type")
+  const options = [
+    "Birthday", "Anniversary"
+  ]
+
+const celebrationTypeHandler = (option)=>{
+  setSelected(option);
+  
+  if(messageType === "SMS"){
+    setScheduleMessageSms({...scheduleMessageSms, schedule:option })
+  }else{
+    setScheduleMessage({ ...scheduleMessage, schedule:option })
+  }
+  setIsActive(false);
+}
   return (
     <div className="maindashboardContainer">
       <div
@@ -394,7 +418,6 @@ function AutoSender(
                     setScheduleMessageSms({
                       ...scheduleMessageSms,
                       receiver: [],
-                      
                     });
                   }}
                 >
@@ -415,13 +438,44 @@ function AutoSender(
                 </button>
               </div>
             </div>
-            <div></div>
+            {/* <DropdownUsers
+              options={["Birthday", "Anniversary"]}
+              setIsActive={setIsActive}
+              isActive={isActive}
+              selected={selected}
+              setSelected = {setSelected}
+            /> */}
+
+
+
+
+
+<div className="dropdownx" style = {{
+      width: "250px",
+    }}>
+      <div className="dropdownx-btn" onClick={() => setIsActive(!isActive)}>
+        {selected}
+        <span className="fas fa-caret-down"></span>
+      </div>
+      {isActive && (
+        <div className="dropdownx-content">
+          {options.map((option, index) => (
+            <div
+              key={index}
+              className="dropdownx-item"
+              onClick={()=>celebrationTypeHandler(option)}
+            >
+              {`${option}`}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
           </div>
 
           <form className="ns-Scheduler-input">
             <div className="ns-Scheduler-house">
               <div>
-                
                 <input
                   type={messageType === "SMS" ? "text" : "email"}
                   name={messageType === "SMS" ? "sms" : "email"}
@@ -466,6 +520,7 @@ function AutoSender(
               ) : null}
             </div>
 
+            {console.log(scheduleMessage.messageSubject)}
             {messageType === "Email" ? (
               <ReactQuillEditorClass
                 //sendData = {}
@@ -624,7 +679,7 @@ function AutoSender(
                         >
                           <Button
                             variant="contained"
-                            onClick={phoneNumberHandler}
+                            onClick={selectCustomersForSms}
                           >
                             CONFIRM SELECTION
                           </Button>
@@ -637,7 +692,7 @@ function AutoSender(
             </Modal>
           ) : (
             <>
-              <ShowUpEmail
+              <ShowUpEmailAutomaticSender
                 allCustomers={allCustomers}
                 handleClose={handleClose}
                 loading={loading}
