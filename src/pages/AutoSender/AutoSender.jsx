@@ -127,13 +127,7 @@ function AutoSender(
   const page = rows.slice(0, 10);
   const { pageIndex } = state;
   const [messageType, setMessageType] = useState("SMS");
-  // const [scheduleMessage, setScheduleMessage] = useState({
-  //   recieverAddress: "",
-  //   messageBody: "",
-  //   messageSubject: "",
-  //   schedule_date: "",
-  //   scheduleType: "Daily",
-  // });
+ 
 
   const [scheduleMessage, setScheduleMessage] = useState({
     messageBody: "Good night",
