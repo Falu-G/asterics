@@ -57,7 +57,7 @@ const MenusList = [
   {
     to: "automaticsend",
     icon: "Message",
-    name: "Birthday or Anniversary",
+    name: "AutoScheduler",
   },
 
   // {

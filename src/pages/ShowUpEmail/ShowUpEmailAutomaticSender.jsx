@@ -23,96 +23,104 @@ const style = {
 };
 
 function ShowUpEmailAutomaticSender({
-    allCustomers,
-    handleClose,
-    loading,
-    open,
-    scheduleMessage,
-    setScheduleMessage,
-    invalidToken
-}
- 
-) {
-    const columns = React.useMemo(
-        () => [
+  allCustomers,
+  handleClose,
+  loading,
+  open,
+  scheduleMessage,
+  setScheduleMessage,
+  invalidToken,
+  valueEmail,
+  setValueEmail,
+}) {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Full Name",
+        accessor: "firstname",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+    ],
+    []
+  );
+
+
+const tableInstance = useTable(
+    { columns, data: allCustomers },
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => {
+        return [
           {
-            Header: "Full Name",
-            accessor: "firstname",
+            id: "name",
+            Header: ({ getToggleAllRowsSelectedProps }) => (
+              <Checkbox {...getToggleAllRowsSelectedProps()} />
+            ),
+
+            Cell: ({ row }) => {
+              return <Checkbox {...row.getToggleRowSelectedProps()} />;
+            },
           },
-          {
-            Header: "Email",
-            accessor: "email",
-          },
-        ],
-        []
-      );
-    
-      const tableInstance = useTable(
-        { columns, data: allCustomers },
-        usePagination,
-        useRowSelect,
-        (hooks) => {
-          hooks.visibleColumns.push((columns) => {
-            return [
-              {
-                id: "name",
-                Header: ({ getToggleAllRowsSelectedProps }) => (
-                  <Checkbox {...getToggleAllRowsSelectedProps()} />
-                ),
-    
-                Cell: ({ row }) => {
-                  return <Checkbox {...row.getToggleRowSelectedProps()} />;
-                },
-              },
-              ...columns,
-            ];
-          });
-        }
-      );
-    
-      const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-        nextPage,
-        previousPage,
-        canNextPage,
-        canPreviousPage,
-        state,
-        pageOptions,
-        selectedFlatRows,
-      } = tableInstance;
-    
-      const page = rows.slice(0, 10);
-      const { pageIndex } = state;
-    
-      const confirmSelection = () => {
-        let promises = selectedFlatRows.map((row) => row.original);
-        console.log("Clicking confirmation");
-        //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
-        Promise.all(promises).then(function (results) {
-            const newArr = results.map(({ createdDate, _id, ...rest }) => {
-              return rest;
-            });
-      
-            console.log(newArr);
-            console.log("The results");
-            console.log(results);
-            setScheduleMessage({ ...scheduleMessage, receivers: newArr });
-          });
-  
-        handleClose();
-    
+          ...columns,
+        ];
+      });
+    }
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    // rows,
+    page,
+    prepareRow,
+    nextPage,
+    previousPage,
+    canPreviousPage,
+    canNextPage,
+    state,
+    pageOptions,
+    selectedFlatRows,
+  } = tableInstance;
+
+  //const pagerow = rows.slice(0, 10);
+  const { pageIndex } = state;
+
+
+
+  const confirmSelection = () => {
+    let promises = selectedFlatRows.map((row) => row.original);
+    console.log("Clicking confirmation");
+    //set the phone number collected here immediately the numbers are confirmed close the modal page and render the numbers on the input screen
+    Promise.all(promises).then(function (results) {
+      const newArr = results.map(({ createdDate, _id, ...rest }) => {
+        return rest;
+      });
+      //This function sets the user gets the list of users selected
+      let newVals = [];
+      results.map((item) => {
+        newVals.push(item.email);
         return null;
-      };
+      });
+      setValueEmail(newVals);
+
+      console.log(results);
+      setScheduleMessage({ ...scheduleMessage, receivers: newArr });
+    });
+
+    handleClose();
+
+    return null;
+  };
   return (
     <>
       {invalidToken ? (
         <SessionExpired />
       ) : (
-       
         <div>
           <Modal
             aria-labelledby="transition-modal-title"
@@ -181,7 +189,7 @@ function ShowUpEmailAutomaticSender({
                         </tbody>
                       </table>
 
-                      <div
+                      {/* <div
                         style={{
                           marginTop: "10px",
                           width: "100%",
@@ -191,8 +199,8 @@ function ShowUpEmailAutomaticSender({
                         }}
                       >
                         <Button
-                           disabled={!canPreviousPage}
-                           onClick={() => previousPage()}
+                          disabled={!canPreviousPage}
+                          onClick={() => previousPage()}
                           variant="contained"
                         >
                           Previous page
@@ -205,13 +213,45 @@ function ShowUpEmailAutomaticSender({
                           </strong>
                         </span>
                         <Button
-                         disabled={!canNextPage}
-                         onClick={() => nextPage()}
+                          disabled={!canNextPage}
+                          onClick={() => nextPage()}
                           variant="contained"
                         >
                           Next Page
                         </Button>
-                      </div>
+                      </div> */}
+
+<div
+                                style={{
+                                  marginTop: "10px",
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <Button
+                                  disabled={!canPreviousPage}
+                                  onClick={() => previousPage()}
+                                  variant="contained"
+                                >
+                                  Previous page
+                                </Button>
+
+                                <span>
+                                  Page{" "}
+                                  <strong>
+                                   {pageIndex + 1} of {pageOptions.length}
+                                  </strong>
+                                </span>
+                                <Button
+                                  disabled={!canNextPage}
+                                  onClick={() => nextPage()}
+                                  variant="contained"
+                                >
+                                  Next Page
+                                </Button>
+                              </div>
 
                       <div
                         style={{

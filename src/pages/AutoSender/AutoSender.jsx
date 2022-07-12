@@ -37,12 +37,6 @@ function AutoSender(
   spinnerDisplay,
   setSmsQueue
 ) {
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, "0");
-  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = today.getFullYear();
-
-  today = `${yyyy}-${mm}-${dd}`;
   //console.log("This is todays date " + today);
 
   const isBlank = (str) => {
@@ -113,7 +107,8 @@ function AutoSender(
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    //rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -124,34 +119,25 @@ function AutoSender(
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  // const page = rows.slice(0, 10);
   const { pageIndex } = state;
   const [messageType, setMessageType] = useState("SMS");
- 
+  const [selected, setSelected] = useState("Select Celebration type");
 
   const [scheduleMessage, setScheduleMessage] = useState({
-    messageBody: "Good night",
-    messageSubject: "Testing now",
-    receivers: [
-      {
-        email: "sfalugba@gmail.com",
-        phone: "2348107530562",
-        firstname: "Segun",
-        lastname: "David",
-        birthday: "15,May",
-        anniversary: "19, May",
-      },
-    ],
-    schedule: "Birthday",
+    messageBody: "",
+    messageSubject: "",
+    receivers: [],
+    schedule: selected,
   });
 
   const [scheduleMessageSms, setScheduleMessageSms] = useState({
     message: "",
     receivers: [],
-    schedule: "Birthday",
+    schedule: selected,
   });
 
-  const [value,] = React.useState(new Date());
+  const [value] = React.useState(new Date());
   const loggedInUser = localStorage.getItem("user-info");
   const userObj = JSON.parse(loggedInUser);
   const token = userObj.message[0].token;
@@ -165,76 +151,41 @@ function AutoSender(
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [html, setHtml] = useState(scheduleMessage.messageBody);
-  const fetchBusiness = async () => {
-    spinnerDisplay(true);
-    Promise.all([
-      fetch("https://asteric.herokuapp.com/mails", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }),
-      fetch("https://asteric.herokuapp.com/vonageSms/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }),
-    ])
-      .then(([items, contactlist]) => {
-        return Promise.all([items.json(), contactlist.json()]);
-      })
-      .then(([data, contactlist]) => {
-        spinnerDisplay(false);
-        if (data.message === "Invalid Token") {
-          setTokenValid(true);
-          setLoading(false);
-        } else {
-          setEmailQueue(data.filter((item) => item.status === "scheduled"));
-          setSentEmailValue(data.filter((item) => item.status === "sent"));
-          setLoading(false);
-          setLoading(false);
-          setSmsQueue(contactlist);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        spinnerDisplay(false);
-      });
-  };
+
+
+  const [isActive, setIsActive] = useState(false);
+  
+  const options = ["Birthday", "Anniversary"];
+
+  const [valuesSMS, setValuesSMS] = useState([]);
+  const [valueEmail, setValueEmail] = useState([]);
+
 
   const handleScheduleMessage = async () => {
     setSendingMessage(true);
+    if(selected === "Select Celebration type"){
+      alert("Please select your celebration type")
+      setSendingMessage(false);
+
+      setOpenModal(false);
+      return
+    }
 
     if (messageType === "Email") {
       try {
         setScheduleMessage({ ...scheduleMessage, schedule_date: value });
-
-        console.log(
-          "This is the date selected in email " +
-            value +
-            " but the date is" +
-            scheduleMessage.schedule_date
-        );
 
         if (isBlank(html)) {
           alert("Please type the message you would like to schedule");
           setSendingMessage(false);
 
           setOpenModal(false);
-
           return;
         }
-        console.log(scheduleMessage);
 
         // if(schedule_date )
         let result = await fetch(
-          "https://asteric.herokuapp.com/mails/schedule",
+          "https://asteric.herokuapp.com/mails/autoScheduleEmail",
           {
             method: "POST",
             headers: {
@@ -251,19 +202,22 @@ function AutoSender(
         );
 
         result = await result.json();
-        if (result.status === 200) {
+
+        if (result.status === "success") {
           console.log(result.message);
           setSendingMessage(false);
+          setScheduleMessage({...scheduleMessage, messageSubject:"",messageBody:""})
           setHtml("");
           addToast("Saved Successfully", { appearance: "success" });
           setOpenModal(false);
-          fetchBusiness();
+          setValueEmail([])
+         
         } else {
           console.log(result.message);
           setSendingMessage(false);
-          addToast(result.message, { appearance: "success" });
+          addToast(result.message, { appearance: "error" });
           setOpenModal(false);
-          fetchBusiness();
+         
         }
       } catch (err) {
         setSendingMessage(false);
@@ -290,16 +244,17 @@ function AutoSender(
         if (result.responsecode === "200") {
           setSendingMessage(false);
           setScheduleMessageSms({ ...scheduleMessageSms, message: "" });
+          setValuesSMS([]);
           addToast(result.message, { appearance: "success" });
           setOpenModal(false);
-          fetchBusiness();
+          
         } else {
           console.log(result.message);
           console.log("finaly not in 200" + result.message);
           setSendingMessage(false);
           setOpenModal(false);
           addToast(result.message, { appearance: "success" });
-          fetchBusiness();
+          
         }
       } catch (err) {
         setSendingMessage(false);
@@ -337,6 +292,8 @@ function AutoSender(
     }
   };
 
+
+
   const selectCustomersForSms = () => {
     let promises = selectedFlatRows.map((row) => row.original);
 
@@ -344,6 +301,14 @@ function AutoSender(
       const newArr = results.map(({ createdDate, _id, ...rest }) => {
         return rest;
       });
+
+      //This function sets the user gets the list of users selected
+      let newVals = [];
+      results.map((item) => {
+        newVals.push(item.firstname + " " + item.lastname);
+        return null;
+      });
+      setValuesSMS(newVals);
 
       console.log(newArr);
 
@@ -355,22 +320,20 @@ function AutoSender(
     return null;
   };
 
-  const [isActive, setIsActive] = useState(false);
-  const [selected,setSelected] = useState("Select Celebration type")
-  const options = [
-    "Birthday", "Anniversary"
-  ]
 
-const celebrationTypeHandler = (option)=>{
-  setSelected(option);
-  
-  if(messageType === "SMS"){
-    setScheduleMessageSms({...scheduleMessageSms, schedule:option })
-  }else{
-    setScheduleMessage({ ...scheduleMessage, schedule:option })
-  }
-  setIsActive(false);
-}
+
+  const celebrationTypeHandler = (option) => {
+    setSelected(option);
+
+    if (messageType === "SMS") {
+      setScheduleMessageSms({ ...scheduleMessageSms, schedule: option });
+    } else {
+      setScheduleMessage({ ...scheduleMessage, schedule: option });
+    }
+    setIsActive(false);
+  };
+
+
   return (
     <div className="maindashboardContainer">
       <div
@@ -393,7 +356,7 @@ const celebrationTypeHandler = (option)=>{
         {/* The design for the screen to send the message starts from here */}
         <div
           style={{
-            height: `100%`,
+            height: `90vh`,
             alignItems: `center`,
             display: `flex`,
             justifyContent: `center`,
@@ -423,7 +386,7 @@ const celebrationTypeHandler = (option)=>{
                     setMessageType("Email");
                     setScheduleMessage({
                       ...scheduleMessage,
-                      recieverAddress: "",
+                      receiver: [],
                     });
                   }}
                 >
@@ -431,39 +394,34 @@ const celebrationTypeHandler = (option)=>{
                 </button>
               </div>
             </div>
-            {/* <DropdownUsers
-              options={["Birthday", "Anniversary"]}
-              setIsActive={setIsActive}
-              isActive={isActive}
-              selected={selected}
-              setSelected = {setSelected}
-            /> */}
 
-
-
-
-
-<div className="dropdownx" style = {{
-      width: "250px",
-    }}>
-      <div className="dropdownx-btn" onClick={() => setIsActive(!isActive)}>
-        {selected}
-        <span className="fas fa-caret-down"></span>
-      </div>
-      {isActive && (
-        <div className="dropdownx-content">
-          {options.map((option, index) => (
             <div
-              key={index}
-              className="dropdownx-item"
-              onClick={()=>celebrationTypeHandler(option)}
+              className="dropdownx"
+              style={{
+                width: "250px",
+              }}
             >
-              {`${option}`}
+              <div
+                className="dropdownx-btn"
+                onClick={() => setIsActive(!isActive)}
+              >
+                {selected}
+                <span className="fas fa-caret-down"></span>
+              </div>
+              {isActive && (
+                <div className="dropdownx-content">
+                  {options.map((option, index) => (
+                    <div
+                      key={index}
+                      className="dropdownx-item"
+                      onClick={() => celebrationTypeHandler(option)}
+                    >
+                      {`${option}`}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
-    </div>
           </div>
 
           <form className="ns-Scheduler-input">
@@ -480,8 +438,8 @@ const celebrationTypeHandler = (option)=>{
                   }}
                   value={
                     messageType === "Email"
-                      ? scheduleMessage.recieverAddress
-                      : scheduleMessageSms.receivers
+                      ? valueEmail
+                      : valuesSMS
                   }
                 />
 
@@ -494,7 +452,7 @@ const celebrationTypeHandler = (option)=>{
                   alt="contact"
                 />
               </div>
-              {messageType === "Email" ? (
+              {messageType === "Email" && (
                 <input
                   type="text"
                   name="title"
@@ -510,10 +468,10 @@ const celebrationTypeHandler = (option)=>{
                   }
                   value={scheduleMessage.messageSubject}
                 />
-              ) : null}
+              )}
             </div>
 
-            {console.log(scheduleMessage.messageSubject)}
+           
             {messageType === "Email" ? (
               <ReactQuillEditorClass
                 //sendData = {}
@@ -639,8 +597,8 @@ const celebrationTypeHandler = (option)=>{
                           }}
                         >
                           <Button
-                             disabled={!canPreviousPage}
-                             onClick={() => previousPage()}
+                            disabled={!canPreviousPage}
+                            onClick={() => previousPage()}
                             variant="contained"
                           >
                             Previous page
@@ -653,10 +611,8 @@ const celebrationTypeHandler = (option)=>{
                             </strong>
                           </span>
                           <Button
-                           
                             disabled={!canNextPage}
                             onClick={() => nextPage()}
-
                             variant="contained"
                           >
                             Next Page
@@ -695,6 +651,8 @@ const celebrationTypeHandler = (option)=>{
                 scheduleMessage={scheduleMessage}
                 setScheduleMessage={setScheduleMessage}
                 invalidToken={invalidToken}
+                valueEmail = {valueEmail}
+                setValueEmail={setValueEmail}
               />
             </>
           )}

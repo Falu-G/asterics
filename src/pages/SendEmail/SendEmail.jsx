@@ -117,6 +117,9 @@ function SendEmail() {
 
   console.log("page is "+page.length)
   console.log(nextPage)
+
+
+  
   const handleSelectCustomers = async () => {
     handleOpen();
     setLoading(true);

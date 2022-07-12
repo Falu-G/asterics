@@ -115,7 +115,7 @@ function NewSchedule({
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -126,7 +126,7 @@ function NewSchedule({
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  // const page = rows.slice(0, 10);
   const { pageIndex } = state;
   const [messageType, setMessageType] = useState("SMS");
   const [scheduleMessage, setScheduleMessage] = useState({
@@ -599,36 +599,36 @@ function NewSchedule({
                       </table>
 
                       <div
-                        style={{
-                          marginTop: "10px",
-                          width: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Button
-                          disabled={!canNextPage}
-                          onClick={() => previousPage()}
-                          variant="contained"
+                          style={{
+                            marginTop: "10px",
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
                         >
-                          Previous page
-                        </Button>
+                          <Button
+                            disabled={!canPreviousPage}
+                            onClick={() => previousPage()}
+                            variant="contained"
+                          >
+                            Previous page
+                          </Button>
 
-                        <span>
-                          Page{" "}
-                          <strong>
-                            {pageIndex + 1} of {pageOptions.length}
-                          </strong>
-                        </span>
-                        <Button
-                          disabled={!canPreviousPage}
-                          onClick={() => nextPage()}
-                          variant="contained"
-                        >
-                          Next Page
-                        </Button>
-                      </div>
+                          <span>
+                            Page{" "}
+                            <strong>
+                              {pageIndex + 1} of {pageOptions.length}
+                            </strong>
+                          </span>
+                          <Button
+                            disabled={!canNextPage}
+                            onClick={() => nextPage()}
+                            variant="contained"
+                          >
+                            Next Page
+                          </Button>
+                        </div>
 
                       <div
                         style={{

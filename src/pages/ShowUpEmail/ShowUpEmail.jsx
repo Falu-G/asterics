@@ -72,7 +72,7 @@ function ShowUpEmail({
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
     nextPage,
     previousPage,
@@ -83,7 +83,7 @@ function ShowUpEmail({
     selectedFlatRows,
   } = tableInstance;
 
-  const page = rows.slice(0, 10);
+  // const page = rows.slice(0, 10);
   const { pageIndex } = state;
 
   const confirmSelection = () => {
