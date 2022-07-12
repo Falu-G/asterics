@@ -432,8 +432,8 @@ function Customer() {
 
                       <div
                         style={{
-                          height: 400,
-                          marginTop: "20px",
+                          height: 550,
+                          marginTop: "10px",
                         }}
                       >
                         {showSkeleton ? (
@@ -453,7 +453,7 @@ function Customer() {
                           <DataGrid
                             rows={allCustomers}
                             columns={dataVertical}
-                            pageSize={5}
+                            pageSize={10}
                             disableSelectionOnClick={true}
                           />
                         )}

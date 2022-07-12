@@ -191,8 +191,8 @@ function ShowUpEmailAutomaticSender({
                         }}
                       >
                         <Button
-                          disabled={!canNextPage}
-                          onClick={() => previousPage()}
+                           disabled={!canPreviousPage}
+                           onClick={() => previousPage()}
                           variant="contained"
                         >
                           Previous page
@@ -205,8 +205,8 @@ function ShowUpEmailAutomaticSender({
                           </strong>
                         </span>
                         <Button
-                          disabled={!canPreviousPage}
-                          onClick={() => nextPage()}
+                         disabled={!canNextPage}
+                         onClick={() => nextPage()}
                           variant="contained"
                         >
                           Next Page

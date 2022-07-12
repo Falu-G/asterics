@@ -13,7 +13,6 @@ import { Checkbox } from "../../components/Checkbox";
 import Skeleton from "@mui/material/Skeleton";
 import ShowUpEmailAutomaticSender from "../../pages/ShowUpEmail/ShowUpEmailAutomaticSender";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 import ReactQuillEditorClass from "../../components/ReactQuillEditor/ReactQuillEditorClass";
 import Menus from "../../components/menu/Menu";
 import { MenuContext } from "../../components/MenuContext";
@@ -488,7 +487,7 @@ const celebrationTypeHandler = (option)=>{
                   value={
                     messageType === "Email"
                       ? scheduleMessage.recieverAddress
-                      : scheduleMessageSms.receivers.firstname
+                      : scheduleMessageSms.receivers
                   }
                 />
 
@@ -646,8 +645,8 @@ const celebrationTypeHandler = (option)=>{
                           }}
                         >
                           <Button
-                            disabled={!canNextPage}
-                            onClick={() => previousPage()}
+                             disabled={!canPreviousPage}
+                             onClick={() => previousPage()}
                             variant="contained"
                           >
                             Previous page
@@ -660,8 +659,10 @@ const celebrationTypeHandler = (option)=>{
                             </strong>
                           </span>
                           <Button
-                            disabled={!canPreviousPage}
+                           
+                            disabled={!canNextPage}
                             onClick={() => nextPage()}
+
                             variant="contained"
                           >
                             Next Page
